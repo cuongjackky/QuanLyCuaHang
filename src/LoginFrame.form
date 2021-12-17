@@ -72,7 +72,6 @@
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Component id="passWarning" pref="243" max="32767" attributes="0"/>
                               <Component id="userWarning" pref="243" max="32767" attributes="0"/>
-                              <Component id="jCheckBox1" min="-2" max="-2" attributes="0"/>
                               <Component id="userTxt" pref="243" max="32767" attributes="0"/>
                               <Component id="passwordTxt" max="32767" attributes="0"/>
                           </Group>
@@ -99,9 +98,7 @@
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="passWarning" min="-2" pref="16" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jCheckBox1" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="LoginBtn" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="ExitBtn" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -136,11 +133,6 @@
           <Events>
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="passwordTxtMouseClicked"/>
           </Events>
-        </Component>
-        <Component class="javax.swing.JCheckBox" name="jCheckBox1">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Saved"/>
-          </Properties>
         </Component>
         <Component class="javax.swing.JButton" name="LoginBtn">
           <Properties>

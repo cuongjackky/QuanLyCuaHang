@@ -33,7 +33,6 @@ public class LoginFrame extends javax.swing.JFrame {
         userTxt = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         passwordTxt = new javax.swing.JPasswordField();
-        jCheckBox1 = new javax.swing.JCheckBox();
         LoginBtn = new javax.swing.JButton();
         ExitBtn = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
@@ -60,8 +59,6 @@ public class LoginFrame extends javax.swing.JFrame {
                 passwordTxtMouseClicked(evt);
             }
         });
-
-        jCheckBox1.setText("Saved");
 
         LoginBtn.setText("Đăng nhập");
         LoginBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -118,11 +115,9 @@ public class LoginFrame extends javax.swing.JFrame {
                         .addGap(69, 69, 69)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(passWarning, javax.swing.GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(userWarning, javax.swing.GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE)
-                                .addComponent(jCheckBox1)
-                                .addComponent(userTxt, javax.swing.GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE)
-                                .addComponent(passwordTxt)))))
+                            .addComponent(userWarning, javax.swing.GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE)
+                            .addComponent(userTxt, javax.swing.GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE)
+                            .addComponent(passwordTxt))))
                 .addContainerGap(134, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -140,9 +135,7 @@ public class LoginFrame extends javax.swing.JFrame {
                     .addComponent(passwordTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(passWarning, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jCheckBox1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(32, 32, 32)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(LoginBtn)
                     .addComponent(ExitBtn))
@@ -248,7 +241,6 @@ public class LoginFrame extends javax.swing.JFrame {
     private javax.swing.JButton ExitBtn;
     private javax.swing.JButton LoginBtn;
     private javax.swing.JLabel RegisterLb;
-    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
