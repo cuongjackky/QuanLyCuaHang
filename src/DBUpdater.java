@@ -384,7 +384,7 @@ public class DBUpdater {
         }
         return -1;
     }
-   public Boolean insertNewCustomerAccount(String CustomerID,String user,String password){
+   public Boolean insertNewCustomerAccount(String CustomerID,String user,String pass){
        String sql = "Insert INTO TAIKHOAN_KH VALUES(?,?,?)";
        
        PreparedStatement statement ;
@@ -398,7 +398,7 @@ public class DBUpdater {
             statement = con.prepareStatement(sql);
             statement.setString(1,CustomerID);
             statement.setString(2,user);
-            statement.setString(3,password);
+            statement.setString(3,pass);
             statement.execute();
             
 
@@ -482,7 +482,7 @@ public class DBUpdater {
         return false;
    }
    public String getSaleManId(String StoreId){
-       String sql = "SELECT TOP 1 MaNV FROM NHANVIEN WHERE NHANVIEN.MaCH =?"+
+       String sql = "SELECT TOP 1 MaNV FROM NHANVIEN WHERE NHANVIEN.MaCH =? AND NHANVIEN.MaLoai= 'LOAINV2'"+
        "ORDER BY NEWID()";
        PreparedStatement statement ;
        try {
@@ -502,6 +502,8 @@ public class DBUpdater {
    }
    public Boolean insertNewOrderDetail(String OrderId,String SuppliesId,String Quantily){
        String sql = "Insert INTO CT_DONHANG(MaDH,MaSP,SoLuong) VALUES(?,?,?)";
+       String procdure = "exec sp_themChiTietDonHang ?,?";
+       String procdure2 = "exec sp_capNhatDonHang ?";
        
        PreparedStatement statement ;
         
@@ -517,9 +519,13 @@ public class DBUpdater {
             statement.setString(3,Quantily);
           
             statement.execute();
-            
-
-
+            statement = con.prepareStatement(procdure);
+            statement.setString(1, OrderId);
+            statement.setString(2, SuppliesId);
+            statement.execute();
+            statement = con.prepareStatement(procdure2);
+            statement.setString(1, OrderId);
+            statement.execute();
             return true;
 
         } catch (Exception ex) {

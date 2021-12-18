@@ -15,7 +15,7 @@ public class Helper {
     
     public String generateCustomerId(){
         String id ="KH";
-        Random r = new Random(0);
+        Random r = new Random();
         int n = new DBUpdater().CountNumberOfCustomer();
         if(n != -1){
             n++;
@@ -43,8 +43,8 @@ public class Helper {
         return id;
     }
     public String generateOrderId(){
-        String id ="KH";
-        Random r = new Random(0);
+        String id ="DH";
+        Random r = new Random();
         int n = new DBUpdater().CountNumberOfOrder();
         if(n != -1){
             n++;
@@ -70,6 +70,7 @@ public class Helper {
             id =generateOrderId();
         }
         return id;
+        
     }
   
     

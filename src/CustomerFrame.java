@@ -1,4 +1,6 @@
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.sql.ResultSet;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -34,6 +36,7 @@ public class CustomerFrame extends javax.swing.JFrame {
     public CustomerFrame(String id) {
         customerId = new DBUpdater().getCustomerId(id);
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**
@@ -81,7 +84,7 @@ public class CustomerFrame extends javax.swing.JFrame {
         ThanhToanCBox = new javax.swing.JComboBox<>();
         jLabel6 = new javax.swing.JLabel();
         ConfirmBtn = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        CacelBtn = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         SoNhaWarn = new javax.swing.JLabel();
@@ -98,6 +101,7 @@ public class CustomerFrame extends javax.swing.JFrame {
         jTable1 = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setLocation((Toolkit.getDefaultToolkit().getScreenSize().width  - getSize().width) / 2, (Toolkit.getDefaultToolkit().getScreenSize().height - getSize().height) / 2);
 
         jTabbedPane1.setBackground(java.awt.Color.white);
 
@@ -323,7 +327,12 @@ public class CustomerFrame extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setText("Huỷ");
+        CacelBtn.setText("Huỷ");
+        CacelBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                CacelBtnMouseClicked(evt);
+            }
+        });
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel7.setText("Địa chỉ giao hàng:");
@@ -365,7 +374,7 @@ public class CustomerFrame extends javax.swing.JFrame {
                         .addGap(365, 365, 365)
                         .addComponent(ConfirmBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(48, 48, 48)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(CacelBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
                         .addGap(57, 57, 57)
@@ -466,13 +475,13 @@ public class CustomerFrame extends javax.swing.JFrame {
                                 .addGap(11, 11, 11)
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(ConfirmBtn)
-                                    .addComponent(jButton2)))
+                                    .addComponent(CacelBtn)))
                             .addComponent(ThanhPhoWarn, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(SoNhaWarn, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(44, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("Mua hàng-Thanh toán", jPanel2);
+        jTabbedPane1.addTab("Mua hàng", jPanel2);
 
         jPanel4.setBackground(java.awt.Color.white);
 
@@ -551,7 +560,9 @@ public class CustomerFrame extends javax.swing.JFrame {
                 TotalCost+=Long.parseLong(ThanhTien);
                 TongTienTxt.setText(Long.toString(TotalCost+30000)+" VNĐ");
                 JOptionPane.showMessageDialog(this, "Thêm thành công !!");
+                
                 StoreId =new DBUpdater().getStoreId(SuppliesId);
+                jTable3.setModel(new DBUpdater().SearchSupplies("", StoreId));
                 PhiVanChuyenTxt.setText("30 000 VNĐ");
             }
             else{
@@ -687,8 +698,25 @@ public class CustomerFrame extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Lỗi !!");
             }
             
+            
         }
     }//GEN-LAST:event_ConfirmBtnMouseClicked
+
+    private void CacelBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CacelBtnMouseClicked
+        DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
+        while(model.getRowCount()>0){
+                    model.removeRow(0);
+                }
+        TotalCost=0;
+        StoreId ="";
+        TongTienTxt.setText("");
+        PhiVanChuyenTxt.setText("");
+        SoNhaTxt.setText("");
+        DuongTxt.setText("");
+        PhuongTxt.setText("");
+        QuanTxt.setText("");
+        ThanhPhoTxt.setText("");
+    }//GEN-LAST:event_CacelBtnMouseClicked
 
     /**
      * @param args the command line arguments
@@ -727,6 +755,7 @@ public class CustomerFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton AddBtn;
+    private javax.swing.JButton CacelBtn;
     private javax.swing.JButton ConfirmBtn;
     private javax.swing.JTextField DuongTxt;
     private javax.swing.JLabel DuongWarn;
@@ -751,7 +780,6 @@ public class CustomerFrame extends javax.swing.JFrame {
     private javax.swing.JTextField TongTienTxt;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;

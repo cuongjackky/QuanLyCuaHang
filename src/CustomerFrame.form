@@ -9,6 +9,9 @@
   </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
+    <Property name="location" type="java.awt.Point" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+      <Connection code="(Toolkit.getDefaultToolkit().getScreenSize().width  - getSize().width) / 2, (Toolkit.getDefaultToolkit().getScreenSize().height - getSize().height) / 2" type="code"/>
+    </Property>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
@@ -274,8 +277,8 @@
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-              <JTabbedPaneConstraints tabName="Mua h&#xe0;ng-Thanh to&#xe1;n">
-                <Property name="tabTitle" type="java.lang.String" value="Mua h&#xe0;ng-Thanh to&#xe1;n"/>
+              <JTabbedPaneConstraints tabName="Mua h&#xe0;ng">
+                <Property name="tabTitle" type="java.lang.String" value="Mua h&#xe0;ng"/>
               </JTabbedPaneConstraints>
             </Constraint>
           </Constraints>
@@ -299,7 +302,7 @@
                               <EmptySpace min="-2" pref="365" max="-2" attributes="0"/>
                               <Component id="ConfirmBtn" min="-2" pref="100" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="48" max="-2" attributes="0"/>
-                              <Component id="jButton2" min="-2" pref="100" max="-2" attributes="0"/>
+                              <Component id="CacelBtn" min="-2" pref="100" max="-2" attributes="0"/>
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
@@ -428,7 +431,7 @@
                                       <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="3" attributes="0">
                                           <Component id="ConfirmBtn" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="jButton2" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="CacelBtn" alignment="3" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
                                   <Component id="ThanhPhoWarn" min="-2" pref="16" max="-2" attributes="0"/>
@@ -526,10 +529,13 @@
                 <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="ConfirmBtnMouseClicked"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JButton" name="jButton2">
+            <Component class="javax.swing.JButton" name="CacelBtn">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Hu&#x1ef7;"/>
               </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="CacelBtnMouseClicked"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel7">
               <Properties>
