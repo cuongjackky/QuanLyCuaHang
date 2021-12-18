@@ -20,7 +20,7 @@ BEGIN
 
 END
 GO
-alter proc sp_thanhTienSP 
+create proc sp_thanhTienSP 
 AS
 BEGIN
 	DECLARE @MaSP char(20)
@@ -52,7 +52,7 @@ BEGIN
 END
 exec sp_thanhTienSP
 go
-alter proc sp_thanhTien
+create proc sp_thanhTien
 AS
 BEGIN
 	DECLARE @MaDH char(20)
@@ -86,8 +86,8 @@ BEGIN
 
 END
 go
-
-
+exec sp_thanhTien
+GO
 create proc sp_donHang
 AS
 BEGIN
@@ -121,6 +121,8 @@ BEGIN
 
 END
 Go
+exec sp_donHang
+GO
 Create trigger trg_themChiTietDonHang ON CT_DONHANG AFTER INSERT AS
 BEGIN
 	UPDATE DONHANG SET
@@ -134,11 +136,10 @@ BEGIN
 
 
 END
-GO
-create proc
+
 GO
 
-alter proc sp_themChiTietDonHang
+create proc sp_themChiTietDonHang
 (
 	@MaDH char(20),
 	@MaSP char(20)
