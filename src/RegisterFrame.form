@@ -55,24 +55,6 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" pref="43" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jLabel4" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="jLabel5" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
-                              <Component id="jLabel7" alignment="0" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace pref="88" max="32767" attributes="0"/>
-                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="TenTxt" max="32767" attributes="0"/>
-                              <Component id="GioiTinhCBox" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="NgaySinhTxt" alignment="0" max="32767" attributes="0"/>
-                              <Component id="SDTTxt" alignment="0" pref="168" max="32767" attributes="0"/>
-                              <Component id="TenWarn" alignment="0" max="32767" attributes="0"/>
-                              <Component id="NgaySinhWarn" alignment="1" max="32767" attributes="0"/>
-                              <Component id="SDTWarn" alignment="0" max="32767" attributes="0"/>
-                          </Group>
-                      </Group>
                       <Group type="102" alignment="1" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
@@ -92,6 +74,25 @@
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Component id="EmailWarn" alignment="1" max="32767" attributes="0"/>
                               <Component id="EmailTxt" alignment="1" pref="168" max="32767" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <Group type="102" alignment="1" attributes="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="jLabel4" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabel5" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabel7" alignment="0" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace pref="88" max="32767" attributes="0"/>
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="TenTxt" max="32767" attributes="0"/>
+                              <Component id="GioiTinhCBox" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="NgaySinhTxt" alignment="0" max="32767" attributes="0"/>
+                              <Component id="SDTTxt" alignment="0" pref="168" max="32767" attributes="0"/>
+                              <Component id="TenWarn" alignment="0" max="32767" attributes="0"/>
+                              <Component id="NgaySinhWarn" alignment="1" max="32767" attributes="0"/>
+                              <Component id="SDTWarn" alignment="0" max="32767" attributes="0"/>
+                              <Component id="jLabel14" alignment="0" min="-2" pref="156" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -186,8 +187,16 @@
                       <Component id="PhuongTxt" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Component id="PhuongWarn" min="-2" pref="15" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" attributes="0">
+                          <Component id="PhuongWarn" min="-2" pref="15" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="1" attributes="0">
+                          <Component id="jLabel14" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel6" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel12" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -470,6 +479,11 @@
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="0" green="0" id="red" palette="1" red="ff" type="palette"/>
             </Property>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabel14">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Nh&#x1ead;p theo format: YYYYmmDD"/>
           </Properties>
         </Component>
       </SubComponents>
