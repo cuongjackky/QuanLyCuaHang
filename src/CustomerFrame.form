@@ -197,6 +197,9 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Hu&#x1ef7;"/>
               </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jButton4MouseClicked"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JTextField" name="SearchBox">
             </Component>
@@ -483,6 +486,9 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="SoNhaTxt">
+              <Events>
+                <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="SoNhaTxtKeyTyped"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel2">
               <Properties>
@@ -490,6 +496,9 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="DuongTxt">
+              <Events>
+                <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="DuongTxtKeyTyped"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel3">
               <Properties>
@@ -497,6 +506,9 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="PhuongTxt">
+              <Events>
+                <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="PhuongTxtKeyTyped"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel4">
               <Properties>
@@ -504,6 +516,9 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="QuanTxt">
+              <Events>
+                <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="QuanTxtKeyTyped"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel5">
               <Properties>
@@ -511,6 +526,9 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="ThanhPhoTxt">
+              <Events>
+                <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="ThanhPhoTxtKeyTyped"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JComboBox" name="ThanhToanCBox">
               <Properties>

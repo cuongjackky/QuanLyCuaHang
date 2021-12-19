@@ -161,6 +161,11 @@ public class CustomerFrame extends javax.swing.JFrame {
         });
 
         jButton4.setText("Huỷ");
+        jButton4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton4MouseClicked(evt);
+            }
+        });
 
         SearchBtn.setText("Tìm kiếm");
         SearchBtn.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -311,13 +316,43 @@ public class CustomerFrame extends javax.swing.JFrame {
 
         jLabel1.setText("Số nhà ");
 
+        SoNhaTxt.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                SoNhaTxtKeyTyped(evt);
+            }
+        });
+
         jLabel2.setText("Đường");
+
+        DuongTxt.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                DuongTxtKeyTyped(evt);
+            }
+        });
 
         jLabel3.setText("Phường");
 
+        PhuongTxt.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                PhuongTxtKeyTyped(evt);
+            }
+        });
+
         jLabel4.setText("Quận");
 
+        QuanTxt.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                QuanTxtKeyTyped(evt);
+            }
+        });
+
         jLabel5.setText("Thành phố");
+
+        ThanhPhoTxt.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                ThanhPhoTxtKeyTyped(evt);
+            }
+        });
 
         ThanhToanCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Thanh Toán Sau", "Thanh Toán Trước" }));
 
@@ -728,6 +763,7 @@ public class CustomerFrame extends javax.swing.JFrame {
                 while(model.getRowCount()>0){
                     model.removeRow(0);
                 }
+                jTable3.setModel(db.SearchSupplies("", ""));
                 TotalCost=0;
                 StoreId ="";
                 TongTienTxt.setText("");
@@ -775,6 +811,47 @@ public class CustomerFrame extends javax.swing.JFrame {
             new LoginFrame().setVisible(true);
         }
     }//GEN-LAST:event_LogOut2MouseClicked
+
+    private void SoNhaTxtKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_SoNhaTxtKeyTyped
+        int len = SoNhaTxt.getText().length();
+        if(len == 5){
+           evt.consume(); 
+        }
+    }//GEN-LAST:event_SoNhaTxtKeyTyped
+
+    private void DuongTxtKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_DuongTxtKeyTyped
+        int len = DuongTxt.getText().length();
+        if(len == 30){
+           evt.consume(); 
+        }
+    }//GEN-LAST:event_DuongTxtKeyTyped
+
+    private void QuanTxtKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_QuanTxtKeyTyped
+        int len = QuanTxt.getText().length();
+        if(len == 20){
+           evt.consume(); 
+        }
+    }//GEN-LAST:event_QuanTxtKeyTyped
+
+    private void PhuongTxtKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_PhuongTxtKeyTyped
+        int len = PhuongTxt.getText().length();
+        if(len == 30){
+           evt.consume(); 
+        }
+    }//GEN-LAST:event_PhuongTxtKeyTyped
+
+    private void ThanhPhoTxtKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ThanhPhoTxtKeyTyped
+        int len = ThanhPhoTxt.getText().length();
+        if(len == 20){
+           evt.consume(); 
+        }
+    }//GEN-LAST:event_ThanhPhoTxtKeyTyped
+
+    private void jButton4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton4MouseClicked
+        MaSPTxt.setText("");
+        TenSPTxt.setText("");
+        SoLuongTxt.setText("");
+    }//GEN-LAST:event_jButton4MouseClicked
 
     /**
      * @param args the command line arguments

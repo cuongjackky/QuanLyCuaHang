@@ -101,6 +101,11 @@ public class RegisterFrame extends javax.swing.JFrame {
                 MatKhauTxtMouseClicked(evt);
             }
         });
+        MatKhauTxt.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                MatKhauTxtKeyTyped(evt);
+            }
+        });
 
         jLabel2.setText("Mật khẩu");
 
@@ -131,11 +136,21 @@ public class RegisterFrame extends javax.swing.JFrame {
                 EmailTxtMouseClicked(evt);
             }
         });
+        EmailTxt.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                EmailTxtKeyTyped(evt);
+            }
+        });
 
         SoNhaTxt.setToolTipText("");
         SoNhaTxt.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 SoNhaTxtMouseClicked(evt);
+            }
+        });
+        SoNhaTxt.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                SoNhaTxtKeyTyped(evt);
             }
         });
 
@@ -144,16 +159,31 @@ public class RegisterFrame extends javax.swing.JFrame {
                 DuongTxtMouseClicked(evt);
             }
         });
+        DuongTxt.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                DuongTxtKeyTyped(evt);
+            }
+        });
 
         PhuongTxt.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 PhuongTxtMouseClicked(evt);
             }
         });
+        PhuongTxt.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                PhuongTxtKeyTyped(evt);
+            }
+        });
 
         QuanTxt.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 QuanTxtMouseClicked(evt);
+            }
+        });
+        QuanTxt.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                QuanTxtKeyTyped(evt);
             }
         });
 
@@ -186,6 +216,11 @@ public class RegisterFrame extends javax.swing.JFrame {
                 ThanhPhoTxtMouseClicked(evt);
             }
         });
+        ThanhPhoTxt.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                ThanhPhoTxtKeyTyped(evt);
+            }
+        });
 
         OkBtn.setText("OK");
         OkBtn.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -209,6 +244,11 @@ public class RegisterFrame extends javax.swing.JFrame {
         NgaySinhTxt.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 NgaySinhTxtMouseClicked(evt);
+            }
+        });
+        NgaySinhTxt.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                NgaySinhTxtKeyTyped(evt);
             }
         });
 
@@ -421,6 +461,10 @@ public class RegisterFrame extends javax.swing.JFrame {
         if(!(Character.isLetter(evt.getKeyChar()))&&!(Character.isSpaceChar(evt.getKeyChar()))){
                 evt.consume();
             }
+        int len = HoTxt.getText().length();
+        if(len == 20){
+           evt.consume(); 
+        }
         
         
     }//GEN-LAST:event_HoTxtKeyTyped
@@ -429,12 +473,20 @@ public class RegisterFrame extends javax.swing.JFrame {
         if(!(Character.isLetter(evt.getKeyChar()))&&!(Character.isSpaceChar(evt.getKeyChar()))){
                 evt.consume();
             }
+        int len = TenTxt.getText().length();
+        if(len == 30){
+           evt.consume(); 
+        }
     }//GEN-LAST:event_TenTxtKeyTyped
 
     private void SDTTxtKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_SDTTxtKeyTyped
         if(!(Character.isDigit(evt.getKeyChar()))){
                 evt.consume();
             }
+        int len = SDTTxt.getText().length();
+        if(len == 10){
+           evt.consume(); 
+        }
     }//GEN-LAST:event_SDTTxtKeyTyped
 
     private void CacelBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CacelBtnMouseClicked
@@ -583,10 +635,71 @@ public class RegisterFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_EmailTxtMouseClicked
 
     private void TaiKhoanTxtKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TaiKhoanTxtKeyTyped
+        
+        int len = (TaiKhoanTxt.getText().length());
+        if(len == 20){
+           evt.consume(); 
+        }
+    }//GEN-LAST:event_TaiKhoanTxtKeyTyped
+
+    private void NgaySinhTxtKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_NgaySinhTxtKeyTyped
         if(!(Character.isDigit(evt.getKeyChar()))){
                 evt.consume();
             }
-    }//GEN-LAST:event_TaiKhoanTxtKeyTyped
+        int len = NgaySinhTxt.getText().length();
+        if(len == 8){
+           evt.consume(); 
+        }
+    }//GEN-LAST:event_NgaySinhTxtKeyTyped
+
+    private void EmailTxtKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_EmailTxtKeyTyped
+        int len = EmailTxt.getText().length();
+        if(len == 30){
+           evt.consume(); 
+        }
+    }//GEN-LAST:event_EmailTxtKeyTyped
+
+    private void MatKhauTxtKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_MatKhauTxtKeyTyped
+        int len = MatKhauTxt.getText().length();
+        if(len == 20){
+           evt.consume(); 
+        }
+    }//GEN-LAST:event_MatKhauTxtKeyTyped
+
+    private void SoNhaTxtKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_SoNhaTxtKeyTyped
+        int len = SoNhaTxt.getText().length();
+        if(len == 5){
+           evt.consume(); 
+        }
+    }//GEN-LAST:event_SoNhaTxtKeyTyped
+
+    private void DuongTxtKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_DuongTxtKeyTyped
+        int len = DuongTxt.getText().length();
+        if(len == 30){
+           evt.consume(); 
+        }
+    }//GEN-LAST:event_DuongTxtKeyTyped
+
+    private void QuanTxtKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_QuanTxtKeyTyped
+        int len = QuanTxt.getText().length();
+        if(len == 20){
+           evt.consume(); 
+        }
+    }//GEN-LAST:event_QuanTxtKeyTyped
+
+    private void ThanhPhoTxtKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ThanhPhoTxtKeyTyped
+        int len = ThanhPhoTxt.getText().length();
+        if(len == 20){
+           evt.consume(); 
+        }
+    }//GEN-LAST:event_ThanhPhoTxtKeyTyped
+
+    private void PhuongTxtKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_PhuongTxtKeyTyped
+        int len = PhuongTxt.getText().length();
+        if(len == 30){
+           evt.consume(); 
+        }
+    }//GEN-LAST:event_PhuongTxtKeyTyped
 
     /**
      * @param args the command line arguments

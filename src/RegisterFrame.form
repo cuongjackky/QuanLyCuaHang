@@ -249,6 +249,7 @@
         <Component class="javax.swing.JPasswordField" name="MatKhauTxt">
           <Events>
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="MatKhauTxtMouseClicked"/>
+            <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="MatKhauTxtKeyTyped"/>
           </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel2">
@@ -271,6 +272,7 @@
         <Component class="javax.swing.JTextField" name="EmailTxt">
           <Events>
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="EmailTxtMouseClicked"/>
+            <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="EmailTxtKeyTyped"/>
           </Events>
         </Component>
         <Component class="javax.swing.JTextField" name="SoNhaTxt">
@@ -279,21 +281,25 @@
           </Properties>
           <Events>
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="SoNhaTxtMouseClicked"/>
+            <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="SoNhaTxtKeyTyped"/>
           </Events>
         </Component>
         <Component class="javax.swing.JTextField" name="DuongTxt">
           <Events>
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="DuongTxtMouseClicked"/>
+            <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="DuongTxtKeyTyped"/>
           </Events>
         </Component>
         <Component class="javax.swing.JTextField" name="PhuongTxt">
           <Events>
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="PhuongTxtMouseClicked"/>
+            <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="PhuongTxtKeyTyped"/>
           </Events>
         </Component>
         <Component class="javax.swing.JTextField" name="QuanTxt">
           <Events>
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="QuanTxtMouseClicked"/>
+            <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="QuanTxtKeyTyped"/>
           </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel3">
@@ -367,6 +373,7 @@
         <Component class="javax.swing.JTextField" name="ThanhPhoTxt">
           <Events>
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="ThanhPhoTxtMouseClicked"/>
+            <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="ThanhPhoTxtKeyTyped"/>
           </Events>
         </Component>
         <Component class="javax.swing.JButton" name="OkBtn">
@@ -389,6 +396,7 @@
         <Component class="javax.swing.JFormattedTextField" name="NgaySinhTxt">
           <Events>
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="NgaySinhTxtMouseClicked"/>
+            <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="NgaySinhTxtKeyTyped"/>
           </Events>
         </Component>
         <Component class="javax.swing.JTextField" name="SDTTxt">
