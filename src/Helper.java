@@ -24,7 +24,7 @@ public class Helper {
                 id+="0";
             }
             id+=temp;
-            for(int i =0;i<2;i++){
+            for(int i =0;i<4;i++){
                 int num = r.nextInt(26);
                 char c = (char) ('A'+num);
                 id+=c;
@@ -53,7 +53,7 @@ public class Helper {
                 id+="0";
             }
             id+=temp;
-            for(int i =0;i<2;i++){
+            for(int i =0;i<4;i++){
                 int num = r.nextInt(26);
                 char c = (char) ('A'+num);
                 id+=c;
