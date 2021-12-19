@@ -26,14 +26,16 @@ public class DBUpdater {
     String password = "123456";
     public Boolean checkUniqueUserName(String user){
              
-        String sql = "SELECT * FROM TAIKHOAN_KH WHERE ID = '"+user + "'";
+        String sql = "SELECT * FROM TAIKHOAN_KH WHERE ID = ?";
+        PreparedStatement statement ;
         try {
         	      	
         	Connection con=DriverManager.getConnection(conString, username, password);
-
-                Statement s = con.createStatement();
-
-                ResultSet rs = s.executeQuery(sql);
+                statement = con.prepareStatement(sql);
+                statement.setString(1,user);
+                
+                
+                ResultSet rs = statement.executeQuery();
                 if(rs.next()){
                     return true;
                 }
@@ -89,14 +91,16 @@ public class DBUpdater {
     }
     public Boolean checkUniqueCustomerID(String id){
              
-        String sql = "SELECT * FROM KHACHHANG WHERE MaKH = '"+id + "'";
+        String sql = "SELECT * FROM KHACHHANG WHERE MaKH = ?";
+        PreparedStatement statement ;
         try {
         	      	
         	Connection con=DriverManager.getConnection(conString, username, password);
-
-                Statement s = con.createStatement();
-
-                ResultSet rs = s.executeQuery(sql);
+                statement = con.prepareStatement(sql);
+                statement.setString(1,id);
+                
+                
+                ResultSet rs = statement.executeQuery();
                 if(rs.next()){
                     return true;
                 }
@@ -110,14 +114,16 @@ public class DBUpdater {
     }
     public Boolean checkUniqueOrderID(String id){
              
-        String sql = "SELECT * FROM DONHANG WHERE MaDH = '"+id + "'";
+        String sql = "SELECT * FROM DONHANG WHERE MaDH = ?";
+        PreparedStatement statement ;
         try {
         	      	
         	Connection con=DriverManager.getConnection(conString, username, password);
-
-                Statement s = con.createStatement();
-
-                ResultSet rs = s.executeQuery(sql);
+                statement = con.prepareStatement(sql);
+                statement.setString(1,id);
+                
+                
+                ResultSet rs = statement.executeQuery();
                 if(rs.next()){
                     return true;
                 }
@@ -130,14 +136,16 @@ public class DBUpdater {
         
     }
     public Boolean CustomerLogin(String user, String pass){
-        String sql = "Select * from TAIKHOAN_KH Where ID = '"+user+"' AND PassWord = '"+pass+"'";
+        String sql = "Select * from TAIKHOAN_KH Where ID = ? AND PassWord = ?";
+        PreparedStatement statement ;
         try {
         	      	
         	Connection con=DriverManager.getConnection(conString, username, password);
-
-                Statement s = con.createStatement();
-
-                ResultSet rs = s.executeQuery(sql);
+                statement = con.prepareStatement(sql);
+                statement.setString(1,user);
+                statement.setString(2, pass);
+                
+                ResultSet rs = statement.executeQuery();
                 if(rs.next()){
                     return true;
                 }
@@ -149,14 +157,16 @@ public class DBUpdater {
         return false;
     }
     public Boolean EmployeeLogin(String user, String pass){
-        String sql = "Select * from TAIKHOAN_NV Where ID = '"+user+"' AND PassWord = '"+pass+"'";
+        String sql = "Select * from TAIKHOAN_NV Where ID = ? AND PassWord = ?";
+        PreparedStatement statement ;
         try {
         	      	
         	Connection con=DriverManager.getConnection(conString, username, password);
-
-                Statement s = con.createStatement();
-
-                ResultSet rs = s.executeQuery(sql);
+                statement = con.prepareStatement(sql);
+                statement.setString(1,user);
+                statement.setString(2, pass);
+                
+                ResultSet rs = statement.executeQuery();
                 if(rs.next()){
                     return true;
                 }
@@ -169,14 +179,16 @@ public class DBUpdater {
     }
     
     public Boolean StoreOwnerLogin(String user, String pass){
-        String sql = "Select * from TAIKHOAN_CCH Where ID = '"+user+"' AND PassWord = '"+pass+"'";
+        String sql = "Select * from TAIKHOAN_CCH Where ID = ? AND PassWord = ?";
+        PreparedStatement statement ;
         try {
         	      	
         	Connection con=DriverManager.getConnection(conString, username, password);
-
-                Statement s = con.createStatement();
-
-                ResultSet rs = s.executeQuery(sql);
+                statement = con.prepareStatement(sql);
+                statement.setString(1,user);
+                statement.setString(2, pass);
+                
+                ResultSet rs = statement.executeQuery();
                 if(rs.next()){
                     return true;
                 }
@@ -189,14 +201,15 @@ public class DBUpdater {
     }
     
     public String getCustomerId(String user){
-        String sql = "SELECT  * FROM TAIKHOAN_KH WHERE id ='"+user+"'";
+        String sql = "SELECT  * FROM TAIKHOAN_KH WHERE id = ?";
+        PreparedStatement statement ;
         try {
         	      	
         	Connection con=DriverManager.getConnection(conString, username, password);
-
-                Statement s = con.createStatement();
-
-                ResultSet rs = s.executeQuery(sql);
+                statement = con.prepareStatement(sql);
+                statement.setString(1,user);
+                
+                ResultSet rs = statement.executeQuery();
                 
                 rs.next();
                 String ans = rs.getString(1);
@@ -210,17 +223,18 @@ public class DBUpdater {
         return null;
     }
     public String getCustomerFullName(String user){
-        String sql = "SELECT  * FROM KHACHHANG WHERE MaKH ='"+user+"'";
+        String sql = "SELECT  * FROM KHACHHANG WHERE MaKH = ?";
+        PreparedStatement statement ;
         try {
         	      	
         	Connection con=DriverManager.getConnection(conString, username, password);
-
-                Statement s = con.createStatement();
-
-                ResultSet rs = s.executeQuery(sql);
+                statement = con.prepareStatement(sql);
+                statement.setString(1,user);
+                
+                ResultSet rs = statement.executeQuery();
                 
                 rs.next();
-                String ans = rs.getString(2).replace(" ", "")+" "+ rs.getString(3).replace(" ", "");
+                String ans = rs.getString(2).strip()+" "+ rs.getString(3).strip();
                 
                 return ans;
                 
@@ -231,14 +245,15 @@ public class DBUpdater {
         return null;
     }
     public String getStoreId(String SuppliesId){
-        String sql = "SELECT  * FROM SP_CH WHERE MaSP ='"+SuppliesId+"'";
+        String sql = "SELECT  * FROM SP_CH WHERE MaSP = ?";
+        PreparedStatement statement ;
         try {
         	      	
         	Connection con=DriverManager.getConnection(conString, username, password);
-
-                Statement s = con.createStatement();
-
-                ResultSet rs = s.executeQuery(sql);
+                statement = con.prepareStatement(sql);
+                statement.setString(1,SuppliesId);
+                
+                ResultSet rs = statement.executeQuery();
                 
                 rs.next();
                 String ans = rs.getString(1);
@@ -263,17 +278,15 @@ public class DBUpdater {
         dm.addColumn("Trạng thái đơn hàng");
 
         //SQL STATEMENT
-        String sql = "SELECT * FROM DONHANG WHERE MaKH = '"+customerId+"'";
-
+        String sql = "SELECT * FROM DONHANG WHERE MaKH = ?";
+        PreparedStatement statement ;
         try {
-        
-            Connection con = DriverManager.getConnection(conString, username, password);
-            
-           
-
-            //PREPARED STMT
-            Statement s = con.createStatement();
-            ResultSet rs = s.executeQuery(sql);
+        	      	
+        	Connection con=DriverManager.getConnection(conString, username, password);
+                statement = con.prepareStatement(sql);
+                statement.setString(1,customerId);
+                
+                ResultSet rs = statement.executeQuery();
             
             //LOOP THRU GETTING ALL VALUES
             while (rs.next()) {
@@ -364,14 +377,15 @@ public class DBUpdater {
 
     }
     public int getInventoryQuantityofSupplies(String Supply){
-        String sql = "SELECT SoLuongTon FROM SP_CH WHERE SP_CH.MaSP = '"+Supply+"'";
+        String sql = "SELECT SoLuongTon FROM SP_CH WHERE SP_CH.MaSP = ?";
+        PreparedStatement statement ;
         try {
         	      	
         	Connection con=DriverManager.getConnection(conString, username, password);
-
-                Statement s = con.createStatement();
-
-                ResultSet rs = s.executeQuery(sql);
+                statement = con.prepareStatement(sql);
+                statement.setString(1,Supply);
+                
+                ResultSet rs = statement.executeQuery();
                 
                 rs.next();
                 int ans = 0;
@@ -482,7 +496,7 @@ public class DBUpdater {
         return false;
    }
    public String getSaleManId(String StoreId){
-       String sql = "SELECT TOP 1 MaNV FROM NHANVIEN WHERE NHANVIEN.MaCH =? AND NHANVIEN.MaLoai= 'LOAINV2'"+
+       String sql = "SELECT TOP 1 MaNV FROM NHANVIEN WHERE NHANVIEN.MaCH = ? AND NHANVIEN.MaLoai= 'LOAINV2'"+
        "ORDER BY NEWID()";
        PreparedStatement statement ;
        try {
