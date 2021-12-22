@@ -514,9 +514,9 @@ public class DBUpdater {
         }
         return null;
    }
-   public Boolean insertNewOrderDetail(String OrderId,String SuppliesId,String Quantily){
-       String sql = "Insert INTO CT_DONHANG(MaDH,MaSP,SoLuong) VALUES(?,?,?)";
-       String procdure = "exec sp_themChiTietDonHang ?,?";
+   public Boolean insertNewOrderDetail(String OrderId,int stt,String SuppliesId,String Quantily){
+       String sql = "Insert INTO CT_DONHANG(MaDH,STT,MaSP,SoLuong) VALUES(?,?,?,?)";
+       String procdure = "exec sp_themChiTietDonHang ?,?,?";
        String procdure2 = "exec sp_capNhatDonHang ?";
        
        PreparedStatement statement ;
@@ -529,13 +529,15 @@ public class DBUpdater {
             Connection con = DriverManager.getConnection(conString, username, password);
             statement = con.prepareStatement(sql);
             statement.setString(1,OrderId);
-            statement.setString(2,SuppliesId);
-            statement.setString(3,Quantily);
+            statement.setInt(2,stt);
+            statement.setString(3,SuppliesId);
+            statement.setString(4,Quantily);
           
             statement.execute();
             statement = con.prepareStatement(procdure);
             statement.setString(1, OrderId);
-            statement.setString(2, SuppliesId);
+            statement.setInt(2, stt);
+            statement.setString(3, SuppliesId);
             statement.execute();
             statement = con.prepareStatement(procdure2);
             statement.setString(1, OrderId);
@@ -546,6 +548,22 @@ public class DBUpdater {
             ex.printStackTrace();
         }
         return false;
+   }
+   public int getNumberofOrder(){
+       String sql = "Select Count(*) From DONHANG";
+       PreparedStatement statement ;
+       try {
+           Connection con = DriverManager.getConnection(conString, username, password);
+           statement = con.prepareStatement(sql);
+           ResultSet rs = statement.executeQuery();
+           rs.next();
+           int ans = Integer.parseInt(rs.getString(1));
+           return ans;
+       }
+        catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return -1;
    }
 }
    

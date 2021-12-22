@@ -615,10 +615,11 @@ public class CustomerFrame extends javax.swing.JFrame {
         }
         else{
              soLuong= Long.parseLong(SoLuong);
-            if(soLuong ==0){
-                SoLuongWarn.setText("Nhập số lượng khác 0");
+            if(soLuong <=0){
+                SoLuongWarn.setText("Nhập số lượng lớn hơn 0");
                 check =false;
             }
+           
             if(soLuong>SuppliesRemainingQuantity ){
                 SoLuongWarn.setText("Không thể cung cấp đủ");
                 SoLuongTxt.setText(Integer.toString(SuppliesRemainingQuantity));
@@ -753,7 +754,7 @@ public class CustomerFrame extends javax.swing.JFrame {
             for(int i =0;i<model.getRowCount();i++){
                 String MaSP = (String)model.getValueAt(i, 0);
                 String SoLuongSanPham =(String)model.getValueAt(i, 2);
-                if(!db.insertNewOrderDetail(MaDH, MaSP, SoLuongSanPham)){
+                if(!db.insertNewOrderDetail(MaDH,i+1, MaSP, SoLuongSanPham)){
                     flag = false;
                 }
             }

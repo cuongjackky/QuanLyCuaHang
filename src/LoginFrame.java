@@ -186,6 +186,7 @@ public class LoginFrame extends javax.swing.JFrame {
                    this.setVisible(false);
                    new CustomerFrame(user).setVisible(true);
                }
+              
                // Phan he chu cua hang
                
                // Phan he nhan vien
