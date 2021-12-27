@@ -25,16 +25,20 @@ public class DBUpdater {
     String username = "sa";
     String password = "123456";
     public Boolean checkUniqueUserName(String user){
-             
+        /* Hàm này dùng để kiểm tra xem id tài khoản có bị trùng không 
+        Trả về True nếu trong cơ sở dữ liệu đã có id 
+        Trả về False nếu không có.
+        */
+         
         String sql = "SELECT * FROM TAIKHOAN_KH WHERE ID = ?";
         PreparedStatement statement ;
         try {
-        	      	
+        	// Kết nối database      	
         	Connection con=DriverManager.getConnection(conString, username, password);
                 statement = con.prepareStatement(sql);
-                statement.setString(1,user);
+                statement.setString(1,user); // Hàm này dùng để thay thế kí tự ? = String user
                 
-                
+                //Lưu kết quả, Nếu rs.next() trả về true tức là kết quả khác rỗng.
                 ResultSet rs = statement.executeQuery();
                 if(rs.next()){
                     return true;
@@ -44,10 +48,14 @@ public class DBUpdater {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+        //Trường hợp lỗi không thể thực hiện câu lệnh
         return false;
         
     }
     public int CountNumberOfCustomer(){
+        /*
+        Hàm này dùng để đến số lượng khách hàng
+        */
         String sql = "SELECT COUNT(*) FROM KHACHHANG";
         try {
         	      	
@@ -69,6 +77,9 @@ public class DBUpdater {
         return -1;
     }
     public int CountNumberOfOrder(){
+        /*
+        Hàm này dùng để đếm số lượng đơn hàng
+        */
         String sql = "SELECT COUNT(*) FROM DONHANG";
         try {
         	      	
@@ -90,7 +101,9 @@ public class DBUpdater {
         return -1;
     }
     public Boolean checkUniqueCustomerID(String id){
-             
+        /*
+        Hàm này kiểm tra xem MaKH có bị trùng không
+        */     
         String sql = "SELECT * FROM KHACHHANG WHERE MaKH = ?";
         PreparedStatement statement ;
         try {
@@ -113,7 +126,9 @@ public class DBUpdater {
         
     }
     public Boolean checkUniqueOrderID(String id){
-             
+        /*
+        Hàm này kiểm tra xem MaHD có bị trùng không
+        */     
         String sql = "SELECT * FROM DONHANG WHERE MaDH = ?";
         PreparedStatement statement ;
         try {
@@ -136,13 +151,16 @@ public class DBUpdater {
         
     }
     public Boolean CustomerLogin(String user, String pass){
+        /*
+        Hàm này kiểm tra xem trong Database có ID và Password nào đúng với Id và Password được nhập không
+        */
         String sql = "Select * from TAIKHOAN_KH Where ID = ? AND PassWord = ?";
         PreparedStatement statement ;
         try {
         	      	
         	Connection con=DriverManager.getConnection(conString, username, password);
                 statement = con.prepareStatement(sql);
-                statement.setString(1,user);
+                statement.setString(1,user); 
                 statement.setString(2, pass);
                 
                 ResultSet rs = statement.executeQuery();
@@ -157,6 +175,9 @@ public class DBUpdater {
         return false;
     }
     public Boolean EmployeeLogin(String user, String pass){
+        /*
+        Tương tự, dùng cho Nhân viên
+        */
         String sql = "Select * from TAIKHOAN_NV Where ID = ? AND PassWord = ?";
         PreparedStatement statement ;
         try {
@@ -179,6 +200,9 @@ public class DBUpdater {
     }
     
     public Boolean StoreOwnerLogin(String user, String pass){
+        /*
+        Tương tự, dùng cho chủ cửa hàng
+        */
         String sql = "Select * from TAIKHOAN_CCH Where ID = ? AND PassWord = ?";
         PreparedStatement statement ;
         try {
@@ -201,6 +225,9 @@ public class DBUpdater {
     }
     
     public String getCustomerId(String user){
+        /*
+        Dùng để lấy MaKH
+        */
         String sql = "SELECT  * FROM TAIKHOAN_KH WHERE id = ?";
         PreparedStatement statement ;
         try {
@@ -223,6 +250,9 @@ public class DBUpdater {
         return null;
     }
     public String getCustomerFullName(String user){
+        /*
+        Dùng để lấy họ và tên của khách hàng
+        */
         String sql = "SELECT  * FROM KHACHHANG WHERE MaKH = ?";
         PreparedStatement statement ;
         try {
@@ -234,7 +264,7 @@ public class DBUpdater {
                 ResultSet rs = statement.executeQuery();
                 
                 rs.next();
-                String ans = rs.getString(2).strip()+" "+ rs.getString(3).strip();
+                String ans = rs.getString(2).strip()+" "+ rs.getString(3).strip(); 
                 
                 return ans;
                 
@@ -245,6 +275,7 @@ public class DBUpdater {
         return null;
     }
     public String getStoreId(String SuppliesId){
+        // Lấy MaCH
         String sql = "SELECT  * FROM SP_CH WHERE MaSP = ?";
         PreparedStatement statement ;
         try {
@@ -267,9 +298,10 @@ public class DBUpdater {
         return null;
     }
     public DefaultTableModel getOrderHistory(String customerId) {
+        // Lấy tất cả DonHang có MaKH trùng với MaKH được đưa vào, trả về 1 bảng
         //ADD COLUMNS TO TABLE MODEL
-        DefaultTableModel dm = new DefaultTableModel();
-        dm.addColumn("Mã đơn hàng");
+        DefaultTableModel dm = new DefaultTableModel(); //Tạo bảng
+        dm.addColumn("Mã đơn hàng"); //Thêm cột tên "Mã đơn hàng"
         dm.addColumn("Mã cửa hàng");
         dm.addColumn("Ngày đặt");
         dm.addColumn("Tổng tiền sản phẩm");
@@ -289,10 +321,10 @@ public class DBUpdater {
                 ResultSet rs = statement.executeQuery();
             
             //LOOP THRU GETTING ALL VALUES
-            while (rs.next()) {
+            while (rs.next()) { //Lấy dòng tiếp theo, khi rs.next() = false tức là hết dòng 
                 //GET VALUES
                 
-                String MaDH = rs.getString(1);
+                String MaDH = rs.getString(1); // lấy cột thứ 1.
                 String MaCH = rs.getString(3);
                 String ngayDat = rs.getString(4);
                 String TongTienSP = rs.getString(5);
@@ -300,7 +332,7 @@ public class DBUpdater {
                 String TongTien = rs.getString(7);
                 String TrangThai = rs.getString(14);
 
-                dm.addRow(new String[]{MaDH, MaCH, ngayDat, TongTienSP,phiVc,TongTien,TrangThai});
+                dm.addRow(new String[]{MaDH, MaCH, ngayDat, TongTienSP,phiVc,TongTien,TrangThai}); //thêm 1 dòng vô bảng
             }
             
 
@@ -317,6 +349,9 @@ public class DBUpdater {
     
     public DefaultTableModel SearchSupplies(String Item,String StoreId) {
         //ADD COLUMNS TO TABLE MODEL
+        /*
+        Hàm này dùng để tìm kiếm Sản phẩm cùng 1 cửa hàng
+        */
         DefaultTableModel dm = new DefaultTableModel();
         dm.addColumn("Mã sản phẩm");
         dm.addColumn("Tên sản phẩm");
@@ -326,7 +361,11 @@ public class DBUpdater {
         dm.addColumn("Mã nhà cung cấp");
        
         String sql;
-        Item=Item+'%';
+        Item=Item+'%'; // thêm % phía sau MaSP hoặc TenSP để so sánh bằng LIKE
+        /*
+        Nếu MaCH bằng null, tìm tất cả sản phẩm giống MaSP hoặc TenSP
+        Nếu MaCH khác null, tìm tất cả sản phẩm giống MaSP hoặc TenSP cùng cửa hàng với MaCH
+        */
         if(StoreId.equals("")){
             sql = "SELECT sp.MaSP,sp.TenSP,sp.GiaGoc,sp.PhanTramGiamGia,spch.SoLuongTon,sp.MaNCC\n" +
             "FROM SANPHAM sp,SP_CH spch\n" +
@@ -377,6 +416,9 @@ public class DBUpdater {
 
     }
     public int getInventoryQuantityofSupplies(String Supply){
+        /*
+        Lấy số lượng tồn của SP
+        */
         String sql = "SELECT SoLuongTon FROM SP_CH WHERE SP_CH.MaSP = ?";
         PreparedStatement statement ;
         try {
@@ -399,6 +441,9 @@ public class DBUpdater {
         return -1;
     }
    public Boolean insertNewCustomerAccount(String CustomerID,String user,String pass){
+       /*
+       Hàm này dùng để thêm một tài khoản, mật khẩu mới vào bảng TAIKHOAN_KH
+       */
        String sql = "Insert INTO TAIKHOAN_KH VALUES(?,?,?)";
        
        PreparedStatement statement ;
@@ -425,6 +470,9 @@ public class DBUpdater {
         return false;
    }
    public Boolean insertNewCustomerInformation(String MaKH,String Ho,String Ten,String gioiTinh, String NgSinh, String sdt,String Email,String SoNha,String Duong,String Phuong,String Quan,String ThanhPho ){
+       /*
+       Hàm này dùng để thêm mới 1 thông tin khách hàng vào bảng KHACHHANG
+       */
        String sql = "Insert INTO KHACHHANG VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
        
        PreparedStatement statement ;
@@ -461,6 +509,9 @@ public class DBUpdater {
         return false;
    }
    public Boolean insertNewOrder(String OrderId,String CustomerId,String StoreId,String OrderDay,String SoNha,String Duong,String Phuong, String Quan, String ThanhPho,String HinhThucThanhToan, String TrangThai,String MaNV){
+       /*
+       Hàm này dùng để thêm mới 1 hoá  đơn
+       */
        String sql = "Insert INTO DONHANG(MaDH,MaKH,MaCH,NgayDat,PhiVC,SoNha_GH,Duong_GH,Phuong_GH,Quan_GH,TPho_GH,HinhThucThanhToan,TrangThaiDH,MaNV) VALUES(?,?,?,?,30000,?,?,?,?,?,?,?,?)";
        
        PreparedStatement statement ;
@@ -496,6 +547,9 @@ public class DBUpdater {
         return false;
    }
    public String getSaleManId(String StoreId){
+       /*
+       Hàm này dùng để lấy ngẫu nhiên 1 nhân viên thu ngân của CuaHang cho trước
+       */
        String sql = "SELECT TOP 1 MaNV FROM NHANVIEN WHERE NHANVIEN.MaCH = ? AND NHANVIEN.MaLoai= 'LOAINV2'"+
        "ORDER BY NEWID()";
        PreparedStatement statement ;
@@ -515,9 +569,13 @@ public class DBUpdater {
         return null;
    }
    public Boolean insertNewOrderDetail(String OrderId,int stt,String SuppliesId,String Quantily){
-       String sql = "Insert INTO CT_DONHANG(MaDH,STT,MaSP,SoLuong) VALUES(?,?,?,?)";
-       String procdure = "exec sp_themChiTietDonHang ?,?,?";
-       String procdure2 = "exec sp_capNhatDonHang ?";
+       /*
+       Hàm này dùng để thêm mới 1 CT_DONHANG
+       Phải cài 2 store sp_themChiTietDonHang và sp_capNhatDonHang mới chạy được
+       */
+       String sql = "Insert INTO CT_DONHANG(MaDH,STT,MaSP,SoLuong) VALUES(?,?,?,?)";// thêm vào CT_DONHANG
+       String procdure = "exec sp_themChiTietDonHang ?,?,?"; // Cập nhật GiaBan, ThanhTien,MaNCC
+       String procdure2 = "exec sp_capNhatDonHang ?";// Cập nhật DonHang
        
        PreparedStatement statement ;
         
@@ -550,6 +608,9 @@ public class DBUpdater {
         return false;
    }
    public int getNumberofOrder(){
+       /*
+       Hàm này dùng để đếm số lượng đơn hàng
+       */
        String sql = "Select Count(*) From DONHANG";
        PreparedStatement statement ;
        try {

@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
  */
 public class Helper {
     
-    public String generateCustomerId(){
+    public String generateCustomerId(){ // Tạo một MaKH ngẫu nhiên
         String id ="KH";
         Random r = new Random();
         int n = new DBUpdater().CountNumberOfCustomer();
@@ -35,9 +35,9 @@ public class Helper {
         return id;
                
     }
-    public String generateUniqueCustomerId(){
+    public String generateUniqueCustomerId(){ // Tạo một MaKH ngẫu nhiên không bị trùng
         String id = generateCustomerId();
-        while(new DBUpdater().checkUniqueCustomerID(id)){
+        while(new DBUpdater().checkUniqueCustomerID(id)){ // Khi bị trùng thì tạo mới một cái khác
             id =generateCustomerId();
         }
         return id;

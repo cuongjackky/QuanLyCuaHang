@@ -632,6 +632,7 @@ public class CustomerFrame extends javax.swing.JFrame {
             String ThanhTien = Long.toString((100-Integer.parseInt(PercentDiscount))*(Cost)*soLuong/100);
             DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
             if(model.getRowCount()==0){
+                // Nếu giỏ hàng chưa có Sản phẩm đang thêm, thêm trực tiếp
                 model.addRow(new Object[]{SuppliesId,SuppliesName,SoLuong,PercentDiscount,ThanhTien,SupplierID});
                 TotalCost+=Long.parseLong(ThanhTien);
                 TongTienTxt.setText(Long.toString(TotalCost+30000)+" VNĐ");
@@ -642,20 +643,23 @@ public class CustomerFrame extends javax.swing.JFrame {
                 PhiVanChuyenTxt.setText("30 000 VNĐ");
             }
             else{
+                // Nếu giỏ hàng đã có Sản phẩm đang thêm, kiểm tra xem có cung cấp đủ hay không
                 Boolean check_2 = true;
                 int SoLuong_2 = 0;
-                int currentStock = new DBUpdater().getInventoryQuantityofSupplies(SuppliesId);
+                int currentStock = new DBUpdater().getInventoryQuantityofSupplies(SuppliesId); // Lấy tồn kho
                 for (int row = 0 ; row < model.getRowCount(); row++){
                     if(SuppliesId.equals(jTable2.getValueAt(row,0))){
-                        SoLuong_2+= Integer.parseInt((String)jTable2.getValueAt(row, 2));
+                        SoLuong_2+= Integer.parseInt((String)jTable2.getValueAt(row, 2)); // Lấy số lượng đã mua trong giỏ hàng
                                             }
                 }
+                
                 if(soLuong>(currentStock-SoLuong_2)){
                             SoLuongWarn.setText("Không thể cung cấp đủ");
                             SoLuongTxt.setText(Integer.toString(currentStock-SoLuong_2));
                             check_2 = false;
-                        }
+                        } // Kiểm tra xem nếu cộng thêm số lượng hiện tại thì có quá số lượng tồn kho hay không, nếu không thì in ra dòng thông báo
                 if(check_2 == true){
+                    // Nếu vẫn cung cấp đủ thì thêm vào giỏ hàng
                     model.addRow(new Object[]{SuppliesId,SuppliesName,SoLuong,PercentDiscount,ThanhTien,SupplierID});
         
                     jTable2.setModel(model);
@@ -671,13 +675,16 @@ public class CustomerFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_AddBtnMouseClicked
 
     private void jTable3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable3MouseClicked
+        /*
+        Khi click vào bảng thì lấy các thông tin sau
+        */
         SuppliesId = jTable3.getValueAt(jTable3.getSelectedRow(), 0).toString();
         SuppliesName =jTable3.getValueAt(jTable3.getSelectedRow(), 1).toString();
         SuppliesRemainingQuantity = Integer.parseInt(jTable3.getValueAt(jTable3.getSelectedRow(), 4).toString());
         PercentDiscount = jTable3.getValueAt(jTable3.getSelectedRow(), 3).toString();
         SupplierID =jTable3.getValueAt(jTable3.getSelectedRow(), 5).toString();
         Cost = Long.parseLong(jTable3.getValueAt(jTable3.getSelectedRow(), 2).toString());
-        MaSPTxt.setText(SuppliesId);
+        MaSPTxt.setText(SuppliesId); 
         TenSPTxt.setText(SuppliesName);
         
         
@@ -687,7 +694,7 @@ public class CustomerFrame extends javax.swing.JFrame {
         if(!(Character.isDigit(evt.getKeyChar()))){
                 evt.consume();
             }
-        
+        //Nếu kí tự nhập vào không phải số, bỏ qua
     }//GEN-LAST:event_SoLuongTxtKeyTyped
 
     private void SoLuongTxtMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SoLuongTxtMouseClicked
@@ -705,8 +712,8 @@ public class CustomerFrame extends javax.swing.JFrame {
 
     private void ConfirmBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ConfirmBtnMouseClicked
         Boolean check = true;
-        DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
-            if(model.getRowCount()==0){
+        DefaultTableModel model = (DefaultTableModel) jTable2.getModel(); // Lấy bảng giỏ hàng
+            if(model.getRowCount()==0){ //Lấy số dòng hiện tại của bảng.
                 JOptionPane.showMessageDialog(this, "Giỏ hàng trống !!");
                 check = false;
             }
@@ -738,11 +745,11 @@ public class CustomerFrame extends javax.swing.JFrame {
         }
         
         if(check == true){
-            String MaDH = new Helper().generateUniqueOrderId();
+            String MaDH = new Helper().generateUniqueOrderId(); // Tạo ngẫu nhiên 1 MaDH
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");  
             LocalDateTime now = LocalDateTime.now();
-            String NgayDat = dtf.format(now);
-            String HinhThucThanhToan = (String)ThanhToanCBox.getSelectedItem();
+            String NgayDat = dtf.format(now); // Lấy ngày giờ hiện tại
+            String HinhThucThanhToan = (String)ThanhToanCBox.getSelectedItem(); // Lấy lựa chọn trong HinhThucThanhToan
             String TrangThai = "Chờ giao";
             DBUpdater db = new DBUpdater();
             String MaNV = db.getSaleManId(StoreId);
@@ -816,7 +823,7 @@ public class CustomerFrame extends javax.swing.JFrame {
     private void SoNhaTxtKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_SoNhaTxtKeyTyped
         int len = SoNhaTxt.getText().length();
         if(len == 5){
-           evt.consume(); 
+           evt.consume(); // Chỉ cho nhập 5 kí tự
         }
     }//GEN-LAST:event_SoNhaTxtKeyTyped
 

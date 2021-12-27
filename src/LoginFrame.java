@@ -17,7 +17,7 @@ public class LoginFrame extends javax.swing.JFrame {
      */
     public LoginFrame() {
         initComponents();
-        this.setLocationRelativeTo(null);
+        this.setLocationRelativeTo(null); //Đặt Frame giữa màn hình
     }
 
     /**
@@ -161,25 +161,28 @@ public class LoginFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void RegisterLbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_RegisterLbMouseClicked
-        new RegisterFrame().setVisible(true);
+        new RegisterFrame().setVisible(true); // Mở cửa sổ RegisterFrame
     }//GEN-LAST:event_RegisterLbMouseClicked
 
     private void userTxtMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_userTxtMouseClicked
-        userWarning.setText("");
+        userWarning.setText(""); //Xoá
     }//GEN-LAST:event_userTxtMouseClicked
 
     private void LoginBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoginBtnActionPerformed
        String user = userTxt.getText();
        String password = passwordTxt.getText();
        if(user.equals("")){
+           // nếu ô user = rỗng, Bắt nhập tài khoản
            userWarning.setText("Nhập tài khoản");
        }
        else{
            if (password.equals("")){
+               // Nếu ô password = rỗng, bắt nhập mật khẩu
                passWarning.setText("Nhập mật khẩu");
            }
            else{
                // Phan he khach hang
+               // Kiểm tra đăng nhập 
                if(new DBUpdater().CustomerLogin(user, password)){
                    JOptionPane.showMessageDialog(this, "Đăng nhập thành công !!");
                    
@@ -191,16 +194,20 @@ public class LoginFrame extends javax.swing.JFrame {
                
                // Phan he nhan vien
                
+               
+               else {
+                   JOptionPane.showMessageDialog(this, "Sai tài khoản hoặc mật khẩu!");
+               }
            }
        }
     }//GEN-LAST:event_LoginBtnActionPerformed
 
     private void passwordTxtMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_passwordTxtMouseClicked
-         passWarning.setText("");
+         passWarning.setText(""); // Xoá 
     }//GEN-LAST:event_passwordTxtMouseClicked
 
     private void ExitBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ExitBtnMouseClicked
-        System.exit(0);
+        System.exit(0); // thoát chương trình
     }//GEN-LAST:event_ExitBtnMouseClicked
 
     /**
