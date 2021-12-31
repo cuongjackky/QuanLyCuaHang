@@ -245,3 +245,247 @@ BEGIN
 	close c
 	deallocate c
 END
+
+------------------------------------------------------------------------------
+
+CREATE OR ALTER TRIGGER TINHDOANHSO_SODONHANG ON dbo.DONHANG AFTER INSERT, UPDATE
+AS
+BEGIN
+	DECLARE @doanhso BIGINT
+    DECLARE @sodonhang SMALLINT
+	SELECT @doanhso = SUM(dh.TongTien), @sodonhang = COUNT(*)
+	FROM Inserted i, dbo.DONHANG dh
+	WHERE i.MaNV = dh.MaNV AND MONTH(i.NgayDat) = MONTH(dh.NgayDat) AND YEAR(i.NgayDat) = YEAR(dh.NgayDat)
+	GROUP BY i.MaNV
+
+	--update bang ct_nhanvien
+	--neu ton tai thong tin nhan vien trong bang thong ke
+	IF EXISTS(SELECT*FROM dbo.ct_nhanvien ct, Inserted i WHERE ct.MaNV=i.MaNV AND  
+				MONTH(i.NgayDat) = ct.Thang_NV AND YEAR(i.NgayDat) = ct.Nam_NV)
+	BEGIN --update
+		UPDATE dbo.ct_nhanvien
+		SET DoanhSo=@doanhso, SoDonHang = @sodonhang
+		FROM Inserted i
+		WHERE i.manv = ct_nhanvien.MaNV AND MONTH(i.NgayDat) = dbo.ct_nhanvien.Thang_NV AND YEAR(i.NgayDat) = dbo.ct_nhanvien.Nam_NV
+    END
+	
+END
+GO
+
+
+CREATE OR ALTER TRIGGER TinhLuongThuong ON CT_NHANVIEN AFTER INSERT, UPDATE
+AS 
+BEGIN
+
+	
+	DECLARE @DOANHSO BIGINT
+	DECLARE @QUOTA  INT
+	SELECT @DOANHSO = CT_NHANVIEN.DoanhSo, @QUOTA = dbo.CT_NHANVIEN.QuotaSale
+					FROM Inserted I, dbo.CT_NHANVIEN
+					WHERE I.MaNV=dbo.CT_NHANVIEN.MANV AND I.Nam_NV=dbo.CT_NHANVIEN.Nam_NV AND I.Thang_NV=dbo.CT_NHANVIEN.Thang_NV
+
+	
+
+
+	IF (@QUOTA < @DOANHSO)
+		UPDATE dbo.CT_NHANVIEN
+		SET LuongThuong = (@DOANHSO - @QUOTA)*0.3,dbo.ct_nhanvien.TienBiTru=dbo.ct_nhanvien.SoNgayNghi*100000, 
+					ct_nhanvien.Luong=ct_nhanvien.LuongCD+dbo.ct_nhanvien.LuongThuong-ct_nhanvien.TienBiTru
+		
+		FROM inserted i
+		WHERE i.manv = dbo.CT_NHANVIEN.MaNV AND i.thang_nv=dbo.CT_NHANVIEN.Thang_NV AND i.nam_nv=dbo.CT_NHANVIEN.Nam_NV
+	ELSE
+    
+		UPDATE dbo.CT_NHANVIEN
+		SET LuongThuong=0, dbo.ct_nhanvien.TienBiTru=dbo.ct_nhanvien.SoNgayNghi*100000, 
+			ct_nhanvien.Luong=ct_nhanvien.LuongCD+dbo.ct_nhanvien.LuongThuong-ct_nhanvien.TienBiTru
+		FROM inserted i
+		WHERE i.manv = dbo.CT_NHANVIEN.MaNV AND i.thang_nv=dbo.CT_NHANVIEN.Thang_NV AND i.nam_nv=dbo.CT_NHANVIEN.Nam_NV
+
+	UPDATE dbo.CT_NHANVIEN
+	SET HieuSuat = (dbo.CT_NHANVIEN.DoanhSo*1.0/dbo.CT_NHANVIEN.QuotaSale) * 100 
+	FROM Inserted i
+	WHERE i.MaNV = dbo.CT_NHANVIEN.MaNV AND i.Nam_NV = dbo.CT_NHANVIEN.Nam_NV AND i.Thang_NV = dbo.CT_NHANVIEN.Thang_NV
+
+	--update so don hang, doanh so
+
+
+END
+GO
+
+--CREATE OR ALTER TRIGGER TinhHieuSuat ON dbo.CT_NHANVIEN AFTER INSERT, UPDATE
+--AS
+
+--	UPDATE dbo.CT_NHANVIEN
+--	SET HieuSuat = dbo.CT_NHANVIEN.DoanhSo/dbo.CT_NHANVIEN.QuotaSale*1.0 * 100
+--	FROM Inserted i
+--	WHERE i.MaNV = dbo.CT_NHANVIEN.MaNV AND i.Nam_NV = dbo.CT_NHANVIEN.Nam_NV AND i.Thang_NV = dbo.CT_NHANVIEN.Thang_NV
+--GO
+
+--CREATE OR ALTER PROC tinhsodonhang_doanhso @manv VARCHAR(20), @thang INT, @nam int
+--AS
+--BEGIN
+--	INSERT INTO dbo.ct_nhanvien
+--	(
+--	    MaNV,
+--	    Thang_NV,
+--	    Nam_NV,
+--	    QuotaSale,
+--	    SoDonHang,
+--	    DoanhSo,
+--	    SoNgayNghi,
+--	    LuongCD,
+--	    TienBiTru,
+--	    LuongThuong,
+--	    Luong,
+--	    HieuSuat
+--	)
+--	VALUES
+--	(   @manv, -- MaNV - varchar(20)
+--	    @thang,  -- Thang_NV - int
+--	    @nam,  -- Nam_NV - int
+--	    100000000,  -- QuotaSale - bigint
+--	    0,  -- SoDonHang - smallint
+--	    0,  -- DoanhSo - bigint
+--	    2,  -- SoNgayNghi - tinyint
+--	    20000000,  -- LuongCD - int
+--	    0,  -- TienBiTru - int
+--	    0,  -- LuongThuong - int
+--	    0,  -- Luong - int
+--	    0.0 -- HieuSuat - float
+--	    )
+
+--	DECLARE @sodonhang SMALLINT 
+--	DECLARE @ds BIGINT 
+--	SELECT @ds = SUM(dh.TongTien), @sodonhang=COUNT(*)
+--	FROM dbo.DONHANG dh, dbo.CT_NHANVIEN ct
+--	WHERE dh.MaNV=ct.MaNV AND ct.Nam_NV= @nam AND ct.Thang_NV= @thang AND MONTH(dh.NgayDat) = @thang AND YEAR(dh.NgayDat) = @nam
+--	AND dh.TrangThaiDH=N'Đã giao' AND ct.MaNV=@manv
+--	GROUP BY dh.MaNV
+	
+--	UPDATE dbo.ct_nhanvien
+--	SET DoanhSo = @ds, SoDonHang = @sodonhang
+--	WHERE MaNV=@manv AND Thang_NV = @thang AND Nam_NV=@nam
+
+--	RETURN
+--END
+--GO
+
+
+--CREATE PROC updatedoanhso @manv VARCHAR(20)
+--AS
+--BEGIN
+--	DECLARE @ds BIGINT 
+--	SET @ds = (SELECT SUM(dh.TongTien)
+--	FROM dbo.DONHANG dh, dbo.CT_NHANVIEN ct
+--	WHERE dh.MaNV=ct.MaNV AND ct.Nam_NV='2009' AND ct.Thang_NV='6' AND ct.Thang_NV=MONTH(dh.NgayDat) AND ct.Nam_NV=YEAR(dh.NgayDat)
+--	AND dh.TrangThaiDH=N'Đã giao' AND ct.MaNV=@manv
+--	GROUP BY dh.MaNV)
+--	UPDATE dbo.ct_nhanvien
+--	SET DoanhSo = @ds
+--	WHERE MaNV=@manv
+--END 
+--GO
+
+
+
+
+--thống kê danh sách nhân viên theo mã cửa hàng, tháng, năm
+CREATE OR ALTER PROC sp_ThongKeNhanVienThuNgan @mach VARCHAR(20), @thang INT, @nam INT
+AS
+BEGIN
+	SELECT ct.Thang_NV, ct.Nam_NV, ct.MaNV, ct.SoDonHang, ct.DoanhSo,ct.QuotaSale,ct.HieuSuat
+    FROM dbo.NHANVIEN nv, dbo.ct_nhanvien ct
+	WHERE nv.MaNV=ct.MaNV AND ct.Thang_NV = @thang AND ct.Nam_NV=@nam AND nv.MaCH=@mach 
+END
+go
+
+
+CREATE PROC sp_GetSalaryInfoByStaffID @manv varchar(20), @thang int, @nam int
+AS
+BEGIN
+	SELECT ct.Thang_NV, ct.Nam_NV, ct.MaNV,ct.LuongCD, ct.LuongThuong,ct.SoNgayNghi, ct.TienBiTru, ct.Luong
+	FROM dbo.ct_nhanvien ct
+	WHERE ct.MaNV=@manv AND ct.Nam_NV=@nam AND ct.Thang_NV=@thang
+END
+GO
+
+
+CREATE OR ALTER PROC sp_AddNewQuotaSale @thang int, @nam int, @quota bigint, @mach varchar(20)
+AS
+BEGIN
+	IF EXISTS(SELECT*FROM dbo.ct_nhanvien WHERE Thang_NV=@thang AND Nam_NV=@nam)
+	BEGIN 
+		RAISERROR('Thong tin da ton tai',15,1)
+		ROLLBACK
+		RETURN
+	END
+	ELSE
+	BEGIN
+		DECLARE @preMonth INT
+		DECLARE @preYear INT
+		IF (@thang = 1)
+		BEGIN
+			SET @preMonth = 12
+			SET @preYear = @nam - 1
+        END
+		ELSE
+		BEGIN
+			SET @preMonth = @thang - 1
+			SET @preYear = @nam
+		
+		END
+
+		DECLARE @manv VARCHAR(20)
+		DECLARE @luongcd int
+		DECLARE c CURSOR FOR SELECT manv FROM dbo.NHANVIEN WHERE mach = @mach AND MaLoai='LOAINV2'
+		OPEN c
+		FETCH NEXT FROM c INTO @manv
+		WHILE @@FETCH_STATUS = 0
+		BEGIN 
+			SELECT @luongcd= LuongCD FROM dbo.ct_nhanvien WHERE MaNV=@manv
+			IF EXISTS(SELECT*FROM dbo.ct_nhanvien WHERE Thang_NV=@thang AND Nam_NV=@nam AND manv =@manv)
+			BEGIN 
+				--RAISERROR('Thong tin da ton tai',15,1)
+				FETCH NEXT FROM c INTO @manv
+			END
+			ELSE
+			BEGIN
+				INSERT INTO dbo.ct_nhanvien
+			(
+			    MaNV,
+			    Thang_NV,
+			    Nam_NV,
+			    QuotaSale,
+			    SoDonHang,
+			    DoanhSo,
+			    SoNgayNghi,
+			    LuongCD,
+			    TienBiTru,
+			    LuongThuong,
+			    Luong,
+			    HieuSuat
+			)
+			VALUES
+			(   @manv, -- MaNV - varchar(20)
+			    @thang,  -- Thang_NV - int
+			    @nam,  -- Nam_NV - int
+			    @quota,  -- QuotaSale - bigint
+			    0,  -- SoDonHang - smallint
+			    0,  -- DoanhSo - bigint
+			    0,  -- SoNgayNghi - tinyint
+			    @luongcd,  -- LuongCD - int
+			    0,  -- TienBiTru - int
+			    0,  -- LuongThuong - int
+			    0,  -- Luong - int
+			    0.0 -- HieuSuat - float
+			    )
+			END
+			FETCH NEXT FROM c INTO @manv
+			--SELECT @luongcd = LuongCD FROM dbo.ct_nhanvien WHERE Thang_NV = @preMonth AND Nam_NV = @preYear AND MaNV = @manv
+			
+		END
+		CLOSE c
+		DEALLOCATE c
+    END
+END
