@@ -7,6 +7,7 @@
  *
  * @author 84978
  */
+import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -23,7 +24,7 @@ import javax.swing.table.DefaultTableModel;
 public class DBUpdater {
     String conString = "jdbc:sqlserver://localhost:1433;databaseName=QuanLyCuaHang";
     String username = "sa";
-    String password = "123456";
+    String password = "1";
     public Boolean checkUniqueUserName(String user){
         /* Hàm này dùng để kiểm tra xem id tài khoản có bị trùng không 
         Trả về True nếu trong cơ sở dữ liệu đã có id 
@@ -625,6 +626,112 @@ public class DBUpdater {
             ex.printStackTrace();
         }
         return -1;
+   }
+   public ResultSet GetStatisticEmployeeByStore(String storeid, int month, int year){
+       DefaultTableModel table = new DefaultTableModel();
+       String query="exec sp_ThongKeNhanVienThuNgan ?,?,?";
+       PreparedStatement statement;
+       try{
+           Connection con =  DriverManager.getConnection(conString,username,password);
+           statement= con.prepareStatement(query);
+           statement.setString(1,storeid );
+           statement.setInt(2,month);
+           statement.setInt(3, year);
+           ResultSet rs=statement.executeQuery();
+           
+          /* while(rs.next()){
+               String thang = rs.getString(1);
+               String nam  = rs.getString(2);
+               String manv = rs.getString(3);
+               String sodonghang = rs.getString(4);
+               String doanhso = rs.getString(5);
+               String quota = rs.getString(6);
+               String hieusuat = rs.getString(7);
+               table.addRow(new String[]{thang,nam,manv,sodonghang,doanhso,quota,hieusuat});*
+           }*/
+           return rs;
+       }catch(Exception e){
+           e.printStackTrace();
+       }
+       return null;
+   }
+   public ResultSet GetSaleStaffIDByStore(String storeid){
+       String query="select * FROM NHANVIEN WHERE MACH=? and MALOAI=?";
+       PreparedStatement s;
+       try{
+           Connection c = DriverManager.getConnection(conString,username,password);
+           s=c.prepareStatement(query);
+           s.setString(1, storeid);
+           s.setString(2, "LOAINV2");
+           ResultSet r = s.executeQuery();
+           return r;
+           
+       }catch(Exception e){
+           e.printStackTrace();
+       }
+       return null;
+   }
+   public ResultSet GetSalaryInfoByStaff(String staffID, int thang, int nam){
+       String query="exec sp_GetSalaryInfoByStaffID ?, ?, ?";
+       PreparedStatement statement;
+       try{
+           Connection c = DriverManager.getConnection(conString,username,password);
+           statement=c.prepareStatement(query);
+           statement.setString(1, staffID);
+           statement.setInt(2, thang);
+           statement.setInt(3, nam);
+           ResultSet rs = statement.executeQuery();
+           return rs;
+       }catch(Exception e){
+               e.printStackTrace();
+       }
+       return null;
+   }
+   public ResultSet GetInfoStaff (String staffid){
+       String query="select * from NHANVIEN where MANV = ?";
+       PreparedStatement statement;
+       try{
+           Connection c = DriverManager.getConnection(conString,username,password);
+           statement=c.prepareStatement(query);
+           statement.setString(1, staffid);
+           ResultSet rs = statement.executeQuery();
+           return rs;
+       }catch(Exception e){
+               e.printStackTrace();
+       }
+       return null;
+   }
+   public int UpdateSalaryInfo (String staffid, int songaynghi, int luongcd, int thang, int nam){
+       String query = "update CT_NHANVIEN set SoNgayNghi= " + songaynghi +  ", LuongCD= " + luongcd + 
+               "where manv = '" + staffid + "' and thang_nv = " + thang + " and nam_nv = " + nam;
+       try{
+           Connection con = DriverManager.getConnection(conString, username, password);
+           Statement statement=con.createStatement();
+           int n = statement.executeUpdate(query);
+           return n;
+           
+       }catch(Exception e){
+           e.printStackTrace();
+       }
+       return 0;
+            
+   }
+   public int AddNewQuotaSale (String mach, int month, int year, int quota){
+       String query = "exec dbo.sp_AddNewQuotaSale ?,?,?,?";
+       PreparedStatement st;
+       try{
+           Connection c = DriverManager.getConnection(conString,username,password);
+           st=c.prepareStatement(query);
+           st.setInt(1, month);
+           st.setInt(2, year);
+           st.setInt(3, quota);
+           st.setString(4, mach);
+           int n = st.executeUpdate();
+           return n;
+       }catch(Exception e){
+           e.printStackTrace();
+       }
+       return 0;
    }
 }
    
