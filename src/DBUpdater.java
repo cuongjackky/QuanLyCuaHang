@@ -17,6 +17,7 @@ import java.util.Vector;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import java.sql.PreparedStatement;
+import javax.naming.spi.DirStateFactory;
 
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -637,16 +638,7 @@ public class DBUpdater {
            statement.setInt(3, year);
            ResultSet rs=statement.executeQuery();
            
-          /* while(rs.next()){
-               String thang = rs.getString(1);
-               String nam  = rs.getString(2);
-               String manv = rs.getString(3);
-               String sodonghang = rs.getString(4);
-               String doanhso = rs.getString(5);
-               String quota = rs.getString(6);
-               String hieusuat = rs.getString(7);
-               table.addRow(new String[]{thang,nam,manv,sodonghang,doanhso,quota,hieusuat});*
-           }*/
+          
            return rs;
        }catch(Exception e){
            e.printStackTrace();
@@ -700,12 +692,18 @@ public class DBUpdater {
        return null;
    }
    public int UpdateSalaryInfo (String staffid, int songaynghi, int luongcd, int thang, int nam){
-       String query = "update CT_NHANVIEN set SoNgayNghi= " + songaynghi +  ", LuongCD= " + luongcd + 
-               "where manv = '" + staffid + "' and thang_nv = " + thang + " and nam_nv = " + nam;
+       String query = "exec sp_UpdateSalaryInfo ?,?,?,?,?";
+       PreparedStatement statement;
+               
        try{
            Connection con = DriverManager.getConnection(conString, username, password);
-           Statement statement=con.createStatement();
-           int n = statement.executeUpdate(query);
+           statement=con.prepareStatement(query);
+           statement.setString(1, staffid);
+           statement.setInt(2, thang);
+           statement.setInt(3, nam);
+           statement.setInt(4, songaynghi);
+           statement.setInt(5, luongcd);
+           int n = statement.executeUpdate();
            return n;
            
        }catch(Exception e){
@@ -1159,6 +1157,579 @@ public class DBUpdater {
         }
         return false;
    }
+   public ResultSet GetCategory(){
+       String query="select * from LOAINHANVIEN";
+       Statement statement;
+       try{
+           Connection c = DriverManager.getConnection(conString,username,password);
+           statement=c.createStatement();
+           ResultSet rs = statement.executeQuery(query);
+           return rs;
+       }catch(Exception e){
+               e.printStackTrace();
+       }
+       return null;
+   }
+   public ResultSet GetListInfoStaff(String storeid){
+       String query="select * from NHANVIEN where MACH = ?";
+       PreparedStatement statement;
+       try{
+           Connection c = DriverManager.getConnection(conString,username,password);
+           statement=c.prepareStatement(query);
+           statement.setString(1, storeid);
+           ResultSet rs = statement.executeQuery();
+           return rs;
+       }catch(Exception e){
+               e.printStackTrace();
+       }
+       return null;
+   }
+   public int CountNumberOfStaff(){
+        /*
+        Hàm này dùng để đến số lượng khách hàng
+        */
+        String sql = "SELECT COUNT(*) FROM NHANVIEN";
+        try {
+        	      	
+        	Connection con=DriverManager.getConnection(conString, username, password);
+
+                Statement s = con.createStatement();
+
+                ResultSet rs = s.executeQuery(sql);
+                
+                rs.next();
+                int ans = 0;
+                ans = Integer.parseInt(rs.getString(1));
+                return ans;
+                
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return -1;
+    }
+   public Boolean checkUniqueStaffID(String id){
+       
+        String sql = "SELECT * FROM NHANVIEN WHERE MaNV = ?";
+        PreparedStatement statement ;
+        try {
+        	      	
+        	Connection con=DriverManager.getConnection(conString, username, password);
+                statement = con.prepareStatement(sql);
+                statement.setString(1,id);
+                
+                
+                ResultSet rs = statement.executeQuery();
+                if(rs.next()){
+                    return true;
+                }
+                return false;
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return false;
+        
+    }
+   public int InsertNewStaff(String mach, String manv , String ho, String ten , String gioitinh ,
+                        String date, String sdt, String email, String maloai){
+       String query = "exec sp_InsertNewStaff ?,?,?,?,?,?,?,?,?";
+       PreparedStatement statement;
+       try{
+           Connection c = DriverManager.getConnection(conString,username,password);
+           statement=c.prepareStatement(query);
+           statement.setString(1, mach);
+           statement.setString(2, manv);
+           statement.setString(3, ho);
+           statement.setString(4, ten); 
+           statement.setString(5, gioitinh);
+           statement.setString(6, date);
+           statement.setString(7, sdt);
+           statement.setString(8, email);
+           statement.setString(9, maloai);
+
+           int rs = statement.executeUpdate();
+           return rs;
+       }catch(Exception e){
+               e.printStackTrace();
+       }
+       return -1;
+   }
+   public int UpdateInfoStaff(String manv , String ho, String ten , String gioitinh ,
+                        String date, String sdt, String email, String maloai){
+       String query = "exec sp_UpdateInfoStaff ?,?,?,?,?,?,?,?";
+       PreparedStatement statement;
+       try{
+           Connection c = DriverManager.getConnection(conString,username,password);
+           statement=c.prepareStatement(query);
+           statement.setString(1, manv);
+           statement.setString(2, ho);
+           statement.setString(3, ten); 
+           statement.setString(4, gioitinh);
+           statement.setString(5, date);
+           statement.setString(6, sdt);
+           statement.setString(7, email);
+           statement.setString(8, maloai);
+
+           int rs = statement.executeUpdate();
+           return rs;
+       }catch(Exception e){
+               e.printStackTrace();
+       }
+       return -1;
+   }
+   public int DeleteStaff(String manv){
+       String query= "Delete from NHANVIEN where MANV= ?";
+        PreparedStatement statement ;
+        try {
+        	      	
+        	Connection con=DriverManager.getConnection(conString, username, password);
+                statement = con.prepareStatement(query);
+                statement.setString(1,manv);
+                int result = statement.executeUpdate();
+          
+               return result;
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return -1;
+   }
+   public int UpdateQuotaSale(String mach, int month, int year, int quota){
+       String query = "exec sp_UpdateQuotaSale ?,?,?,?";
+       PreparedStatement statement ;
+        try {
+        	      	
+        	Connection con=DriverManager.getConnection(conString, username, password);
+                statement = con.prepareStatement(query);
+                statement.setString(1,mach);
+                statement.setInt(2,month);
+                statement.setInt(3,year);
+                statement.setInt(4,quota);
+                int result = statement.executeUpdate();
+          
+               return result;
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return -1;
+   }
+   public ResultSet GetDetailInfoStaff(String id){
+       String query = "SELECT*FROM dbo.TAIKHOAN_NV, dbo.NHANVIEN WHERE NHANVIEN.MaNV=? AND NHANVIEN.MaNV=TAIKHOAN_NV.MaNV";
+       PreparedStatement statement ;
+        try {
+        	      	
+        	Connection con=DriverManager.getConnection(conString, username, password);
+                statement = con.prepareStatement(query);
+                statement.setString(1,id);
+               
+                ResultSet rs = statement.executeQuery();
+          
+               return rs;
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
+   }
+   public int UpdatePassStaff (String manv, String pass){
+       String query = "exec sp_UpdatePassStaff ?,?";
+       PreparedStatement statement ;
+        try {
+        	      	
+        	Connection con=DriverManager.getConnection(conString, username, password);
+                statement = con.prepareStatement(query);
+                statement.setString(1,manv);
+               statement.setString(2, pass);
+                int rs = statement.executeUpdate();
+          
+               return rs;
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return -1;
+   }
+   public ResultSet GetOrderListByStaffID(String staffid){
+       String query = "select*from DONHANG where manv=?";
+       PreparedStatement statement ;
+        try {
+        	      	
+        	Connection con=DriverManager.getConnection(conString, username, password);
+                statement = con.prepareStatement(query);
+                statement.setString(1,staffid);
+               
+                ResultSet rs = statement.executeQuery();
+          
+               return rs;
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
+   }
+   public ResultSet GetOrderListByStaffID_MY(String staffid, int thang, int nam){
+       String query = "exec sp_GetOrderListByID_MY ?,?,?";
+       PreparedStatement statement ;
+        try {
+        	      	
+        	Connection con=DriverManager.getConnection(conString, username, password);
+                statement = con.prepareStatement(query);
+                statement.setString(1,staffid);
+               statement.setInt(2, thang);
+               statement.setInt(3, nam);
+                ResultSet rs = statement.executeQuery();
+          
+               return rs;
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
+   }
+   public ResultSet GetOrderListByStaffID_MY_Status(String staffid, int thang, int nam, String trangthai){
+       String query = "sp_GetOrderListByID_MY_Status ?,?,?,?";
+       PreparedStatement statement ;
+        try {
+        	      	
+        	Connection con=DriverManager.getConnection(conString, username, password);
+                statement = con.prepareStatement(query);
+                statement.setString(1,staffid);
+               statement.setInt(2, thang);
+               statement.setInt(3, nam);
+               statement.setString(4,trangthai);
+                ResultSet rs = statement.executeQuery();
+          
+               return rs;
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
+   }
+   public ResultSet GetDetailOrder(String madh){
+       String query = " sp_GetDetailOrder ?";
+       PreparedStatement statement ;
+        try {
+        	      	
+        	Connection con=DriverManager.getConnection(conString, username, password);
+                statement = con.prepareStatement(query);
+                statement.setString(1,madh);
+               
+                ResultSet rs = statement.executeQuery();
+          
+               return rs;
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
+   }
+   public ResultSet GetCusInfoForDetailOrder(String makh){
+       String query = " select*from khachhang where makh= ?";
+       PreparedStatement statement ;
+        try {
+        	      	
+        	Connection con=DriverManager.getConnection(conString, username, password);
+                statement = con.prepareStatement(query);
+                statement.setString(1,makh);
+               
+                ResultSet rs = statement.executeQuery();
+          
+               return rs;
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
+   }
+   public String GetStoreIDByStaff(String staffid)
+   {
+       String query="Select MACH FROM NHANVIEN WHERE MANV= ?";
+       PreparedStatement statement;
+        try {
+        	      	
+        	Connection con=DriverManager.getConnection(conString, username, password);
+                statement = con.prepareStatement(query);
+                statement.setString(1,staffid);
+               
+                ResultSet rs = statement.executeQuery();
+                rs.next();
+                String mach = rs.getString(1);
+               return mach;
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return "";
+   }
+   public ResultSet GetListProductByStore(String storeid){
+       var query = "SELECT sp.*, ch.SoLuongTon FROM dbo.SP_CH ch, dbo.SANPHAM sp WHERE ch.MaSP=sp.MaSP AND ch.MaCH=?";
+       PreparedStatement statement;
+        try {
+        	      	
+        	Connection con=DriverManager.getConnection(conString, username, password);
+                statement = con.prepareStatement(query);
+                statement.setString(1,storeid);
+               
+                ResultSet rs = statement.executeQuery();
+               
+               return rs;
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
+   }
+   public ResultSet GetListProductByStore_OOS(String storeid){
+       var query = "SELECT sp.*, ch.SoLuongTon FROM dbo.SP_CH ch, dbo.SANPHAM sp WHERE ch.MaSP=sp.MaSP AND ch.MaCH=? AND ch.SoLuongTon <=50";
+       PreparedStatement statement;
+        try {
+        	      	
+        	Connection con=DriverManager.getConnection(conString, username, password);
+                statement = con.prepareStatement(query);
+                statement.setString(1,storeid);
+               
+                ResultSet rs = statement.executeQuery();
+               
+               return rs;
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
+   }
+   public String GetWareHouseIDByStore(String mach){
+       String query="Select MAKHO FROM KHO WHERE MACH= ?";
+       PreparedStatement statement;
+        try {
+        	      	
+        	Connection con=DriverManager.getConnection(conString, username, password);
+                statement = con.prepareStatement(query);
+                statement.setString(1,mach);
+               
+                ResultSet rs = statement.executeQuery();
+                rs.next();
+                String makho = rs.getString(1);
+               return makho;
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return "";
+   }
+   public int CountNumberOfImportWH(){
+        /*
+        Hàm này dùng để đến số lượng khách hàng
+        */
+        String sql = "SELECT COUNT(*) FROM DONNHAP";
+        try {
+        	      	
+        	Connection con=DriverManager.getConnection(conString, username, password);
+
+                Statement s = con.createStatement();
+
+                ResultSet rs = s.executeQuery(sql);
+                
+                rs.next();
+                int ans = 0;
+                ans = Integer.parseInt(rs.getString(1));
+                return ans;
+                
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return -1;
+    }
+   public Boolean checkUniqueImportWHID(String id){
+       
+        String sql = "SELECT * FROM DONNHAP WHERE MADN = ?";
+        PreparedStatement statement ;
+        try {
+        	      	
+        	Connection con=DriverManager.getConnection(conString, username, password);
+                statement = con.prepareStatement(sql);
+                statement.setString(1,id);
+                
+                
+                ResultSet rs = statement.executeQuery();
+                if(rs.next()){
+                    return true;
+                }
+                return false;
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return false;
+        
+    }
+   public ResultSet GetListAllProductID(){
+       var query = "SELECT MASP FROM SANPHAM";
+       Statement statement;
+        try {
+        	      	
+        	Connection con=DriverManager.getConnection(conString, username, password);
+                statement = con.createStatement();
+                ResultSet rs = statement.executeQuery(query);
+               
+               return rs;
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
+   }
+   public ResultSet GetInfoProdForImportForm(String masp){
+       String query = "exec sp_GetInfoProductForImportForm ?";
+        PreparedStatement statement ;
+        try {
+        	      	
+        	Connection con=DriverManager.getConnection(conString, username, password);
+                statement = con.prepareStatement(query);
+                statement.setString(1,masp);
+                
+                
+                ResultSet rs = statement.executeQuery();
+                return rs;
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
+   }
+   public int InsertNewImportForm(String madh, String date, String makho, String manv){
+       String query="INSERT INTO DONNHAP VALUES (?,?,?,?)";
+        PreparedStatement statement ;
+        try {
+        	      	
+        	Connection con=DriverManager.getConnection(conString, username, password);
+                statement = con.prepareStatement(query);
+                statement.setString(1,madh);
+                statement.setString(2, date);
+                statement.setString(3, makho);
+                statement.setString(4, manv);
+                
+                int rs = statement.executeUpdate();
+                return rs;
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return -1;
+   }
+   public int InsertNewDetailImport(String madh, String masp, int sl, String mach){
+       String query="sp_InsertDetailImportForm ?,?,?,?";
+        PreparedStatement statement ;
+        try {
+        	      	
+        	Connection con=DriverManager.getConnection(conString, username, password);
+                statement = con.prepareStatement(query);
+                statement.setString(1,madh);
+                statement.setString(2, masp);
+                statement.setInt(3, sl);
+               statement.setString(4,mach);
+                
+                int rs = statement.executeUpdate();
+                return rs;
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return -1;
+   }
+   public ResultSet GetAllListImportByStaff(String staffid){
+       String query = "SELECT*FROM DONNHAP WHERE MANV= ?";
+        PreparedStatement statement ;
+        try {
+        	      	
+        	Connection con=DriverManager.getConnection(conString, username, password);
+                statement = con.prepareStatement(query);
+                statement.setString(1,staffid);
+                
+                
+                ResultSet rs = statement.executeQuery();
+                return rs;
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
+   }
+   public ResultSet GetAllListImportByStaff_MY(String staffid, int thang, int nam){
+       String query = "SELECT*FROM DONNHAP WHERE MANV= ? and YEAR(NGAYNHAP)= ? AND MONTH(NGAYNHAP)=?";
+        PreparedStatement statement ;
+        try {
+        	      	
+        	Connection con=DriverManager.getConnection(conString, username, password);
+                statement = con.prepareStatement(query);
+                statement.setString(1,staffid);
+                statement.setInt(2, nam);
+                statement.setInt(3, thang);
+                ResultSet rs = statement.executeQuery();
+                return rs;
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
+   }
+   public ResultSet GetInfoDI(String madn){
+       String query = "SELECT*FROM CT_DONNHAP WHERE MADN= ?";
+        PreparedStatement statement ;
+        try {
+        	      	
+        	Connection con=DriverManager.getConnection(conString, username, password);
+                statement = con.prepareStatement(query);
+                statement.setString(1,madn);
+                
+                ResultSet rs = statement.executeQuery();
+                return rs;
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
+   }
+   public String GetStaffIdbyUserName(String user){
+       String query = "SELECT MaNV FROM TAIKHOAN_NV WHERE id = ?";
+        PreparedStatement statement ;
+        try {
+        	      	
+        	Connection con=DriverManager.getConnection(conString, username, password);
+                statement = con.prepareStatement(query);
+                statement.setString(1,user);
+                
+                ResultSet rs = statement.executeQuery();
+                rs.next();
+                return rs.getString(1);
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
+   }
+   public String LayLoaiNV(String MaNV){
+       String query = "SELECT MaLoai FROM NHANVIEN WHERE MaNV = ?";
+        PreparedStatement statement ;
+        try {
+        	      	
+        	Connection con=DriverManager.getConnection(conString, username, password);
+                statement = con.prepareStatement(query);
+                statement.setString(1,MaNV);
+                
+                ResultSet rs = statement.executeQuery();
+                rs.next();
+                return rs.getString(1);
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
+   }
+   
 }
    
 

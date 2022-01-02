@@ -21,6 +21,7 @@ public class SaleStaffFrame extends javax.swing.JFrame {
         txtID.setText(staffid);
         LoadInfoStaff(staffID);
         LoadTableOrder();
+        this.setLocationRelativeTo(null);
     }
 
     private SaleStaffFrame() {

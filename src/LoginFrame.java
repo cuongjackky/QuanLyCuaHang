@@ -1,4 +1,4 @@
-
+import java.sql.ResultSet;
 import javax.swing.JOptionPane;
 import java.awt.Toolkit;
 /*
@@ -252,7 +252,24 @@ public class LoginFrame extends javax.swing.JFrame {
                else{
                    if(new DBUpdater().EmployeeLogin(user, password)){
                         JOptionPane.showMessageDialog(this, "Đăng nhập thành công !!");
-                   
+                        try{
+                            DBUpdater db = new DBUpdater();
+                            String StaffId = db.GetStaffIdbyUserName(user);
+                            String MaLoai = db.LayLoaiNV(StaffId);
+                            
+                            if(MaLoai.equals("LOAINV1")){
+                                new WarehouseStaffFrame(StaffId).setVisible(true);
+                                this.setVisible(false);
+                            }
+                            else{
+                                new SaleStaffFrame(StaffId).setVisible(true);
+                                this.setVisible(false);
+                            }
+                            
+                        }
+                        catch(Exception e){
+                            
+                        }
                         this.setVisible(false);
                         //Giao dien Nhan vien
                     }

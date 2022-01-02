@@ -288,26 +288,30 @@ BEGIN
 
 
 	IF (@QUOTA < @DOANHSO)
+	begin
 		UPDATE dbo.CT_NHANVIEN
-		SET LuongThuong = (@DOANHSO - @QUOTA)*0.3,dbo.ct_nhanvien.TienBiTru=dbo.ct_nhanvien.SoNgayNghi*100000, 
-					ct_nhanvien.Luong=ct_nhanvien.LuongCD+dbo.ct_nhanvien.LuongThuong-ct_nhanvien.TienBiTru
-		
+		SET LuongThuong = (@DOANHSO - @QUOTA)*0.3
 		FROM inserted i
 		WHERE i.manv = dbo.CT_NHANVIEN.MaNV AND i.thang_nv=dbo.CT_NHANVIEN.Thang_NV AND i.nam_nv=dbo.CT_NHANVIEN.Nam_NV
+	end
 	ELSE
-    
+    begin
 		UPDATE dbo.CT_NHANVIEN
-		SET LuongThuong=0, dbo.ct_nhanvien.TienBiTru=dbo.ct_nhanvien.SoNgayNghi*100000, 
-			ct_nhanvien.Luong=ct_nhanvien.LuongCD+dbo.ct_nhanvien.LuongThuong-ct_nhanvien.TienBiTru
+		SET LuongThuong=0
 		FROM inserted i
 		WHERE i.manv = dbo.CT_NHANVIEN.MaNV AND i.thang_nv=dbo.CT_NHANVIEN.Thang_NV AND i.nam_nv=dbo.CT_NHANVIEN.Nam_NV
-
+	end
 	UPDATE dbo.CT_NHANVIEN
-	SET HieuSuat = (dbo.CT_NHANVIEN.DoanhSo*1.0/dbo.CT_NHANVIEN.QuotaSale) * 100 
+	SET HieuSuat = (dbo.CT_NHANVIEN.DoanhSo*1.0/dbo.CT_NHANVIEN.QuotaSale) * 100, 
+		dbo.ct_nhanvien.TienBiTru=dbo.ct_nhanvien.SoNgayNghi*100000
+		
 	FROM Inserted i
 	WHERE i.MaNV = dbo.CT_NHANVIEN.MaNV AND i.Nam_NV = dbo.CT_NHANVIEN.Nam_NV AND i.Thang_NV = dbo.CT_NHANVIEN.Thang_NV
 
-	--update so don hang, doanh so
+	UPDATE dbo.ct_nhanvien
+	SET dbo.ct_nhanvien.Luong=dbo.ct_nhanvien.LuongCD+dbo.ct_nhanvien.LuongThuong-dbo.ct_nhanvien.TienBiTru
+	FROM Inserted i
+	WHERE i.MaNV = dbo.CT_NHANVIEN.MaNV AND i.Nam_NV = dbo.CT_NHANVIEN.Nam_NV AND i.Thang_NV = dbo.CT_NHANVIEN.Thang_NV--update so don hang, doanh so
 
 
 END
@@ -443,7 +447,7 @@ BEGIN
 		FETCH NEXT FROM c INTO @manv
 		WHILE @@FETCH_STATUS = 0
 		BEGIN 
-			SELECT @luongcd= LuongCD FROM dbo.ct_nhanvien WHERE MaNV=@manv
+			SELECT @luongcd= LuongCD FROM dbo.ct_nhanvien WHERE MaNV=@manv AND Nam_NV=@preYear AND Thang_NV=@preMonth
 			IF EXISTS(SELECT*FROM dbo.ct_nhanvien WHERE Thang_NV=@thang AND Nam_NV=@nam AND manv =@manv)
 			BEGIN 
 				--RAISERROR('Thong tin da ton tai',15,1)
@@ -518,3 +522,18 @@ BEGIN
 	FROM   CT_DONHANG,inserted
 	WHERE CT_DONHANG.MaSP =inserted.MaSp AND CT_DONHANG.MaDH =inserted.MaDH
 END
+--insert new staff
+
+									
+									SELECT*FROM dbo.SP_CH WHERE MACH = 'CH85650' AND MASP='SP261013'
+									SELECT*FROM dbo.CT_DONNHAP WHERE 
+									SELECT*FROM dbo.DONNHAP
+									SELECT*FROM KHO
+									SELECT*FROM dbo.DONNHAP WHERE manv='NV06168'
+
+CREATE PROC sp_GetInfoDI @madn varchar(20)
+AS
+BEGIN
+	
+END
+GO
