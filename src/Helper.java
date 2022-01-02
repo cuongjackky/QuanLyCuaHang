@@ -72,6 +72,86 @@ public class Helper {
         return id;
         
     }
+    public String TaoMaDanhMucNgauNhien(){
+        String id = "DM";
+        int n = new DBUpdater().DemSoDanhMuc();
+        Random r = new Random();
+        if(n != -1&&n<10000){
+            n++;
+            String temp = Integer.toString(n);
+            for(int i =0;i<5-temp.length();i++){
+                id+="0";
+            }
+            id+=temp;
+            for(int i =0;i<4;i++){
+                int num = r.nextInt(26);
+                char c = (char) ('A'+num);
+                id+=c;
+            }
+        }
+        return id;
+    }
+    public String TaoMaDanhMucNgauNhienKhongTrungLap(){
+        String id = TaoMaDanhMucNgauNhien();
+        while(new DBUpdater().KTTrungLapDanhMuc(id)){ // Khi bị trùng thì tạo mới một cái khác
+            id =TaoMaDanhMucNgauNhien();
+        }
+        return id;
+    }
+    public String TaoMaNhaCungCapNgauNhien(){
+        String id = "NCC";
+        int n = new DBUpdater().DemSoNhaCungCap();
+        Random r = new Random();
+        if(n != -1&&n<10000){
+            n++;
+            String temp = Integer.toString(n);
+            for(int i =0;i<5-temp.length();i++){
+                id+="0";
+            }
+            id+=temp;
+            for(int i =0;i<4;i++){
+                int num = r.nextInt(26);
+                char c = (char) ('A'+num);
+                id+=c;
+            }
+        }
+        return id;
+    }
+    public String TaoMaNhaCungCapNgauNhienKhongTrungLap(){
+        String id = TaoMaNhaCungCapNgauNhien();
+        while(new DBUpdater().KTTrungLapNhaCungCap(id)){ // Khi bị trùng thì tạo mới một cái khác
+            id =TaoMaNhaCungCapNgauNhien();
+        }
+        return id;
+    }
+    public String TaoMaSanPhamNgauNhien(){
+        String id = "SP";
+        int n = new DBUpdater().DemSoSanPham();
+        Random r = new Random();
+        if(n != -1&&n<1000000){
+            n++;
+            String temp = Integer.toString(n);
+            for(int i =0;i<7-temp.length();i++){
+                id+="0";
+            }
+            id+=temp;
+            for(int i =0;i<4;i++){
+                int num = r.nextInt(26);
+                char c = (char) ('A'+num);
+                id+=c;
+            }
+        }
+        return id;
+    }
+    public String TaoMaSanPhamNgauNhienKhongTrungLap(){
+        String id = TaoMaSanPhamNgauNhien();
+        while(new DBUpdater().KTTrungLapNhaCungCap(id)){ // Khi bị trùng thì tạo mới một cái khác
+            id =TaoMaSanPhamNgauNhien();
+        }
+        return id;
+    }
+    
+    
     
         
         

@@ -24,7 +24,7 @@ import javax.swing.table.DefaultTableModel;
 public class DBUpdater {
     String conString = "jdbc:sqlserver://localhost:1433;databaseName=QuanLyCuaHang";
     String username = "sa";
-    String password = "1";
+    String password = "123456";
     public Boolean checkUniqueUserName(String user){
         /* Hàm này dùng để kiểm tra xem id tài khoản có bị trùng không 
         Trả về True nếu trong cơ sở dữ liệu đã có id 
@@ -204,7 +204,7 @@ public class DBUpdater {
         /*
         Tương tự, dùng cho chủ cửa hàng
         */
-        String sql = "Select * from TAIKHOAN_CCH Where ID = ? AND PassWord = ?";
+        String sql = "Select * from TAIKHOAN_QL Where ID = ? AND PassWord = ?";
         PreparedStatement statement ;
         try {
         	      	
@@ -298,19 +298,8 @@ public class DBUpdater {
         }
         return null;
     }
-    public DefaultTableModel getOrderHistory(String customerId) {
-        // Lấy tất cả DonHang có MaKH trùng với MaKH được đưa vào, trả về 1 bảng
-        //ADD COLUMNS TO TABLE MODEL
-        DefaultTableModel dm = new DefaultTableModel(); //Tạo bảng
-        dm.addColumn("Mã đơn hàng"); //Thêm cột tên "Mã đơn hàng"
-        dm.addColumn("Mã cửa hàng");
-        dm.addColumn("Ngày đặt");
-        dm.addColumn("Tổng tiền sản phẩm");
-        dm.addColumn("Phí vận chuyển");
-        dm.addColumn("Tổng tiền");
-        dm.addColumn("Trạng thái đơn hàng");
-
-        //SQL STATEMENT
+    public ResultSet getOrderHistory(String customerId) {
+        
         String sql = "SELECT * FROM DONHANG WHERE MaKH = ?";
         PreparedStatement statement ;
         try {
@@ -320,24 +309,9 @@ public class DBUpdater {
                 statement.setString(1,customerId);
                 
                 ResultSet rs = statement.executeQuery();
+                return rs;
             
-            //LOOP THRU GETTING ALL VALUES
-            while (rs.next()) { //Lấy dòng tiếp theo, khi rs.next() = false tức là hết dòng 
-                //GET VALUES
-                
-                String MaDH = rs.getString(1); // lấy cột thứ 1.
-                String MaCH = rs.getString(3);
-                String ngayDat = rs.getString(4);
-                String TongTienSP = rs.getString(5);
-                String phiVc = rs.getString(6);
-                String TongTien = rs.getString(7);
-                String TrangThai = rs.getString(14);
-
-                dm.addRow(new String[]{MaDH, MaCH, ngayDat, TongTienSP,phiVc,TongTien,TrangThai}); //thêm 1 dòng vô bảng
-            }
             
-
-            return dm;
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -348,65 +322,48 @@ public class DBUpdater {
 
     }
     
-    public DefaultTableModel SearchSupplies(String Item,String StoreId) {
+    public ResultSet SearchSupplies(String StoreId) {
         //ADD COLUMNS TO TABLE MODEL
         /*
         Hàm này dùng để tìm kiếm Sản phẩm cùng 1 cửa hàng
         */
-        DefaultTableModel dm = new DefaultTableModel();
-        dm.addColumn("Mã sản phẩm");
-        dm.addColumn("Tên sản phẩm");
-        dm.addColumn("Giá gốc");
-        dm.addColumn("Phầm trăm giá giảm");
-        dm.addColumn("Số lượng tồn kho");
-        dm.addColumn("Mã nhà cung cấp");
-       
+        
+       PreparedStatement statement;
         String sql;
-        Item=Item+'%'; // thêm % phía sau MaSP hoặc TenSP để so sánh bằng LIKE
+         // thêm % phía sau MaSP hoặc TenSP để so sánh bằng LIKE
         /*
-        Nếu MaCH bằng null, tìm tất cả sản phẩm giống MaSP hoặc TenSP
-        Nếu MaCH khác null, tìm tất cả sản phẩm giống MaSP hoặc TenSP cùng cửa hàng với MaCH
+        Nếu MaCH bằng null, tìm tất cả sản phẩm 
+        Nếu MaCH khác null, tìm tất cả sản phẩm  cùng cửa hàng với MaCH
         */
-        if(StoreId.equals("")){
-            sql = "SELECT sp.MaSP,sp.TenSP,sp.GiaGoc,sp.PhanTramGiamGia,spch.SoLuongTon,sp.MaNCC\n" +
-            "FROM SANPHAM sp,SP_CH spch\n" +
-            "WHERE sp.MaSP = spch.MaSP "
-                + " AND( sp.MaSP LIKE '"+Item+"' OR sp.TenSP LIKE N'"+Item+"')";
-        }
-        else{
-            sql = "SELECT sp.MaSP,sp.TenSP,sp.GiaGoc,sp.PhanTramGiamGia,spch.SoLuongTon,sp.MaNCC\n" +
-            "FROM SANPHAM sp,SP_CH spch\n" +
-            "WHERE sp.MaSP = spch.MaSP "
-                + " AND( sp.MaSP LIKE '"+Item+"' OR sp.TenSP LIKE N'"+Item+"') AND spch.MaCH= '"+StoreId+"'";
-        }
-
-        //SQL STATEMENT
         
 
         try {
-        
+            Boolean flag = false;
             Connection con = DriverManager.getConnection(conString, username, password);
-            
-           
-
-            //PREPARED STMT
-            Statement s = con.createStatement();
-            ResultSet rs = s.executeQuery(sql);
-            //PREPARED STMT
-            
-            
-            
-            while(rs.next()){
-                String MaSp = rs.getString(1);
-                String TenSp = rs.getString(2);
-                String GiaGoc = rs.getString(3);
-                String PhanTram = rs.getString(4);
-                String SoLuong = rs.getString(5);
-                String MaNCC = rs.getString(6);
-                dm.addRow(new String[]{MaSp, TenSp, GiaGoc, PhanTram,SoLuong,MaNCC});
-                
+            if(StoreId.equals("")){
+                sql = "SELECT sp.MaSP,sp.TenSP,sp.GiaGoc,sp.PhanTramGiamGia,spch.SoLuongTon,sp.MaNCC\n" +
+                "FROM SANPHAM sp,SP_CH spch\n" +
+                "WHERE sp.MaSP = spch.MaSP ";
+              
             }
-            return dm;
+            else{
+                sql = "SELECT sp.MaSP,sp.TenSP,sp.GiaGoc,sp.PhanTramGiamGia,spch.SoLuongTon,sp.MaNCC\n" +
+                "FROM SANPHAM sp,SP_CH spch\n" +
+                "WHERE sp.MaSP = spch.MaSP AND spch.MaCH= ?";
+                flag= true;
+            }
+            
+            
+            statement = con.prepareStatement(sql);
+            
+            if(flag==true){
+                statement.setString(1, StoreId);
+            }
+            ResultSet rs = statement.executeQuery();
+            return rs;
+            
+            
+            
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -569,14 +526,13 @@ public class DBUpdater {
         }
         return null;
    }
-   public Boolean insertNewOrderDetail(String OrderId,int stt,String SuppliesId,String Quantily){
+   public Boolean insertNewOrderDetail(String OrderId,String SuppliesId,String Quantily){
        /*
        Hàm này dùng để thêm mới 1 CT_DONHANG
        Phải cài 2 store sp_themChiTietDonHang và sp_capNhatDonHang mới chạy được
        */
-       String sql = "Insert INTO CT_DONHANG(MaDH,STT,MaSP,SoLuong) VALUES(?,?,?,?)";// thêm vào CT_DONHANG
-       String procdure = "exec sp_themChiTietDonHang ?,?,?"; // Cập nhật GiaBan, ThanhTien,MaNCC
-       String procdure2 = "exec sp_capNhatDonHang ?";// Cập nhật DonHang
+       String sql = "exec sp_THEM_CTDH ?,?,?";// thêm vào CT_DONHANG
+       
        
        PreparedStatement statement ;
         
@@ -588,19 +544,11 @@ public class DBUpdater {
             Connection con = DriverManager.getConnection(conString, username, password);
             statement = con.prepareStatement(sql);
             statement.setString(1,OrderId);
-            statement.setInt(2,stt);
-            statement.setString(3,SuppliesId);
-            statement.setString(4,Quantily);
-          
+            statement.setString(2,SuppliesId);
+            statement.setString(3,Quantily);
+            
             statement.execute();
-            statement = con.prepareStatement(procdure);
-            statement.setString(1, OrderId);
-            statement.setInt(2, stt);
-            statement.setString(3, SuppliesId);
-            statement.execute();
-            statement = con.prepareStatement(procdure2);
-            statement.setString(1, OrderId);
-            statement.execute();
+            
             return true;
 
         } catch (Exception ex) {
@@ -732,6 +680,434 @@ public class DBUpdater {
            e.printStackTrace();
        }
        return 0;
+   }
+   public String getStoreManagerId(String user){
+       String query = "Select MaQL FROM TAIKHOAN_QL WHERE ID = ?";
+       PreparedStatement st;
+       try{
+           Connection c = DriverManager.getConnection(conString,username,password);
+           st=c.prepareStatement(query);
+           st.setString(1, user);
+           ResultSet rs = st.executeQuery();
+           rs.next();
+           String StoreManagerId = rs.getString(1);
+           return StoreManagerId;
+       }catch(Exception e){
+           e.printStackTrace();
+       }
+       return null;
+   }
+   public String getStoreIDByManagerId(String StoreManagerId){
+       String query = "Select MaCH FROM CUAHANG WHERE MAQL = ?";
+       PreparedStatement st;
+       try{
+           Connection c = DriverManager.getConnection(conString,username,password);
+           st=c.prepareStatement(query);
+           st.setString(1, StoreManagerId);
+           ResultSet rs = st.executeQuery();
+           rs.next();
+           String StoreID= rs.getString(1);
+           return StoreID;
+       }catch(Exception e){
+           e.printStackTrace();
+       }
+       return null;
+   }
+   public int DemSoDanhMuc(){
+       String sql = "Select Count(*) From DanhMuc";
+       PreparedStatement statement ;
+       try {
+           Connection con = DriverManager.getConnection(conString, username, password);
+           statement = con.prepareStatement(sql);
+           ResultSet rs = statement.executeQuery();
+           rs.next();
+           int ans = Integer.parseInt(rs.getString(1));
+           return ans;
+       }
+        catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return -1;
+   }
+   public int DemSoNhaCungCap(){
+       String sql = "Select Count(*) From NhaCungCap";
+       PreparedStatement statement ;
+       try {
+           Connection con = DriverManager.getConnection(conString, username, password);
+           statement = con.prepareStatement(sql);
+           ResultSet rs = statement.executeQuery();
+           rs.next();
+           int ans = Integer.parseInt(rs.getString(1));
+           return ans;
+       }
+        catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return -1;
+   }
+   public Boolean KTTrungLapDanhMuc(String id){
+       String sql = "SELECT * FROM DANHMUC WHERE MaDM = ?";
+        PreparedStatement statement ;
+        try {
+        	      	
+        	Connection con=DriverManager.getConnection(conString, username, password);
+                statement = con.prepareStatement(sql);
+                statement.setString(1,id);
+                
+                
+                ResultSet rs = statement.executeQuery();
+                if(rs.next()){
+                    return true;
+                }
+                return false;
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return false;
+   }
+   public int DemSoSanPham(){
+       String sql = "Select Count(*) From SANPHAM";
+       PreparedStatement statement ;
+       try {
+           Connection con = DriverManager.getConnection(conString, username, password);
+           statement = con.prepareStatement(sql);
+           ResultSet rs = statement.executeQuery();
+           rs.next();
+           int ans = Integer.parseInt(rs.getString(1));
+           return ans;
+       }
+        catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return -1;
+   }
+   public Boolean KTTrungLapSanPham(String id){
+       String sql = "SELECT * FROM SANPHAM WHERE MaSP = ?";
+        PreparedStatement statement ;
+        try {
+        	      	
+        	Connection con=DriverManager.getConnection(conString, username, password);
+                statement = con.prepareStatement(sql);
+                statement.setString(1,id);
+                
+                
+                ResultSet rs = statement.executeQuery();
+                if(rs.next()){
+                    return true;
+                }
+                return false;
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return false;
+   }
+   public Boolean KTTrungLapNhaCungCap(String id){
+       String sql = "SELECT * FROM NHACUNGCAP WHERE MaNCC = ?";
+        PreparedStatement statement ;
+        try {
+        	      	
+        	Connection con=DriverManager.getConnection(conString, username, password);
+                statement = con.prepareStatement(sql);
+                statement.setString(1,id);
+                
+                
+                ResultSet rs = statement.executeQuery();
+                if(rs.next()){
+                    return true;
+                }
+                return false;
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return false;
+   }
+   public Boolean ThemMoiDanhMuc(String MaDM,String TenDM){
+       String sql = "exec sp_Them1DM ?,?";
+        PreparedStatement statement ;
+        try {
+        	      	
+        	Connection con=DriverManager.getConnection(conString, username, password);
+                statement = con.prepareStatement(sql);
+                statement.setString(1,MaDM);
+                statement.setString(2,TenDM);
+                statement.execute();
+                return true;
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return false;
+   }
+   public Boolean ThemMoiNhaCungCap(String MaNCC,String TenNCC){
+       String sql = "exec sp_Them1NCC ?,?";
+        PreparedStatement statement ;
+        try {
+        	      	
+        	Connection con=DriverManager.getConnection(conString, username, password);
+                statement = con.prepareStatement(sql);
+                statement.setString(1,MaNCC);
+                statement.setString(2,TenNCC);
+                
+                statement.execute();
+                return true;
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return false;
+   }
+   public Boolean ThemMoiSanPham(String MaSP,String TenSP,String MoTa,int GiaGoc,int PhanTram,String MaDM,String MaNCC){
+       String sql = "exec sp_Them1SP ?,?,?,?,?,?,?";
+        PreparedStatement statement ;
+        try {
+        	      	
+        	Connection con=DriverManager.getConnection(conString, username, password);
+                statement = con.prepareStatement(sql);
+                statement.setString(1,MaSP);
+                statement.setString(2,TenSP);
+                statement.setString(3,MoTa);
+                statement.setInt(4,GiaGoc);
+                statement.setInt(5,PhanTram);
+                statement.setString(6,MaDM);
+                statement.setString(7,MaNCC);
+                
+                
+                
+                statement.execute();
+                return true;
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return false;
+   }
+   public ResultSet LayMaDM(){
+       String query = "Select MaDM FROM DANHMUC";
+       PreparedStatement st;
+       try{
+           Connection c = DriverManager.getConnection(conString,username,password);
+           st=c.prepareStatement(query);
+           ResultSet rs = st.executeQuery();
+           return rs;
+       }catch(Exception e){
+           e.printStackTrace();
+       }
+       return null;
+   }
+   public ResultSet LayMaNCC(){
+       String query = "Select MaNCC FROM NHACUNGCAP";
+       PreparedStatement st;
+       try{
+           Connection c = DriverManager.getConnection(conString,username,password);
+           st=c.prepareStatement(query);
+           ResultSet rs = st.executeQuery();
+           return rs;
+       }catch(Exception e){
+           e.printStackTrace();
+       }
+       return null;
+   }
+   public ResultSet LayMaVaDiaChiKho(String MaCH){
+       String query = "Select MaKho,DiaChiKho FROM KHO WHERE KHO.MaCH= ?";
+       PreparedStatement st;
+       try{
+           Connection c = DriverManager.getConnection(conString,username,password);
+           st=c.prepareStatement(query);
+           st.setString(1,MaCH);
+           ResultSet rs = st.executeQuery();
+           return rs;
+       }catch(Exception e){
+           e.printStackTrace();
+       }
+       return null;
+   }
+   
+   public ResultSet LayBangSanPham(String MaCH){
+       String query = "Select * FROM SANPHAM,SP_CH WHERE SANPHAM.MaSP = SP_CH.MaSP AND SP_CH.MaCH = ?";
+       PreparedStatement st;
+       try{
+           Connection c = DriverManager.getConnection(conString,username,password);
+           st=c.prepareStatement(query);
+           st.setString(1, MaCH);
+           ResultSet rs = st.executeQuery();
+           return rs;
+       }catch(Exception e){
+           e.printStackTrace();
+       }
+       return null;
+   }
+   public ResultSet LayBangDonNhap(String MaCH){
+       String query = "Select DONNHAP.* FROM DONNHAP,KHO WHERE DONNHAP.MaKho = Kho.MaKho AND Kho.MaCH = ?";
+       PreparedStatement st;
+       try{
+           Connection c = DriverManager.getConnection(conString,username,password);
+           st=c.prepareStatement(query);
+           st.setString(1, MaCH);
+           ResultSet rs = st.executeQuery();
+           return rs;
+       }catch(Exception e){
+           e.printStackTrace();
+       }
+       return null;
+   }
+   public ResultSet LayBangChiTietDonNhap(String MaDN){
+       String query = "SElECT * from CT_DONNHAP WHERE CT_DONNHAP.MaDN = ?";
+       PreparedStatement st;
+       try{
+           Connection c = DriverManager.getConnection(conString,username,password);
+           st=c.prepareStatement(query);
+           st.setString(1, MaDN);
+           ResultSet rs = st.executeQuery();
+           return rs;
+       }catch(Exception e){
+           e.printStackTrace();
+       }
+       return null;
+   }
+   public ResultSet LayBangDonXuat(String MaCH){
+       String query = "Select DONXUAT.* FROM DONXUAT,KHO WHERE DONXUAT.MaKho = Kho.MaKho AND Kho.MaCH = ?";
+       PreparedStatement st;
+       try{
+           Connection c = DriverManager.getConnection(conString,username,password);
+           st=c.prepareStatement(query);
+           st.setString(1, MaCH);
+           ResultSet rs = st.executeQuery();
+           return rs;
+       }catch(Exception e){
+           e.printStackTrace();
+       }
+       return null;
+   }
+   public ResultSet LayBangChiTietDonXuat(String MaDX){
+       String query = "SElECT * from CT_DONXUAT WHERE CT_DONXUAT.MaDX = ?";
+       PreparedStatement st;
+       try{
+           Connection c = DriverManager.getConnection(conString,username,password);
+           st=c.prepareStatement(query);
+           st.setString(1, MaDX);
+           ResultSet rs = st.executeQuery();
+           return rs;
+       }catch(Exception e){
+           e.printStackTrace();
+       }
+       return null;
+   }
+   public Boolean ThemMoiSanPhamCuaHang(String MaSP, String MaCH){
+       String sql = "Insert INTO SP_CH VALUES(?,?,0)";
+        PreparedStatement statement ;
+        try {
+        	      	
+        	Connection con=DriverManager.getConnection(conString, username, password);
+                statement = con.prepareStatement(sql);
+                statement.setString(1,MaCH);
+                statement.setString(2,MaSP);
+                
+                
+                
+                
+                statement.execute();
+                return true;
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return false;
+   }
+   public ResultSet LayBangTonKho(String MaCH){
+       String query = "Select SANPHAM.MaSP,SANPHAM.TenSP,SP_CH.SoLuongTon FROM SANPHAM,SP_CH WHERE SANPHAM.MaSP =SP_CH.MaSP AND SP_CH.MACH = ? \n" +
+        "ORder by SoLuongTon ASC";
+       PreparedStatement st;
+       try{
+           Connection c = DriverManager.getConnection(conString,username,password);
+           st=c.prepareStatement(query);
+           st.setString(1, MaCH);
+           ResultSet rs = st.executeQuery();
+           return rs;
+       }catch(Exception e){
+           e.printStackTrace();
+       }
+       return null;
+   }
+   public ResultSet LayBangLichSuGia(String MaSP){
+       String query = "Select * FROM LICHSUGIA WHERE MaSP = ? ORDER BY ThoiGianApDung DESC";
+       PreparedStatement st;
+       try{
+           Connection c = DriverManager.getConnection(conString,username,password);
+           st=c.prepareStatement(query);
+           st.setString(1, MaSP);
+           ResultSet rs = st.executeQuery();
+           return rs;
+       }catch(Exception e){
+           e.printStackTrace();
+       }
+       return null;
+   }
+   public Boolean ChinhSuaSanPham(String MaSP, String TenSP,String Mota,int GiaGoc,int PhanTram,String MaDM,String MaNCC){
+       String sql = "Update SANPHAM SET TenSP =?,MoTa = ?,GiaGoc = ?,PhanTramGiamGia = ?,MaDM = ?,MaNCC =? WHERE MaSP =?";
+        PreparedStatement statement ;
+        try {
+        	      	
+        	Connection con=DriverManager.getConnection(conString, username, password);
+                statement = con.prepareStatement(sql);
+                statement.setString(1,TenSP);
+                statement.setString(2,Mota);
+                statement.setInt(3,GiaGoc);
+                statement.setInt(4,PhanTram);
+                statement.setString(5,MaDM);
+                statement.setString(6,MaNCC);
+                statement.setString(7,MaSP);
+                statement.executeUpdate();
+                return true;
+                
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return false;
+   }
+   public Boolean XoaSanPham(String MaCH,String MaSP){
+       String sql = "exec sp_XoaSanPham ?,?";
+        PreparedStatement statement ;
+        try {
+        	      	
+        	Connection con=DriverManager.getConnection(conString, username, password);
+                statement = con.prepareStatement(sql);
+                statement.setString(1,MaCH);
+                statement.setString(2,MaSP);
+                
+                statement.executeUpdate();
+                return true;
+                
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return false;
+   }
+   public Boolean ThemLichSuGia(String MaSP, String ThoiGian,int GiaGoc,int PhanTram){
+       String sql = "INSERT INTO LICHSUGIA VALUES(?,?,?,?)";
+       
+        PreparedStatement statement ;
+        try {
+        	      	
+        	Connection con=DriverManager.getConnection(conString, username, password);
+                statement = con.prepareStatement(sql);
+                statement.setString(1,MaSP);
+                statement.setString(2,ThoiGian);
+                statement.setInt(3,GiaGoc);
+                statement.setInt(4,PhanTram);
+                
+                statement.execute();
+                return true;
+                
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return false;
    }
 }
    

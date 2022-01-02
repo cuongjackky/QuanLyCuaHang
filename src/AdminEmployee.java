@@ -17,9 +17,9 @@ import javax.swing.table.DefaultTableModel;
  */
 public class AdminEmployee extends javax.swing.JFrame {
 
-   private String StoreID="CH85650";
+   private static String StoreID="";
    
-    public AdminEmployee() {
+    public AdminEmployee(String storeId) {
         initComponents();
         UIManager.getDefaults().put("Button.disabledShadow", Color.RED);
         this.setLocationRelativeTo(null);
@@ -1120,7 +1120,7 @@ public class AdminEmployee extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new AdminEmployee().setVisible(true);
+                new AdminEmployee(StoreID).setVisible(true);
             }
         });
     }
