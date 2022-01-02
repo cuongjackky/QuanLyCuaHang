@@ -288,26 +288,30 @@ BEGIN
 
 
 	IF (@QUOTA < @DOANHSO)
+	begin
 		UPDATE dbo.CT_NHANVIEN
-		SET LuongThuong = (@DOANHSO - @QUOTA)*0.3,dbo.ct_nhanvien.TienBiTru=dbo.ct_nhanvien.SoNgayNghi*100000, 
-					ct_nhanvien.Luong=ct_nhanvien.LuongCD+dbo.ct_nhanvien.LuongThuong-ct_nhanvien.TienBiTru
-		
+		SET LuongThuong = (@DOANHSO - @QUOTA)*0.3
 		FROM inserted i
 		WHERE i.manv = dbo.CT_NHANVIEN.MaNV AND i.thang_nv=dbo.CT_NHANVIEN.Thang_NV AND i.nam_nv=dbo.CT_NHANVIEN.Nam_NV
+	end
 	ELSE
-    
+    begin
 		UPDATE dbo.CT_NHANVIEN
-		SET LuongThuong=0, dbo.ct_nhanvien.TienBiTru=dbo.ct_nhanvien.SoNgayNghi*100000, 
-			ct_nhanvien.Luong=ct_nhanvien.LuongCD+dbo.ct_nhanvien.LuongThuong-ct_nhanvien.TienBiTru
+		SET LuongThuong=0
 		FROM inserted i
 		WHERE i.manv = dbo.CT_NHANVIEN.MaNV AND i.thang_nv=dbo.CT_NHANVIEN.Thang_NV AND i.nam_nv=dbo.CT_NHANVIEN.Nam_NV
-
+	end
 	UPDATE dbo.CT_NHANVIEN
-	SET HieuSuat = (dbo.CT_NHANVIEN.DoanhSo*1.0/dbo.CT_NHANVIEN.QuotaSale) * 100 
+	SET HieuSuat = (dbo.CT_NHANVIEN.DoanhSo*1.0/dbo.CT_NHANVIEN.QuotaSale) * 100, 
+		dbo.ct_nhanvien.TienBiTru=dbo.ct_nhanvien.SoNgayNghi*100000
+		
 	FROM Inserted i
 	WHERE i.MaNV = dbo.CT_NHANVIEN.MaNV AND i.Nam_NV = dbo.CT_NHANVIEN.Nam_NV AND i.Thang_NV = dbo.CT_NHANVIEN.Thang_NV
 
-	--update so don hang, doanh so
+	UPDATE dbo.ct_nhanvien
+	SET dbo.ct_nhanvien.Luong=dbo.ct_nhanvien.LuongCD+dbo.ct_nhanvien.LuongThuong-dbo.ct_nhanvien.TienBiTru
+	FROM Inserted i
+	WHERE i.MaNV = dbo.CT_NHANVIEN.MaNV AND i.Nam_NV = dbo.CT_NHANVIEN.Nam_NV AND i.Thang_NV = dbo.CT_NHANVIEN.Thang_NV--update so don hang, doanh so
 
 
 END
@@ -443,7 +447,7 @@ BEGIN
 		FETCH NEXT FROM c INTO @manv
 		WHILE @@FETCH_STATUS = 0
 		BEGIN 
-			SELECT @luongcd= LuongCD FROM dbo.ct_nhanvien WHERE MaNV=@manv
+			SELECT @luongcd= LuongCD FROM dbo.ct_nhanvien WHERE MaNV=@manv AND Nam_NV=@preYear AND Thang_NV=@preMonth
 			IF EXISTS(SELECT*FROM dbo.ct_nhanvien WHERE Thang_NV=@thang AND Nam_NV=@nam AND manv =@manv)
 			BEGIN 
 				--RAISERROR('Thong tin da ton tai',15,1)
@@ -489,3 +493,198 @@ BEGIN
 		DEALLOCATE c
     END
 END
+
+--insert new staff
+CREATE OR ALTER PROC sp_InsertNewStaff @mach VARCHAR(20), @manv VARCHAR(20), @ho NVARCHAR(20), @ten NVARCHAR(20),
+						@gioitinh NVARCHAR(3), @ngaysinh DATETIME, @sdt VARCHAR(10), @email VARCHAR(30),@maloai VARCHAR(20)
+AS 
+BEGIN
+	INSERT INTO dbo.NHANVIEN
+	(
+	    MaNV,
+	    HoNV,
+	    TenNV,
+	    GioiTinh_NV,
+	    NgaySinh_NV,
+	    SDT_NV,
+	    Email_NV,
+	    MaCH,
+	    MaLoai
+	)
+	VALUES
+	(   @manv,        -- MaNV - varchar(20)
+	    @ho,       -- HoNV - nvarchar(20)
+	    @ten,       -- TenNV - nvarchar(20)
+	    @gioitinh,       -- GioiTinh_NV - nvarchar(3)
+	    @ngaysinh, -- NgaySinh_NV - datetime
+	    @sdt,        -- SDT_NV - varchar(10)
+		@email,        -- Email_NV - varchar(40)
+	    @mach,        -- MaCH - varchar(20)
+	    @maloai         -- MaLoai - varchar(20)
+	    )
+END
+go
+CREATE PROC sp_UpdateInfoStaff @manv VARCHAR(20), @ho NVARCHAR(20), @ten NVARCHAR(20),
+						@gioitinh NVARCHAR(3), @ngaysinh DATETIME, @sdt VARCHAR(10), @email VARCHAR(30),@maloai VARCHAR(20)
+AS
+BEGIN
+	IF NOT EXISTS (SELECT*FROM dbo.NHANVIEN WHERE MaNV=@manv)
+	BEGIN
+		RAISERROR('Không tồn tại nhân viên',15,1)
+		RETURN
+    END
+	ELSE
+	BEGIN
+		UPDATE dbo.NHANVIEN
+		SET HoNV=@HO, TenNV=@TEN, GioiTinh_NV=@gioitinh, Email_NV=@email, NgaySinh_NV=@ngaysinh,
+			SDT_NV=@SDT, MaLoai=@maloai
+		WHERE MaNV=@MANV
+	END
+END
+GO
+
+CREATE OR ALTER PROC sp_UpdateQuotaSale @mach VARCHAR(20),@thang INT, @nam INT, @quota INT
+AS
+BEGIN
+	DECLARE @manv VARCHAR(20)
+	DECLARE c CURSOR FOR SELECT ct.manv FROM dbo.ct_nhanvien ct, dbo.NHANVIEN nv	
+							WHERE ct.MaNV=nv.MaNV AND nv.MaCH=@mach AND nv.MaLoai='LOAINV2' AND ct.Thang_NV=@thang AND ct.Nam_NV=@nam
+	OPEN c
+	FETCH NEXT FROM c INTO @manv
+	WHILE @@FETCH_STATUS = 0 
+	BEGIN
+		UPDATE dbo.ct_nhanvien
+		SET QuotaSale=@quota
+		WHERE MaNV=@manv AND Thang_NV=@thang AND Nam_NV=@nam
+		FETCH NEXT FROM c INTO @manv
+    END
+	CLOSE c
+	DEALLOCATE c
+END
+GO
+EXEC dbo.sp_UpdateQuotaSale @mach = 'CH85650', -- varchar(20)
+                            @thang = 3, -- int
+                            @nam = 2022,   -- int
+                            @quota = 20  -- int
+CREATE PROC sp_UpdateSalaryInfo @manv varchar(20), @thang int, @nam int, @songaynghi tinyint, @luongcd int
+AS
+BEGIN
+	UPDATE dbo.ct_nhanvien
+	SET SoNgayNghi= @songaynghi, LuongCD=@luongcd
+	WHERE manv = @manv AND Thang_NV=@thang AND Nam_NV=@nam
+END
+
+CREATE PROC sp_UpdatePassStaff @manv varchar(20), @newpass varchar(20)
+AS
+BEGIN
+	UPDATE dbo.TAIKHOAN_NV
+	SET PassWord = @newpass
+	WHERE MaNV=@manv
+END
+GO
+
+CREATE PROC sp_GetOrderListByID_MY @manv VARCHAR(20), @thang INT, @nam INT
+AS
+BEGIN
+	SELECT*FROM dbo.DONHANG WHERE MaNV=@manv AND YEAR(NgayDat)=@nam AND MONTH(NgayDat)=@thang
+END
+
+CREATE PROC sp_GetOrderListByID_MY_Status @manv VARCHAR(20), @thang INT, @nam INT, @trangthai NVARCHAR(20)
+AS
+BEGIN
+	SELECT*FROM dbo.DONHANG WHERE MaNV=@manv AND YEAR(NgayDat)=@nam AND MONTH(NgayDat)=@thang AND TrangThaiDH=@trangthai
+END
+GO
+
+CREATE PROC sp_GetDetailOrder @madh VARCHAR(20)
+AS
+BEGIN
+	SELECT ct.MaDH, ct.STT, ct.MaSP, sp.TenSP, ct.GiaBan, ct.SoLuong, ct.ThanhTien, ct.MaNCC, ncc.TenNCC
+	FROM dbo.CT_DONHANG ct, dbo.SANPHAM sp, dbo.NHACUNGCAP ncc
+	WHERE ct.MaDH=@madh AND ct.MaSP=sp.MaSP AND sp.MaNCC = ncc.MaNCC
+END
+GO
+
+CREATE PROC sp_GetInfoProductForImportForm @masp VARCHAR(20)
+AS
+BEGIN
+	SELECT sp.TenSP, sp.MaNCC, ncc.TenNCC
+	FROM dbo.SANPHAM sp, dbo.NHACUNGCAP ncc
+	WHERE sp.MaSP=@masp AND sp.MaNCC=ncc.MaNCC
+
+END
+GO
+
+ CREATE OR ALTER PROC sp_InsertDetailImportForm @madn VARCHAR(20), @masp VARCHAR(20), @sl INT, @mach VARCHAR(20)
+ AS
+ BEGIN
+
+	IF EXISTS(SELECT*FROM dbo.CT_DONNHAP WHERE MADN=@MADN AND MaSP=@MASP)
+	BEGIN
+		RAISERROR('CHI TIET DON NHAP DA TON TAI',15,1)
+		RETURN
+	END
+	ELSE
+	BEGIN
+		INSERT INTO dbo.CT_DONNHAP
+		(
+		    MaDN,
+		    MaSP,
+		    SoLuongNhap
+		)
+		VALUES
+		(   @MADN, -- MaDN - varchar(20)
+		    @MASP, -- MaSP - varchar(20)
+		    @SL   -- SoLuongNhap - int
+		    )
+	--	IF EXISTS(SELECT*FROM dbo.SP_CH WHERE MaSP=@masp AND MaCH=@mach)
+	--	BEGIN
+	--		-- UPDATE SO LUONG
+	--		UPDATE dbo.SP_CH
+	--		SET SoLuongTon=SoLuongTon+@sl
+	--		WHERE MaCH=@MACH AND MaSP=@MASP
+	--	END
+	--	ELSE
+	--	BEGIN
+	--		--THEM SAN PHAM MOI VAO CUA HANG
+	--		INSERT INTO dbo.SP_CH
+	--		(
+	--		    MaCH,
+	--		    MaSP,
+	--		    SoLuongTon
+	--		)
+	--		VALUES
+	--		(   @MACH, -- MaCH - varchar(20)
+	--		   @MASP, -- MaSP - varchar(20)
+	--		    @SL   -- SoLuongTon - smallint
+	--		    )
+	--	END
+	END
+	
+
+ END
+ GO
+ 
+ SELECT*FROM dbo.CT_DONNHAP
+ SELECT*FROM dbo.DONNHAP
+ DN0007JFYW 
+
+ SELECT*FROM dbo.SP_CH WHERE MaCH='CH85650' AND SoLuongTon<50
+
+ EXEC dbo.sp_InsertDetailImportForm @madn = 'DN0006SXZK', -- varchar(20)
+                                    @masp = 'SP261013', -- varchar(20)
+                                    @sl = 1000,    -- int
+                                    @mach = 'CH85650'  -- varchar(20)
+									
+									SELECT*FROM dbo.SP_CH WHERE MACH = 'CH85650' AND MASP='SP261013'
+									SELECT*FROM dbo.CT_DONNHAP WHERE 
+									SELECT*FROM dbo.DONNHAP
+									SELECT*FROM KHO
+									SELECT*FROM dbo.DONNHAP WHERE manv='NV06168'
+
+CREATE PROC sp_GetInfoDI @madn varchar(20)
+AS
+BEGIN
+	
+END
+GO

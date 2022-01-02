@@ -1,7 +1,18 @@
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
 import java.sql.ResultSet;
+import java.text.DateFormat;
+import java.text.FieldPosition;
+import java.text.Format;
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
@@ -18,22 +29,25 @@ import javax.swing.table.DefaultTableModel;
 public class AdminEmployee extends javax.swing.JFrame {
 
    private String StoreID="CH85650";
+   private Boolean checkLength=false;
    
     public AdminEmployee() {
         initComponents();
         UIManager.getDefaults().put("Button.disabledShadow", Color.RED);
         this.setLocationRelativeTo(null);
-        table();
+        SetUp();
         LoadCbYear();
         LoadCbMonth();
         LoadCbStaff();
+        LoadCbGender_Cate();
+        LoadStaffTable(this.StoreID);
         //this.StoreID = txtStoreID.getText();
         this.StoreID = "CH85650";
         txtStoreID.setText(this.StoreID);
     }
     
     //custom table
-    public void table(){
+    public void SetUp(){
         TableStatistic.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD,14));
         TableStatistic.getTableHeader().setBackground(new Color(99, 100, 171));
         TableStatistic.getTableHeader().setOpaque(false);
@@ -46,11 +60,20 @@ public class AdminEmployee extends javax.swing.JFrame {
         tableSalary.getTableHeader().setForeground(new Color(229, 218, 233));
         tableSalary.setRowHeight(30);
         
+        tableStatisticStaff.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD,14));
+        tableStatisticStaff.getTableHeader().setBackground(new Color(99, 100, 171));
+        tableStatisticStaff.getTableHeader().setOpaque(false);
+        tableStatisticStaff.getTableHeader().setForeground(new Color(229, 218, 233));
+        tableStatisticStaff.setRowHeight(30);
+        
         //
         //panelDetail.setVisible(false);
         panelQuota.setVisible(false);
-        
-        
+        panelInfoStaff.setVisible(false);
+        btnSaveChangeUpdate.setVisible(false);
+        btnSaveNewStaff.setVisible(false);
+        btnCancel.setVisible(false);
+        SbtnSaveChange.setVisible(false);
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -63,7 +86,81 @@ public class AdminEmployee extends javax.swing.JFrame {
 
         jLabel13 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
+        jLabel33 = new javax.swing.JLabel();
+        jTextField5 = new javax.swing.JTextField();
         TbPanelEmployee = new javax.swing.JTabbedPane();
+        jPanel2 = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
+        SCbMonth = new javax.swing.JComboBox<>();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        SCbStaffID = new javax.swing.JComboBox<>();
+        jLabel11 = new javax.swing.JLabel();
+        SCbYear = new javax.swing.JComboBox<>();
+        SbtnStatistic = new javax.swing.JButton();
+        jPanel5 = new javax.swing.JPanel();
+        jPanel6 = new javax.swing.JPanel();
+        jSeparator2 = new javax.swing.JSeparator();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tableSalary = new javax.swing.JTable();
+        SbtnAdd = new javax.swing.JButton();
+        SbtnSaveChange = new javax.swing.JButton();
+        txtDayOff = new javax.swing.JTextField();
+        jLabel20 = new javax.swing.JLabel();
+        jLabel19 = new javax.swing.JLabel();
+        txtSalary = new javax.swing.JTextField();
+        txtLastname = new javax.swing.JTextField();
+        txtFirstname = new javax.swing.JTextField();
+        txtStaffID = new javax.swing.JTextField();
+        jLabel16 = new javax.swing.JLabel();
+        jLabel17 = new javax.swing.JLabel();
+        jLabel18 = new javax.swing.JLabel();
+        jLabel21 = new javax.swing.JLabel();
+        StxtMonth = new javax.swing.JTextField();
+        StxtYear = new javax.swing.JTextField();
+        jLabel22 = new javax.swing.JLabel();
+        SbtnCancelSalary = new javax.swing.JButton();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
+        btnUpdateSalary = new javax.swing.JButton();
+        jPanel7 = new javax.swing.JPanel();
+        jPanel8 = new javax.swing.JPanel();
+        jLabel25 = new javax.swing.JLabel();
+        jLabel28 = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tableStatisticStaff = new javax.swing.JTable();
+        btnDeleteStaff = new javax.swing.JButton();
+        btnAddStaff = new javax.swing.JButton();
+        btnCancel = new javax.swing.JButton();
+        jTextField1 = new javax.swing.JTextField();
+        btnSaveChangeUpdate = new javax.swing.JButton();
+        jLabel40 = new javax.swing.JLabel();
+        panelInfoStaff = new javax.swing.JPanel();
+        jLabel30 = new javax.swing.JLabel();
+        jPanel10 = new javax.swing.JPanel();
+        jPanel11 = new javax.swing.JPanel();
+        jLabel31 = new javax.swing.JLabel();
+        txtAddFirstname = new javax.swing.JTextField();
+        txtAddStaffID = new javax.swing.JTextField();
+        jLabel32 = new javax.swing.JLabel();
+        txtAddLastname = new javax.swing.JTextField();
+        txtAddDoB = new javax.swing.JTextField();
+        jLabel34 = new javax.swing.JLabel();
+        jLabel35 = new javax.swing.JLabel();
+        jLabel36 = new javax.swing.JLabel();
+        txtAddphone = new javax.swing.JTextField();
+        jLabel37 = new javax.swing.JLabel();
+        jLabel38 = new javax.swing.JLabel();
+        jLabel39 = new javax.swing.JLabel();
+        jLabel29 = new javax.swing.JLabel();
+        cbAddGender1 = new javax.swing.JComboBox<>();
+        cbAddCate = new javax.swing.JComboBox<>();
+        txtAddStore = new javax.swing.JTextField();
+        txtAddMail = new javax.swing.JTextField();
+        btnUpdateInfoStaff = new javax.swing.JButton();
+        btnSaveNewStaff = new javax.swing.JButton();
+        btnSearchInfoStaff1 = new javax.swing.JButton();
+        jPanel9 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
@@ -93,59 +190,816 @@ public class AdminEmployee extends javax.swing.JFrame {
         jLabel27 = new javax.swing.JLabel();
         txtSetNewQuota = new javax.swing.JTextField();
         btnSaveQuota = new javax.swing.JButton();
-        jPanel2 = new javax.swing.JPanel();
-        jPanel4 = new javax.swing.JPanel();
-        SCbMonth = new javax.swing.JComboBox<>();
-        jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        SCbStaffID = new javax.swing.JComboBox<>();
-        jLabel11 = new javax.swing.JLabel();
-        SCbYear = new javax.swing.JComboBox<>();
-        SbtnStatistic = new javax.swing.JButton();
-        jPanel5 = new javax.swing.JPanel();
-        jPanel6 = new javax.swing.JPanel();
-        jLabel12 = new javax.swing.JLabel();
-        jLabel14 = new javax.swing.JLabel();
-        jSeparator2 = new javax.swing.JSeparator();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        tableSalary = new javax.swing.JTable();
-        SbtnAdd = new javax.swing.JButton();
-        SbtnUpdate = new javax.swing.JButton();
-        SbtnSave = new javax.swing.JButton();
-        txtDayOff = new javax.swing.JTextField();
-        jLabel20 = new javax.swing.JLabel();
-        jLabel19 = new javax.swing.JLabel();
-        txtSalary = new javax.swing.JTextField();
-        txtLastname = new javax.swing.JTextField();
-        txtFirstname = new javax.swing.JTextField();
-        txtStaffID = new javax.swing.JTextField();
-        jLabel16 = new javax.swing.JLabel();
-        jLabel17 = new javax.swing.JLabel();
-        jLabel18 = new javax.swing.JLabel();
-        jLabel21 = new javax.swing.JLabel();
-        StxtMonth = new javax.swing.JTextField();
-        StxtYear = new javax.swing.JTextField();
-        jLabel22 = new javax.swing.JLabel();
+        SbtnSaveChangeQuota = new javax.swing.JButton();
+        SbtnCancelAll = new javax.swing.JButton();
+        txtAddEmail = new javax.swing.JTextField();
 
         jLabel13.setText("jLabel13");
 
         jLabel15.setText("jLabel15");
 
+        jLabel33.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel33.setForeground(new java.awt.Color(213, 213, 227));
+        jLabel33.setText("Mã nhân viên");
+
+        jTextField5.setBackground(new java.awt.Color(231, 220, 234));
+        jTextField5.setBorder(null);
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setAutoRequestFocus(false);
         setBackground(new java.awt.Color(31, 34, 46));
 
-        TbPanelEmployee.setBackground(new java.awt.Color(31, 34, 46));
-        TbPanelEmployee.setForeground(new java.awt.Color(184, 185, 208));
+        TbPanelEmployee.setBackground(new java.awt.Color(255, 255, 255));
+        TbPanelEmployee.setForeground(new java.awt.Color(31, 34, 46));
 
-        jPanel1.setBackground(new java.awt.Color(31, 34, 46));
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setForeground(new java.awt.Color(69, 73, 100));
 
-        jPanel3.setBackground(new java.awt.Color(31, 34, 46));
+        jPanel4.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/Home Page.png"))); // NOI18N
+        SCbMonth.setBackground(new java.awt.Color(184, 185, 208));
+        SCbMonth.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        SCbMonth.setForeground(new java.awt.Color(66, 66, 114));
+        SCbMonth.setBorder(null);
+        jPanel4.add(SCbMonth, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 200, 160, -1));
+
+        jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel9.setForeground(new java.awt.Color(31, 34, 46));
+        jLabel9.setText("Tháng");
+        jPanel4.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 180, -1, -1));
+
+        jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel10.setForeground(new java.awt.Color(31, 34, 46));
+        jLabel10.setText("Mã nhân viên");
+        jPanel4.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 100, -1, -1));
+
+        SCbStaffID.setBackground(new java.awt.Color(184, 185, 208));
+        SCbStaffID.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        SCbStaffID.setForeground(new java.awt.Color(66, 66, 114));
+        SCbStaffID.setBorder(null);
+        jPanel4.add(SCbStaffID, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 120, 160, -1));
+
+        jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel11.setForeground(new java.awt.Color(31, 34, 46));
+        jLabel11.setText("Năm");
+        jPanel4.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 260, -1, -1));
+
+        SCbYear.setBackground(new java.awt.Color(184, 185, 208));
+        SCbYear.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        SCbYear.setForeground(new java.awt.Color(66, 66, 114));
+        SCbYear.setBorder(null);
+        jPanel4.add(SCbYear, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 290, 160, -1));
+
+        SbtnStatistic.setBackground(new java.awt.Color(213, 213, 227));
+        SbtnStatistic.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        SbtnStatistic.setForeground(new java.awt.Color(67, 67, 115));
+        SbtnStatistic.setText("Thống kê");
+        SbtnStatistic.setBorder(null);
+        SbtnStatistic.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SbtnStatisticActionPerformed(evt);
+            }
+        });
+        jPanel4.add(SbtnStatistic, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 390, 182, 34));
+
+        jPanel5.setLayout(new java.awt.BorderLayout());
+
+        jPanel6.setBackground(new java.awt.Color(31, 34, 46));
+        jPanel6.setLayout(new java.awt.BorderLayout());
+
+        jSeparator2.setBackground(new java.awt.Color(69, 73, 100));
+        jSeparator2.setOrientation(javax.swing.SwingConstants.VERTICAL);
+
+        tableSalary.setAutoCreateRowSorter(true);
+        tableSalary.setBackground(new java.awt.Color(31, 34, 46));
+        tableSalary.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        tableSalary.setForeground(new java.awt.Color(231, 220, 234));
+        tableSalary.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Tháng", "Năm", "Mã nhân viên", "Lương cố định", "Lương thưởng", "Số ngày nghỉ", "Tiền bị trừ", "Tổng lương"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tableSalary.setFocusable(false);
+        tableSalary.setGridColor(new java.awt.Color(31, 34, 46));
+        tableSalary.setRowHeight(40);
+        tableSalary.setSelectionBackground(new java.awt.Color(181, 185, 222));
+        tableSalary.setShowGrid(false);
+        tableSalary.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableSalaryMouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(tableSalary);
+        if (tableSalary.getColumnModel().getColumnCount() > 0) {
+            tableSalary.getColumnModel().getColumn(0).setPreferredWidth(10);
+            tableSalary.getColumnModel().getColumn(1).setPreferredWidth(10);
+            tableSalary.getColumnModel().getColumn(2).setPreferredWidth(10);
+            tableSalary.getColumnModel().getColumn(3).setPreferredWidth(10);
+            tableSalary.getColumnModel().getColumn(4).setPreferredWidth(10);
+            tableSalary.getColumnModel().getColumn(5).setPreferredWidth(10);
+            tableSalary.getColumnModel().getColumn(6).setPreferredWidth(10);
+            tableSalary.getColumnModel().getColumn(7).setPreferredWidth(10);
+        }
+
+        SbtnAdd.setBackground(new java.awt.Color(213, 213, 227));
+        SbtnAdd.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        SbtnAdd.setForeground(new java.awt.Color(69, 73, 100));
+        SbtnAdd.setText("Thêm");
+        SbtnAdd.setBorder(null);
+        SbtnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SbtnAddActionPerformed(evt);
+            }
+        });
+
+        SbtnSaveChange.setBackground(new java.awt.Color(213, 213, 227));
+        SbtnSaveChange.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        SbtnSaveChange.setForeground(new java.awt.Color(69, 73, 100));
+        SbtnSaveChange.setText("Lưu thay đổi");
+        SbtnSaveChange.setBorder(null);
+        SbtnSaveChange.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                SbtnSaveChangeMouseClicked(evt);
+            }
+        });
+        SbtnSaveChange.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SbtnSaveChangeActionPerformed(evt);
+            }
+        });
+
+        txtDayOff.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+
+        jLabel20.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel20.setForeground(new java.awt.Color(31, 34, 46));
+        jLabel20.setText("Số ngày nghỉ");
+
+        jLabel19.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel19.setForeground(new java.awt.Color(31, 34, 46));
+        jLabel19.setText("Lương cố định");
+
+        txtSalary.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+
+        txtLastname.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtLastname.setForeground(new java.awt.Color(31, 34, 46));
+        txtLastname.setEnabled(false);
+
+        txtFirstname.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtFirstname.setForeground(new java.awt.Color(31, 34, 46));
+        txtFirstname.setEnabled(false);
+
+        txtStaffID.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtStaffID.setForeground(new java.awt.Color(31, 34, 46));
+        txtStaffID.setEnabled(false);
+
+        jLabel16.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel16.setForeground(new java.awt.Color(31, 34, 46));
+        jLabel16.setText("Mã nhân viên");
+
+        jLabel17.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel17.setForeground(new java.awt.Color(31, 34, 46));
+        jLabel17.setText("Họ");
+
+        jLabel18.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel18.setForeground(new java.awt.Color(31, 34, 46));
+        jLabel18.setText("Tên");
+
+        jLabel21.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel21.setForeground(new java.awt.Color(31, 34, 46));
+        jLabel21.setText("Tháng");
+
+        StxtMonth.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+
+        StxtYear.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+
+        jLabel22.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel22.setForeground(new java.awt.Color(31, 34, 46));
+        jLabel22.setText("Năm");
+
+        SbtnCancelSalary.setBackground(new java.awt.Color(213, 213, 227));
+        SbtnCancelSalary.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        SbtnCancelSalary.setForeground(new java.awt.Color(69, 73, 100));
+        SbtnCancelSalary.setText("Hủy");
+        SbtnCancelSalary.setBorder(null);
+        SbtnCancelSalary.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                SbtnCancelSalaryMouseClicked(evt);
+            }
+        });
+        SbtnCancelSalary.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SbtnCancelSalaryActionPerformed(evt);
+            }
+        });
+
+        jLabel12.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel12.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel12.setForeground(new java.awt.Color(58, 54, 107));
+        jLabel12.setText("  Quản lý lương");
+
+        jLabel14.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/Money .png"))); // NOI18N
+
+        btnUpdateSalary.setBackground(new java.awt.Color(213, 213, 227));
+        btnUpdateSalary.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnUpdateSalary.setForeground(new java.awt.Color(69, 73, 100));
+        btnUpdateSalary.setText("Cập nhật");
+        btnUpdateSalary.setBorder(null);
+        btnUpdateSalary.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateSalaryActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(56, 56, 56)
+                                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(53, 53, 53)
+                                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel14)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel12))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(28, 28, 28)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 908, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(SbtnSaveChange, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(SbtnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnUpdateSalary, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(SbtnCancelSalary, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(83, 83, 83)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addComponent(jLabel18)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(txtLastname, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addComponent(jLabel17)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(txtFirstname, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addComponent(jLabel16)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(txtStaffID, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addGap(76, 76, 76)
+                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                                .addComponent(jLabel19)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(txtSalary, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                                .addComponent(jLabel20)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(txtDayOff, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addGap(133, 133, 133)
+                                        .addComponent(jLabel21)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(StxtMonth, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(70, 70, 70)
+                                        .addComponent(jLabel22)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(StxtYear, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
+                .addContainerGap(120, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(54, 54, 54))
+                    .addComponent(jLabel14)
+                    .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(59, 59, 59)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtSalary, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel19)
+                            .addComponent(txtStaffID, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel16))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(42, 42, 42)
+                                .addComponent(jLabel17))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(33, 33, 33)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(txtDayOff, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel20)))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(42, 42, 42)
+                                .addComponent(txtFirstname, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(28, 28, 28)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel18)
+                            .addComponent(txtLastname, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(StxtMonth, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel21)
+                            .addComponent(jLabel22)
+                            .addComponent(StxtYear, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(8, 8, 8))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(30, 30, 30)
+                        .addComponent(SbtnCancelSalary, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnUpdateSalary, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(43, 43, 43)))
+                .addComponent(SbtnSaveChange, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(28, 28, 28)
+                .addComponent(SbtnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(402, 402, 402))
+            .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.TRAILING)
+        );
+
+        TbPanelEmployee.addTab("Quản lý lương", jPanel2);
+
+        jPanel7.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel7.setPreferredSize(new java.awt.Dimension(1215, 900));
+
+        jPanel8.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel8.setForeground(new java.awt.Color(213, 213, 227));
+
+        jLabel25.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/People1.png"))); // NOI18N
+
+        jLabel28.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel28.setForeground(new java.awt.Color(58, 54, 107));
+        jLabel28.setText("Quản lý nhân viên");
+
+        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
+        jPanel8.setLayout(jPanel8Layout);
+        jPanel8Layout.setHorizontalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel25)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel28)
+                .addContainerGap(100, Short.MAX_VALUE))
+        );
+        jPanel8Layout.setVerticalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel25, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addComponent(jLabel28, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+
+        tableStatisticStaff.setAutoCreateRowSorter(true);
+        tableStatisticStaff.setBackground(new java.awt.Color(31, 34, 46));
+        tableStatisticStaff.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        tableStatisticStaff.setForeground(new java.awt.Color(231, 220, 234));
+        tableStatisticStaff.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "Mã nhân viên", "Họ ", "Tên", "Giớitính", "Ngày sinh", "Số điện thoại", "Email", "Mã cửa hàng", "Mã loại"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        tableStatisticStaff.setFocusable(false);
+        tableStatisticStaff.setGridColor(new java.awt.Color(31, 34, 46));
+        tableStatisticStaff.setRowHeight(40);
+        tableStatisticStaff.setSelectionBackground(new java.awt.Color(181, 185, 222));
+        tableStatisticStaff.setShowGrid(false);
+        tableStatisticStaff.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableStatisticStaffMouseClicked(evt);
+            }
+        });
+        jScrollPane3.setViewportView(tableStatisticStaff);
+        if (tableStatisticStaff.getColumnModel().getColumnCount() > 0) {
+            tableStatisticStaff.getColumnModel().getColumn(0).setPreferredWidth(10);
+            tableStatisticStaff.getColumnModel().getColumn(1).setPreferredWidth(10);
+            tableStatisticStaff.getColumnModel().getColumn(2).setPreferredWidth(10);
+            tableStatisticStaff.getColumnModel().getColumn(3).setPreferredWidth(10);
+            tableStatisticStaff.getColumnModel().getColumn(4).setPreferredWidth(10);
+            tableStatisticStaff.getColumnModel().getColumn(5).setPreferredWidth(10);
+            tableStatisticStaff.getColumnModel().getColumn(6).setPreferredWidth(15);
+            tableStatisticStaff.getColumnModel().getColumn(7).setPreferredWidth(10);
+            tableStatisticStaff.getColumnModel().getColumn(8).setPreferredWidth(10);
+        }
+
+        btnDeleteStaff.setBackground(new java.awt.Color(213, 213, 227));
+        btnDeleteStaff.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnDeleteStaff.setForeground(new java.awt.Color(31, 34, 46));
+        btnDeleteStaff.setText("Xóa");
+        btnDeleteStaff.setBorder(null);
+        btnDeleteStaff.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnDeleteStaffMouseClicked(evt);
+            }
+        });
+        btnDeleteStaff.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteStaffActionPerformed(evt);
+            }
+        });
+
+        btnAddStaff.setBackground(new java.awt.Color(213, 213, 227));
+        btnAddStaff.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnAddStaff.setForeground(new java.awt.Color(31, 34, 46));
+        btnAddStaff.setText("Thêm");
+        btnAddStaff.setBorder(null);
+        btnAddStaff.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddStaffActionPerformed(evt);
+            }
+        });
+
+        btnCancel.setBackground(new java.awt.Color(213, 213, 227));
+        btnCancel.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnCancel.setForeground(new java.awt.Color(31, 34, 46));
+        btnCancel.setText("Hủy");
+        btnCancel.setBorder(null);
+        btnCancel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnCancelMouseClicked(evt);
+            }
+        });
+
+        btnSaveChangeUpdate.setBackground(new java.awt.Color(213, 213, 227));
+        btnSaveChangeUpdate.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnSaveChangeUpdate.setForeground(new java.awt.Color(31, 34, 46));
+        btnSaveChangeUpdate.setText("Lưu thay đổi");
+        btnSaveChangeUpdate.setBorder(null);
+        btnSaveChangeUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveChangeUpdateActionPerformed(evt);
+            }
+        });
+
+        jLabel40.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/Search (1).png"))); // NOI18N
+
+        panelInfoStaff.setBackground(new java.awt.Color(31, 34, 46));
+
+        jLabel30.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel30.setForeground(new java.awt.Color(213, 213, 227));
+        jLabel30.setText("Ngày sinh");
+
+        javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
+        jPanel10.setLayout(jPanel10Layout);
+        jPanel10Layout.setHorizontalGroup(
+            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 160, Short.MAX_VALUE)
+        );
+        jPanel10Layout.setVerticalGroup(
+            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
+        jPanel11.setLayout(jPanel11Layout);
+        jPanel11Layout.setHorizontalGroup(
+            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 170, Short.MAX_VALUE)
+        );
+        jPanel11Layout.setVerticalGroup(
+            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        jLabel31.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel31.setForeground(new java.awt.Color(213, 213, 227));
+        jLabel31.setText("Mã nhân viên");
+
+        txtAddFirstname.setBackground(new java.awt.Color(231, 220, 234));
+        txtAddFirstname.setBorder(null);
+
+        txtAddStaffID.setBackground(new java.awt.Color(231, 220, 234));
+        txtAddStaffID.setBorder(null);
+
+        jLabel32.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel32.setForeground(new java.awt.Color(213, 213, 227));
+        jLabel32.setText("Họ");
+
+        txtAddLastname.setBackground(new java.awt.Color(231, 220, 234));
+        txtAddLastname.setBorder(null);
+
+        txtAddDoB.setBackground(new java.awt.Color(231, 220, 234));
+        txtAddDoB.setBorder(null);
+
+        jLabel34.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel34.setForeground(new java.awt.Color(213, 213, 227));
+        jLabel34.setText("Tên");
+
+        jLabel35.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel35.setForeground(new java.awt.Color(213, 213, 227));
+        jLabel35.setText("Giới tính");
+
+        jLabel36.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel36.setForeground(new java.awt.Color(213, 213, 227));
+        jLabel36.setText("Email");
+
+        txtAddphone.setBackground(new java.awt.Color(231, 220, 234));
+        txtAddphone.setBorder(null);
+
+        jLabel37.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel37.setForeground(new java.awt.Color(213, 213, 227));
+        jLabel37.setText("Số điện thoại");
+
+        jLabel38.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel38.setForeground(new java.awt.Color(213, 213, 227));
+        jLabel38.setText("Mã cửa hàng");
+
+        jLabel39.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel39.setForeground(new java.awt.Color(213, 213, 227));
+        jLabel39.setText("Loại nhân viên");
+
+        jLabel29.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel29.setForeground(new java.awt.Color(178, 182, 220));
+        jLabel29.setText("THÔNG TIN NHÂN VIÊN");
+
+        txtAddStore.setBackground(new java.awt.Color(231, 220, 234));
+        txtAddStore.setBorder(null);
+
+        txtAddMail.setBackground(new java.awt.Color(231, 220, 234));
+
+        javax.swing.GroupLayout panelInfoStaffLayout = new javax.swing.GroupLayout(panelInfoStaff);
+        panelInfoStaff.setLayout(panelInfoStaffLayout);
+        panelInfoStaffLayout.setHorizontalGroup(
+            panelInfoStaffLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelInfoStaffLayout.createSequentialGroup()
+                .addGap(82, 82, 82)
+                .addComponent(jLabel29)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(panelInfoStaffLayout.createSequentialGroup()
+                .addGroup(panelInfoStaffLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelInfoStaffLayout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addGroup(panelInfoStaffLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelInfoStaffLayout.createSequentialGroup()
+                                .addGroup(panelInfoStaffLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel30, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel34))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(txtAddLastname, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelInfoStaffLayout.createSequentialGroup()
+                                .addComponent(jLabel32)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(txtAddFirstname, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelInfoStaffLayout.createSequentialGroup()
+                                .addGroup(panelInfoStaffLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelInfoStaffLayout.createSequentialGroup()
+                                        .addComponent(jLabel31)
+                                        .addGap(26, 26, 26)
+                                        .addComponent(txtAddStaffID, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelInfoStaffLayout.createSequentialGroup()
+                                        .addGroup(panelInfoStaffLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel36)
+                                            .addComponent(jLabel35))
+                                        .addGap(69, 69, 69)
+                                        .addGroup(panelInfoStaffLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(txtAddMail, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(cbAddGender1, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelInfoStaffLayout.createSequentialGroup()
+                                        .addGroup(panelInfoStaffLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel39)
+                                            .addComponent(jLabel37))
+                                        .addGap(18, 18, 18)
+                                        .addGroup(panelInfoStaffLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(txtAddphone, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(cbAddCate, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(txtAddDoB, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(txtAddStore, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGap(0, 0, Short.MAX_VALUE))))
+                    .addGroup(panelInfoStaffLayout.createSequentialGroup()
+                        .addGap(19, 19, 19)
+                        .addComponent(jLabel38)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        panelInfoStaffLayout.setVerticalGroup(
+            panelInfoStaffLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelInfoStaffLayout.createSequentialGroup()
+                .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(panelInfoStaffLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelInfoStaffLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(315, 315, 315))
+                    .addGroup(panelInfoStaffLayout.createSequentialGroup()
+                        .addComponent(jLabel29)
+                        .addGap(40, 40, 40)
+                        .addGroup(panelInfoStaffLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtAddStaffID, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(panelInfoStaffLayout.createSequentialGroup()
+                                .addComponent(jLabel31, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addGroup(panelInfoStaffLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel32, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtAddFirstname, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(18, 18, 18)
+                        .addGroup(panelInfoStaffLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel34, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtAddLastname, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(panelInfoStaffLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel30, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtAddDoB, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(21, 21, 21)
+                        .addGroup(panelInfoStaffLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel35, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cbAddGender1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(panelInfoStaffLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel36, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtAddMail, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(panelInfoStaffLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtAddphone, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel37, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(panelInfoStaffLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel39, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cbAddCate, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(panelInfoStaffLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel38, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtAddStore, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(11, 11, 11))))
+        );
+
+        btnUpdateInfoStaff.setBackground(new java.awt.Color(213, 213, 227));
+        btnUpdateInfoStaff.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnUpdateInfoStaff.setForeground(new java.awt.Color(31, 34, 46));
+        btnUpdateInfoStaff.setText("Cập nhật");
+        btnUpdateInfoStaff.setBorder(null);
+        btnUpdateInfoStaff.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateInfoStaffActionPerformed(evt);
+            }
+        });
+
+        btnSaveNewStaff.setBackground(new java.awt.Color(213, 213, 227));
+        btnSaveNewStaff.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnSaveNewStaff.setForeground(new java.awt.Color(31, 34, 46));
+        btnSaveNewStaff.setText("Xác nhận");
+        btnSaveNewStaff.setBorder(null);
+        btnSaveNewStaff.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveNewStaffActionPerformed(evt);
+            }
+        });
+
+        btnSearchInfoStaff1.setBackground(new java.awt.Color(213, 213, 227));
+        btnSearchInfoStaff1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnSearchInfoStaff1.setForeground(new java.awt.Color(31, 34, 46));
+        btnSearchInfoStaff1.setText("Tìm kiếm");
+        btnSearchInfoStaff1.setBorder(null);
+
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(497, 497, 497))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 843, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel7Layout.createSequentialGroup()
+                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel40)
+                                .addGap(43, 43, 43)
+                                .addComponent(btnSearchInfoStaff1, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel7Layout.createSequentialGroup()
+                                .addComponent(btnAddStaff, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(40, 40, 40)
+                                .addComponent(btnDeleteStaff, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(40, 40, 40)
+                                .addComponent(btnUpdateInfoStaff, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnSaveNewStaff, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(40, 40, 40)
+                                .addComponent(btnSaveChangeUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(36, 36, 36)))
+                .addComponent(panelInfoStaff, javax.swing.GroupLayout.PREFERRED_SIZE, 352, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(67, Short.MAX_VALUE))
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(34, 34, 34)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnSearchInfoStaff1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jLabel40, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(28, 28, 28)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(46, 46, 46)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnDeleteStaff, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnUpdateInfoStaff, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSaveChangeUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnAddStaff, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSaveNewStaff, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(38, Short.MAX_VALUE))
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(panelInfoStaff, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        TbPanelEmployee.addTab("Quán lý nhân viên", jPanel7);
+
+        jPanel9.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
+        jPanel9.setLayout(jPanel9Layout);
+        jPanel9Layout.setHorizontalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1319, Short.MAX_VALUE)
+        );
+        jPanel9Layout.setVerticalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 611, Short.MAX_VALUE)
+        );
+
+        TbPanelEmployee.addTab("Thưởng", jPanel9);
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/home1.png"))); // NOI18N
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(224, 221, 209));
+        jLabel1.setForeground(new java.awt.Color(58, 54, 107));
         jLabel1.setText("QUẢN LÝ NHÂN SỰ");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -171,7 +1025,7 @@ public class AdminEmployee extends javax.swing.JFrame {
 
         jLabel2.setBackground(new java.awt.Color(31, 34, 46));
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(224, 221, 209));
+        jLabel2.setForeground(new java.awt.Color(31, 34, 46));
         jLabel2.setText("Cửa hàng số: ");
 
         txtStoreID.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
@@ -214,7 +1068,7 @@ public class AdminEmployee extends javax.swing.JFrame {
             TableStatistic.getColumnModel().getColumn(3).setPreferredWidth(10);
             TableStatistic.getColumnModel().getColumn(4).setPreferredWidth(10);
             TableStatistic.getColumnModel().getColumn(5).setPreferredWidth(10);
-            TableStatistic.getColumnModel().getColumn(6).setPreferredWidth(10);
+            TableStatistic.getColumnModel().getColumn(6).setPreferredWidth(15);
         }
 
         txtSearch.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -222,23 +1076,17 @@ public class AdminEmployee extends javax.swing.JFrame {
         cbYear.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(231, 220, 234));
+        jLabel5.setForeground(new java.awt.Color(31, 34, 46));
         jLabel5.setText("Tháng");
 
         cbMonth.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
         cbMonth.setToolTipText("");
-        cbMonth.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbMonthActionPerformed(evt);
-            }
-        });
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(231, 220, 234));
+        jLabel6.setForeground(new java.awt.Color(31, 34, 46));
         jLabel6.setText("Năm");
 
-        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/Search.png"))); // NOI18N
-        jLabel8.setText("jLabel8");
+        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/Search (1).png"))); // NOI18N
 
         btnStatistic.setBackground(new java.awt.Color(146, 150, 208));
         btnStatistic.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -289,45 +1137,32 @@ public class AdminEmployee extends javax.swing.JFrame {
             }
         });
 
+        panelQuota.setBackground(new java.awt.Color(31, 34, 46));
+
         jLabel23.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel23.setForeground(new java.awt.Color(213, 213, 227));
         jLabel23.setText("QUOTA SALE THÁNG MỚI");
 
         cbMonthAdd.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
         cbMonthAdd.setToolTipText("");
-        cbMonthAdd.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbMonthAddActionPerformed(evt);
-            }
-        });
 
         jLabel24.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel24.setForeground(new java.awt.Color(87, 81, 161));
+        jLabel24.setForeground(new java.awt.Color(213, 213, 227));
         jLabel24.setText("Tháng");
 
         jLabel26.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel26.setForeground(new java.awt.Color(87, 81, 161));
+        jLabel26.setForeground(new java.awt.Color(213, 213, 227));
         jLabel26.setText("Năm");
 
         cbYearAdd1.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
         cbYearAdd1.setToolTipText("");
-        cbYearAdd1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbYearAdd1ActionPerformed(evt);
-            }
-        });
 
         jLabel27.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel27.setForeground(new java.awt.Color(87, 81, 161));
+        jLabel27.setForeground(new java.awt.Color(213, 213, 227));
         jLabel27.setText("Đặt Quota Sale");
 
-        txtSetNewQuota.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtSetNewQuotaActionPerformed(evt);
-            }
-        });
-
         btnSaveQuota.setBackground(new java.awt.Color(58, 54, 107));
-        btnSaveQuota.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnSaveQuota.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnSaveQuota.setForeground(new java.awt.Color(213, 213, 227));
         btnSaveQuota.setText("Xác nhận");
         btnSaveQuota.setBorder(null);
@@ -337,33 +1172,73 @@ public class AdminEmployee extends javax.swing.JFrame {
             }
         });
 
+        SbtnSaveChangeQuota.setBackground(new java.awt.Color(58, 54, 107));
+        SbtnSaveChangeQuota.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        SbtnSaveChangeQuota.setForeground(new java.awt.Color(213, 213, 227));
+        SbtnSaveChangeQuota.setText("Lưu thay đổi");
+        SbtnSaveChangeQuota.setBorder(null);
+        SbtnSaveChangeQuota.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                SbtnSaveChangeQuotaMouseClicked(evt);
+            }
+        });
+        SbtnSaveChangeQuota.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SbtnSaveChangeQuotaActionPerformed(evt);
+            }
+        });
+
+        SbtnCancelAll.setBackground(new java.awt.Color(58, 54, 107));
+        SbtnCancelAll.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        SbtnCancelAll.setForeground(new java.awt.Color(213, 213, 227));
+        SbtnCancelAll.setText("Hủy");
+        SbtnCancelAll.setBorder(null);
+        SbtnCancelAll.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                SbtnCancelAllMouseClicked(evt);
+            }
+        });
+        SbtnCancelAll.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SbtnCancelAllActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelQuotaLayout = new javax.swing.GroupLayout(panelQuota);
         panelQuota.setLayout(panelQuotaLayout);
         panelQuotaLayout.setHorizontalGroup(
             panelQuotaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelQuotaLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(panelQuotaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnSaveQuota, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel23))
-                .addGap(74, 74, 74))
+            .addGroup(panelQuotaLayout.createSequentialGroup()
+                .addGap(45, 45, 45)
+                .addComponent(jLabel23)
+                .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(panelQuotaLayout.createSequentialGroup()
                 .addGap(27, 27, 27)
                 .addGroup(panelQuotaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel27)
-                    .addComponent(jLabel24)
-                    .addComponent(cbMonthAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cbYearAdd1, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel26)
-                    .addComponent(txtSetNewQuota, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(panelQuotaLayout.createSequentialGroup()
+                        .addComponent(SbtnSaveChangeQuota, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(panelQuotaLayout.createSequentialGroup()
+                        .addGroup(panelQuotaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel27)
+                            .addComponent(jLabel24)
+                            .addComponent(cbMonthAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cbYearAdd1, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel26)
+                            .addComponent(txtSetNewQuota, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelQuotaLayout.createSequentialGroup()
+                        .addComponent(SbtnCancelAll, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
+                        .addComponent(btnSaveQuota, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(28, 28, 28))))
         );
         panelQuotaLayout.setVerticalGroup(
             panelQuotaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelQuotaLayout.createSequentialGroup()
-                .addGap(24, 24, 24)
+                .addGap(22, 22, 22)
                 .addComponent(jLabel23)
-                .addGap(34, 34, 34)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel24)
                 .addGap(9, 9, 9)
                 .addComponent(cbMonthAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -375,9 +1250,13 @@ public class AdminEmployee extends javax.swing.JFrame {
                 .addComponent(jLabel27)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtSetNewQuota, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
-                .addComponent(btnSaveQuota, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(39, 39, 39))
+                .addGap(36, 36, 36)
+                .addGroup(panelQuotaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnSaveQuota, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(SbtnCancelAll, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(SbtnSaveChangeQuota, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -394,7 +1273,7 @@ public class AdminEmployee extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 925, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 307, Short.MAX_VALUE))
+                .addGap(0, 394, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -415,29 +1294,26 @@ public class AdminEmployee extends javax.swing.JFrame {
                         .addGap(30, 30, 30)
                         .addComponent(btnAddStatistic, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel4)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 770, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cbMonth, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6))
+                    .addComponent(jLabel6)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 817, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(panelQuota, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(59, 59, 59))
+                .addComponent(panelQuota, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(37, 37, 37))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel2)
+                        .addComponent(txtStoreID)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 2, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(panelQuota, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jLabel2)
-                                .addComponent(txtStoreID)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 2, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(29, 29, 29)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -455,438 +1331,86 @@ public class AdminEmployee extends javax.swing.JFrame {
                             .addComponent(btnStatistic, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnUpdateStatistic, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnAddStatistic, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(19, 19, 19))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(19, 19, 19))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(panelQuota, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())))
         );
 
         TbPanelEmployee.addTab("Giao diện chính", jPanel1);
 
-        jPanel2.setBackground(new java.awt.Color(31, 34, 46));
-        jPanel2.setForeground(new java.awt.Color(69, 73, 100));
-
-        jPanel4.setBackground(new java.awt.Color(31, 34, 46));
-        jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        SCbMonth.setBackground(new java.awt.Color(184, 185, 208));
-        SCbMonth.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        SCbMonth.setForeground(new java.awt.Color(66, 66, 114));
-        SCbMonth.setBorder(null);
-        jPanel4.add(SCbMonth, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 200, 160, -1));
-
-        jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel9.setForeground(new java.awt.Color(240, 240, 240));
-        jLabel9.setText("Tháng");
-        jPanel4.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 180, -1, -1));
-
-        jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel10.setForeground(new java.awt.Color(240, 240, 240));
-        jLabel10.setText("Mã nhân viên");
-        jPanel4.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 100, -1, -1));
-
-        SCbStaffID.setBackground(new java.awt.Color(184, 185, 208));
-        SCbStaffID.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        SCbStaffID.setForeground(new java.awt.Color(66, 66, 114));
-        SCbStaffID.setBorder(null);
-        jPanel4.add(SCbStaffID, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 120, 160, -1));
-
-        jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel11.setForeground(new java.awt.Color(240, 240, 240));
-        jLabel11.setText("Năm");
-        jPanel4.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 260, -1, -1));
-
-        SCbYear.setBackground(new java.awt.Color(184, 185, 208));
-        SCbYear.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        SCbYear.setForeground(new java.awt.Color(66, 66, 114));
-        SCbYear.setBorder(null);
-        jPanel4.add(SCbYear, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 290, 160, -1));
-
-        SbtnStatistic.setBackground(new java.awt.Color(213, 213, 227));
-        SbtnStatistic.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        SbtnStatistic.setForeground(new java.awt.Color(67, 67, 115));
-        SbtnStatistic.setText("Thống kê");
-        SbtnStatistic.setBorder(null);
-        SbtnStatistic.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                SbtnStatisticActionPerformed(evt);
-            }
-        });
-        jPanel4.add(SbtnStatistic, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 390, 182, 34));
-
-        jPanel5.setLayout(new java.awt.BorderLayout());
-
-        jPanel6.setBackground(new java.awt.Color(31, 34, 46));
-        jPanel6.setLayout(new java.awt.BorderLayout());
-
-        jLabel12.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel12.setForeground(new java.awt.Color(231, 220, 234));
-        jLabel12.setText("  Quản lý lương");
-        jPanel6.add(jLabel12, java.awt.BorderLayout.CENTER);
-
-        jLabel14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/Money Bag Bitcoin.png"))); // NOI18N
-        jPanel6.add(jLabel14, java.awt.BorderLayout.LINE_START);
-
-        jSeparator2.setBackground(new java.awt.Color(69, 73, 100));
-        jSeparator2.setOrientation(javax.swing.SwingConstants.VERTICAL);
-
-        tableSalary.setAutoCreateRowSorter(true);
-        tableSalary.setBackground(new java.awt.Color(31, 34, 46));
-        tableSalary.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        tableSalary.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        tableSalary.setForeground(new java.awt.Color(231, 220, 234));
-        tableSalary.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Tháng", "Năm", "Mã nhân viên", "Lương cố định", "Lương thưởng", "Số ngày nghỉ", "Tiền bị trừ", "Tổng lương"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-        });
-        tableSalary.setFocusable(false);
-        tableSalary.setGridColor(new java.awt.Color(31, 34, 46));
-        tableSalary.setOpaque(false);
-        tableSalary.setRowHeight(40);
-        tableSalary.setSelectionBackground(new java.awt.Color(181, 185, 222));
-        tableSalary.setShowGrid(false);
-        tableSalary.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tableSalaryMouseClicked(evt);
-            }
-        });
-        jScrollPane2.setViewportView(tableSalary);
-        if (tableSalary.getColumnModel().getColumnCount() > 0) {
-            tableSalary.getColumnModel().getColumn(0).setPreferredWidth(10);
-            tableSalary.getColumnModel().getColumn(1).setPreferredWidth(10);
-            tableSalary.getColumnModel().getColumn(2).setPreferredWidth(10);
-            tableSalary.getColumnModel().getColumn(3).setPreferredWidth(10);
-            tableSalary.getColumnModel().getColumn(4).setPreferredWidth(10);
-            tableSalary.getColumnModel().getColumn(5).setPreferredWidth(10);
-            tableSalary.getColumnModel().getColumn(6).setPreferredWidth(10);
-            tableSalary.getColumnModel().getColumn(7).setPreferredWidth(10);
-        }
-
-        SbtnAdd.setBackground(new java.awt.Color(213, 213, 227));
-        SbtnAdd.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        SbtnAdd.setForeground(new java.awt.Color(69, 73, 100));
-        SbtnAdd.setText("Thêm");
-        SbtnAdd.setBorder(null);
-        SbtnAdd.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                SbtnAddActionPerformed(evt);
-            }
-        });
-
-        SbtnUpdate.setBackground(new java.awt.Color(213, 213, 227));
-        SbtnUpdate.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        SbtnUpdate.setForeground(new java.awt.Color(69, 73, 100));
-        SbtnUpdate.setText("Cập nhật");
-        SbtnUpdate.setBorder(null);
-        SbtnUpdate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                SbtnUpdateActionPerformed(evt);
-            }
-        });
-
-        SbtnSave.setBackground(new java.awt.Color(213, 213, 227));
-        SbtnSave.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        SbtnSave.setForeground(new java.awt.Color(69, 73, 100));
-        SbtnSave.setText("Lưu thay đổi");
-        SbtnSave.setBorder(null);
-        SbtnSave.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                SbtnSaveActionPerformed(evt);
-            }
-        });
-
-        txtDayOff.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        txtDayOff.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtDayOffActionPerformed(evt);
-            }
-        });
-
-        jLabel20.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel20.setForeground(new java.awt.Color(213, 213, 227));
-        jLabel20.setText("Số ngày nghỉ");
-
-        jLabel19.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel19.setForeground(new java.awt.Color(213, 213, 227));
-        jLabel19.setText("Lương cố định");
-
-        txtSalary.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        txtSalary.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtSalaryActionPerformed(evt);
-            }
-        });
-
-        txtLastname.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        txtLastname.setForeground(new java.awt.Color(31, 34, 46));
-        txtLastname.setEnabled(false);
-        txtLastname.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtLastnameActionPerformed(evt);
-            }
-        });
-
-        txtFirstname.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        txtFirstname.setForeground(new java.awt.Color(31, 34, 46));
-        txtFirstname.setEnabled(false);
-        txtFirstname.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtFirstnameActionPerformed(evt);
-            }
-        });
-
-        txtStaffID.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        txtStaffID.setForeground(new java.awt.Color(31, 34, 46));
-        txtStaffID.setEnabled(false);
-        txtStaffID.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtStaffIDActionPerformed(evt);
-            }
-        });
-
-        jLabel16.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel16.setForeground(new java.awt.Color(213, 213, 227));
-        jLabel16.setText("Mã nhân viên");
-
-        jLabel17.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel17.setForeground(new java.awt.Color(213, 213, 227));
-        jLabel17.setText("Họ");
-
-        jLabel18.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel18.setForeground(new java.awt.Color(213, 213, 227));
-        jLabel18.setText("Tên");
-
-        jLabel21.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel21.setForeground(new java.awt.Color(213, 213, 227));
-        jLabel21.setText("Tháng");
-
-        StxtMonth.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        StxtMonth.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                StxtMonthActionPerformed(evt);
-            }
-        });
-
-        StxtYear.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        StxtYear.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                StxtYearActionPerformed(evt);
-            }
-        });
-
-        jLabel22.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel22.setForeground(new java.awt.Color(213, 213, 227));
-        jLabel22.setText("Năm");
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(28, 28, 28)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(SbtnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(SbtnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(SbtnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(79, 79, 79)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addComponent(jLabel18)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(txtLastname, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addComponent(jLabel17)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(txtFirstname, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addComponent(jLabel16)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(txtStaffID, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addGap(76, 76, 76)
-                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                                .addComponent(jLabel19)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(txtSalary, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                                .addComponent(jLabel20)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(txtDayOff, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addGap(133, 133, 133)
-                                        .addComponent(jLabel21)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(StxtMonth, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(70, 70, 70)
-                                        .addComponent(jLabel22)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(StxtYear, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 908, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(56, 56, 56)
-                        .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(53, 53, 53)
-                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(37, Short.MAX_VALUE))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(40, 40, 40)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(131, 131, 131)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(SbtnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(31, 31, 31)
-                        .addComponent(SbtnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(43, 43, 43)
-                        .addComponent(SbtnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtSalary, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel19)
-                            .addComponent(txtStaffID, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel16))
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(35, 35, 35)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(txtFirstname, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel17)))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(33, 33, 33)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(txtDayOff, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel20))))
-                        .addGap(35, 35, 35)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel18)
-                            .addComponent(txtLastname, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(StxtMonth, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel21)
-                            .addComponent(jLabel22)
-                            .addComponent(StxtYear, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(39, Short.MAX_VALUE))
-            .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.TRAILING)
-        );
-
-        TbPanelEmployee.addTab("Quản lý lương", jPanel2);
+        txtAddEmail.setBackground(new java.awt.Color(231, 220, 234));
+        txtAddEmail.setBorder(null);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(TbPanelEmployee, javax.swing.GroupLayout.PREFERRED_SIZE, 1237, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addComponent(TbPanelEmployee, javax.swing.GroupLayout.PREFERRED_SIZE, 1324, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(txtAddEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(TbPanelEmployee)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap(390, Short.MAX_VALUE)
+                .addComponent(txtAddEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(217, 217, 217))
+            .addComponent(TbPanelEmployee, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnStatisticActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStatisticActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnStatisticActionPerformed
-
-    
-    private void btnStatisticMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnStatisticMouseClicked
-        //thống kê theo tháng và năm
-        String month = cbMonth.getSelectedItem().toString();
-        String year = cbYear.getSelectedItem().toString();
-
-        try{
-            
-            ResultSet rs = new DBUpdater().GetStatisticEmployeeByStore(
-                                                StoreID, Integer.parseInt(month), Integer.parseInt(year));
-           
-            DefaultTableModel model=(DefaultTableModel)TableStatistic.getModel();
-            int i=0;
-            if (!rs.next()){
-                JOptionPane.showMessageDialog(this,"Thống kê thất bại!");
-            }else{
-                while(rs.next()){
-            
-               String thang = rs.getString(1);
-               String nam  = rs.getString(2);
-               String manv = rs.getString(3);
-               String sodonghang = rs.getString(4);
-               String doanhso = rs.getString(5);
-               String quota = rs.getString(6);
-               String hieusuat = rs.getString(7);
-               //JOptionPane.showMessageDialog(this, thang + " " + nam);
-               Object[] row = {thang,nam,manv,sodonghang,doanhso,quota,hieusuat};
-              // model.addRow(row);
-               model.insertRow(i, row);
-                }
-              JOptionPane.showMessageDialog(this, "Thống kê thành công! ");
-            
-            }
-           
-        }catch(Exception e){
-            e.printStackTrace();
-        }
+    //lưu thay đổi cập nhật lương
+    private void SbtnSaveChangeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SbtnSaveChangeActionPerformed
         
-    }//GEN-LAST:event_btnStatisticMouseClicked
-
-    private void LoadCbStaff(){
-        try{
-            ResultSet r = new DBUpdater().GetSaleStaffIDByStore(StoreID);
-            while (r.next()){
-                String manv = r.getString("MaNV");
-                SCbStaffID.addItem(manv);
-            } 
-            
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-       
-    }
-    private void cbMonthActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbMonthActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cbMonthActionPerformed
+    }//GEN-LAST:event_SbtnSaveChangeActionPerformed
 
     private void SbtnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SbtnAddActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_SbtnAddActionPerformed
 
-    //button cap nhan luong
-    private void SbtnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SbtnUpdateActionPerformed
-        SbtnUpdate.setVisible(false);
-        SbtnSave.setVisible(true);
-    }//GEN-LAST:event_SbtnUpdateActionPerformed
+    private void tableSalaryMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableSalaryMouseClicked
+        // TODO add your handling code here:
+        // panelDetail.setVisible(true); //hien panel
+        txtSalary.setEnabled(false);
+        txtDayOff.setEnabled(false);
+        StxtMonth.setEnabled(false);
+        StxtYear.setEnabled(false);
+        String id = tableSalary.getValueAt(tableSalary.getSelectedRow(), 2).toString();
+        String luongcd = tableSalary.getValueAt(tableSalary.getSelectedRow(), 3).toString();
+        String songaynghi = tableSalary.getValueAt(tableSalary.getSelectedRow(), 5).toString();
+        String thang = tableSalary.getValueAt(tableSalary.getSelectedRow(), 0).toString();
+        String nam = tableSalary.getValueAt(tableSalary.getSelectedRow(), 1).toString();
+
+        txtDayOff.setText(songaynghi);
+        txtSalary.setText(luongcd);
+        txtStaffID.setText(id);
+        StxtMonth.setText(thang);
+        StxtYear.setText(nam);
+
+        try{
+            ResultSet rs = new DBUpdater().GetInfoStaff(id);
+            rs.next();
+            String honv = rs.getString(2);
+            String ten = rs.getString(3);
+
+            JOptionPane.showMessageDialog(this, ten);
+            txtLastname.setText(honv);
+            txtFirstname.setText(ten);
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+    }//GEN-LAST:event_tableSalaryMouseClicked
 
     private void SbtnStatisticActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SbtnStatisticActionPerformed
         //thống kê theo tháng, năm thông tin của 1 nhân viên
@@ -894,6 +1418,8 @@ public class AdminEmployee extends javax.swing.JFrame {
         String year = SCbYear.getSelectedItem().toString();
         String manv = SCbStaffID.getSelectedItem().toString();
         DefaultTableModel model = (DefaultTableModel)tableSalary.getModel();
+        model.getDataVector().removeAllElements();
+         model.fireTableDataChanged();
         try{
             ResultSet rs = new DBUpdater().GetSalaryInfoByStaff(manv, Integer.parseInt(month),Integer.parseInt(year));
             while(rs.next()){
@@ -911,7 +1437,445 @@ public class AdminEmployee extends javax.swing.JFrame {
             e.printStackTrace();
         }
     }//GEN-LAST:event_SbtnStatisticActionPerformed
-    
+
+    private void btnSaveQuotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveQuotaActionPerformed
+        String mach = this.StoreID;
+        int thang = Integer.parseInt(cbMonthAdd.getSelectedItem().toString());
+        int nam = Integer.parseInt(cbYearAdd1.getSelectedItem().toString());
+        String quota = txtSetNewQuota.getText();
+        int quotasale=0;
+        int result;
+        if (quota.equals("")){
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập QuotaSale tháng mới!");
+        }else{
+            quotasale=Integer.parseInt(quota);
+            try{
+                result = new DBUpdater().AddNewQuotaSale(mach, thang, nam, quotasale);
+                if (result>0){
+                    JOptionPane.showMessageDialog(this, "Thêm thành công!");
+
+                }
+                else{
+                    JOptionPane.showMessageDialog(this, "Thêm thất bại");
+                }
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+        btnAddStatistic.setVisible(true);
+        panelQuota.setVisible(false);
+
+    }//GEN-LAST:event_btnSaveQuotaActionPerformed
+
+    private void btnAddStatisticActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddStatisticActionPerformed
+       
+    }//GEN-LAST:event_btnAddStatisticActionPerformed
+
+    private void btnAddStatisticMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAddStatisticMouseClicked
+        //thêm quota sale cho tháng mới'
+        btnAddStatistic.setEnabled(false);
+        btnUpdateStatistic.setVisible(false);
+        //btnAddStatistic.setVisible(false);
+        btnStatistic.setVisible(false);
+        panelQuota.setVisible(true);
+        btnAddStatistic.setEnabled(false);
+        SbtnSaveChangeQuota.setVisible(false);
+    }//GEN-LAST:event_btnAddStatisticMouseClicked
+
+    private void btnUpdateStatisticActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateStatisticActionPerformed
+
+        if (TableStatistic.getSelectedRow()==-1){
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn thông tin cần cập nhật!");
+        }else{
+             btnUpdateStatistic.setEnabled(false);
+            btnAddStatistic.setVisible(false);
+            btnStatistic.setVisible(false);
+            panelQuota.setVisible(true);
+            SbtnSaveChangeQuota.setVisible(true);
+            btnSaveQuota.setVisible(false);
+            String thang = TableStatistic.getValueAt(TableStatistic.getSelectedRow(), 0).toString();
+            String nam = TableStatistic.getValueAt(TableStatistic.getSelectedRow(), 1).toString();
+            String quota = TableStatistic.getValueAt(TableStatistic.getSelectedRow(), 5).toString();
+            
+            cbMonthAdd.setSelectedItem(thang);
+            cbYearAdd1.setSelectedItem(nam);
+            txtSetNewQuota.setText(quota);
+            
+            
+        }
+    }//GEN-LAST:event_btnUpdateStatisticActionPerformed
+
+    private void btnUpdateStatisticMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUpdateStatisticMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnUpdateStatisticMouseClicked
+
+    private void btnStatisticActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStatisticActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnStatisticActionPerformed
+
+    private void btnStatisticMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnStatisticMouseClicked
+        //thống kê theo tháng và năm
+        String month = cbMonth.getSelectedItem().toString();
+        String year = cbYear.getSelectedItem().toString();
+
+        try{
+
+            ResultSet rs = new DBUpdater().GetStatisticEmployeeByStore(
+                StoreID, Integer.parseInt(month), Integer.parseInt(year));
+
+            DefaultTableModel model=(DefaultTableModel)TableStatistic.getModel();
+            int i=0;
+            if (!rs.next()){
+                JOptionPane.showMessageDialog(this,"Thống kê thất bại!");
+            }else{
+                while(rs.next()){
+
+                    String thang = rs.getString(1);
+                    String nam  = rs.getString(2);
+                    String manv = rs.getString(3);
+                    String sodonghang = rs.getString(4);
+                    String doanhso = rs.getString(5);
+                    String quota = rs.getString(6);
+                    String hieusuat = rs.getString(7);
+                    //JOptionPane.showMessageDialog(this, thang + " " + nam);
+                    Object[] row = {thang,nam,manv,sodonghang,doanhso,quota,hieusuat};
+                    // model.addRow(row);
+                    model.insertRow(i, row);
+                }
+                JOptionPane.showMessageDialog(this, "Thống kê thành công! ");
+
+            }
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+    }//GEN-LAST:event_btnStatisticMouseClicked
+
+    private void btnDeleteStaffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteStaffActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnDeleteStaffActionPerformed
+
+    private void tableStatisticStaffMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableStatisticStaffMouseClicked
+        panelInfoStaff.setVisible(true);
+        DisableStaffInfo();
+        String manv = tableStatisticStaff.getValueAt(tableStatisticStaff.getSelectedRow(), 0).toString();
+        String ho = tableStatisticStaff.getValueAt(tableStatisticStaff.getSelectedRow(), 1).toString();
+        String ten = tableStatisticStaff.getValueAt(tableStatisticStaff.getSelectedRow(), 2).toString();
+        String gioitinh = tableStatisticStaff.getValueAt(tableStatisticStaff.getSelectedRow(), 3).toString();
+        String ngaysinh = tableStatisticStaff.getValueAt(tableStatisticStaff.getSelectedRow(), 4).toString();
+        String sdt = tableStatisticStaff.getValueAt(tableStatisticStaff.getSelectedRow(), 5).toString();
+        String email = tableStatisticStaff.getValueAt(tableStatisticStaff.getSelectedRow(), 6).toString();
+        String mach = tableStatisticStaff.getValueAt(tableStatisticStaff.getSelectedRow(), 7).toString();
+        String maloai = tableStatisticStaff.getValueAt(tableStatisticStaff.getSelectedRow(), 8).toString();
+        
+        SetInfoIntoPanel(manv, ho, ten, gioitinh, ngaysinh, sdt, email, mach, maloai);
+        //DisableStaffInfo();
+        
+    }//GEN-LAST:event_tableStatisticStaffMouseClicked
+
+    private void btnAddStaffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddStaffActionPerformed
+        //refesh
+        RefeshInfoPanel();
+        btnAddStaff.setVisible(false);
+        panelInfoStaff.setVisible(true);
+        btnSaveNewStaff.setVisible(true);
+        btnCancel.setVisible(true);
+    }//GEN-LAST:event_btnAddStaffActionPerformed
+
+    private void btnSaveChangeUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveChangeUpdateActionPerformed
+        // TODO add your handling code here:
+        String manv = txtAddStaffID.getText();
+       String ho = txtAddFirstname.getText();
+       String ten = txtAddLastname.getText();
+       String gioitinh = cbAddGender1.getSelectedItem().toString();
+       String ngaysinh = txtAddDoB.getText();
+       String sdt = txtAddphone.getText();
+       String email = txtAddMail.getText();
+       String maloai = cbAddCate.getSelectedItem().toString();
+       
+       if (ho.equals("") || ten.equals("") || ngaysinh.equals("") ||sdt.equals("") ||email.equals("")){
+           JOptionPane.showMessageDialog(this, "Vui lòng không để trống thông tin");
+       }else{
+            int result = new DBUpdater().UpdateInfoStaff(manv, ho, ten, gioitinh, ngaysinh, sdt, email, maloai);
+             if (result > 0){
+                JOptionPane.showMessageDialog(this, "Cập nhật thông tin thành công!");
+                 btnSaveChangeUpdate.setVisible(false);
+                 btnUpdateInfoStaff.setVisible(true);
+                 panelInfoStaff.setVisible(false);
+                 btnCancel.setVisible(false);
+                 //DisableStaffInfo();
+            }else{
+                JOptionPane.showMessageDialog(this, "Cập nhật thông tin thất bại!");
+            }
+       }
+        LoadStaffTable(this.StoreID);
+    }//GEN-LAST:event_btnSaveChangeUpdateActionPerformed
+
+    private void btnSaveNewStaffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveNewStaffActionPerformed
+      
+       //add new staff
+       String mach = this.StoreID;
+       String manv = txtAddStaffID.getText();
+       String ho = txtAddFirstname.getText();
+       String ten = txtAddLastname.getText();
+       String gioitinh = cbAddGender1.getSelectedItem().toString();
+       String ngaysinh = txtAddDoB.getText();
+       String sdt = txtAddphone.getText();
+       String email = txtAddMail.getText();
+       String maloai = cbAddCate.getSelectedItem().toString();
+       
+       if (ho.equals("") || ten.equals("") || ngaysinh.equals("") ||sdt.equals("") ||email.equals("")){
+           JOptionPane.showMessageDialog(this, "Vui lòng không để trống thông tin");
+       }else{
+            int result = new DBUpdater().InsertNewStaff(mach, manv, ho, ten, gioitinh, ngaysinh, sdt, email, maloai);
+             if (result > 0){
+                JOptionPane.showMessageDialog(this, "Thêm nhân viên thành công!");
+                 btnSaveNewStaff.setVisible(false); 
+                 btnAddStaff.setVisible(true);
+                 panelInfoStaff.setVisible(false);
+                 btnCancel.setVisible(false);
+            }else{
+                JOptionPane.showMessageDialog(this, "Thêm nhân viên thất bại!");
+                
+            }
+       }
+        LoadStaffTable(this.StoreID);
+      
+    }//GEN-LAST:event_btnSaveNewStaffActionPerformed
+
+    private void btnUpdateInfoStaffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateInfoStaffActionPerformed
+        EnableStaffInfo();
+        txtAddStaffID.setEnabled(false);
+        txtAddStore.setEnabled(false);
+        btnSaveChangeUpdate.setVisible(true);
+        btnCancel.setVisible(true);
+    }//GEN-LAST:event_btnUpdateInfoStaffActionPerformed
+
+    private void btnCancelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCancelMouseClicked
+        
+        panelInfoStaff.setVisible(false);
+        btnUpdateInfoStaff.setVisible(true);
+        btnAddStaff.setVisible(true);
+        btnSaveChangeUpdate.setVisible(false);
+        btnSaveNewStaff.setVisible(false);
+        btnCancel.setVisible(false);
+    }//GEN-LAST:event_btnCancelMouseClicked
+
+    private void btnDeleteStaffMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDeleteStaffMouseClicked
+        String manv = tableStatisticStaff.getValueAt(tableStatisticStaff.getSelectedRow(), 0).toString();
+        int result = JOptionPane.showConfirmDialog(this, "Bạn muốn xóa nhân viên này?","Xóa", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if (result == 0){ //xoa
+            int r1 = new DBUpdater().DeleteStaff(manv);
+            if (r1 > 0){
+                JOptionPane.showMessageDialog(this, "Xoá thành công!");
+            }else{
+                 JOptionPane.showMessageDialog(this, "Xoá thất bại!");
+            }
+        }else{
+            if (result == 1 || result==2){
+                return;
+            }
+        }
+        LoadStaffTable(this.StoreID);
+    }//GEN-LAST:event_btnDeleteStaffMouseClicked
+
+    private void SbtnCancelSalaryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SbtnCancelSalaryActionPerformed
+       
+       
+    }//GEN-LAST:event_SbtnCancelSalaryActionPerformed
+
+    private void SbtnSaveChangeQuotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SbtnSaveChangeQuotaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_SbtnSaveChangeQuotaActionPerformed
+
+    private void SbtnSaveChangeQuotaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SbtnSaveChangeQuotaMouseClicked
+        
+       String mach = this.StoreID;
+        int thang = Integer.parseInt(cbMonthAdd.getSelectedItem().toString());
+        int nam = Integer.parseInt(cbYearAdd1.getSelectedItem().toString());
+        String quota = txtSetNewQuota.getText();
+        int quotasale=0;
+        int result;
+        if (quota.equals("")){
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập QuotaSale!");
+        }else{
+            quotasale=Integer.parseInt(quota);
+            try{
+                result = new DBUpdater().UpdateQuotaSale(mach, thang, nam, quotasale);
+                if (result>0){
+                    JOptionPane.showMessageDialog(this, "Cập nhật thành công!");
+                    panelQuota.setVisible(false);
+                     btnAddStatistic.setVisible(true);
+                    btnAddStatistic.setEnabled(true);
+                    btnUpdateStatistic.setVisible(true);
+                    btnUpdateStatistic.setEnabled(true);
+                    btnStatistic.setVisible(true);
+                    btnStatistic.setEnabled(true);
+                    LoadStatisticTable(mach, thang, nam);
+
+                }
+                else{
+                    JOptionPane.showMessageDialog(this, "Cập nhật thất bại");
+                }
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+        
+    }//GEN-LAST:event_SbtnSaveChangeQuotaMouseClicked
+
+    private void SbtnCancelAllMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SbtnCancelAllMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_SbtnCancelAllMouseClicked
+
+    private void SbtnCancelAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SbtnCancelAllActionPerformed
+        panelQuota.setVisible(false);
+        btnStatistic.setVisible(true);
+        btnUpdateStatistic.setVisible(true);
+        btnAddStatistic.setVisible(true);
+        btnAddStatistic.setEnabled(true);
+        btnUpdateStatistic.setEnabled(true);
+        btnStatistic.setEnabled(true);
+    }//GEN-LAST:event_SbtnCancelAllActionPerformed
+
+    private void SbtnSaveChangeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SbtnSaveChangeMouseClicked
+        //SbtnUpdate.setVisible(true);
+        String luongcd = txtSalary.getText();
+        String songaynghi = txtDayOff.getText();
+        String manv = txtStaffID.getText();
+        int thang = Integer.parseInt(StxtMonth.getText());
+        int nam = Integer.parseInt(StxtYear.getText());
+        //cap nhat vao he thong
+        int result=new DBUpdater().UpdateSalaryInfo(manv, Integer.parseInt(songaynghi), Integer.parseInt(luongcd), thang, nam);
+        if (result > 0){
+            JOptionPane.showMessageDialog(this, "Cập nhật thành công!");
+            SbtnCancelSalary.setEnabled(true);
+            SbtnCancelSalary.setVisible(true);
+           SbtnSaveChange.setVisible(false);
+        }else{
+            JOptionPane.showMessageDialog(this, "Cập nhật thất bại!");
+        }
+        LoadSalaryTable(manv, thang, nam);
+    }//GEN-LAST:event_SbtnSaveChangeMouseClicked
+
+    private void btnUpdateSalaryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateSalaryActionPerformed
+        SbtnSaveChange.setVisible(true);
+        SbtnCancelSalary.setVisible(false);
+        txtSalary.setEnabled(true);
+        txtDayOff.setEnabled(true);
+        btnUpdateSalary.setEnabled(false);
+       
+    }//GEN-LAST:event_btnUpdateSalaryActionPerformed
+
+    private void SbtnCancelSalaryMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SbtnCancelSalaryMouseClicked
+        btnUpdateSalary.setEnabled(true);
+        btnUpdateSalary.setVisible(true);
+        SbtnCancelSalary.setVisible(false);
+    }//GEN-LAST:event_SbtnCancelSalaryMouseClicked
+
+    private void SetInfoIntoPanel(String manv, String honv, String tennv, String gioitinhString, String ngaysinhString, 
+                                            String sdt, String email, String mach, String maloai){
+        txtAddStaffID.setText(manv);
+        txtAddFirstname.setText(honv);
+        txtAddLastname.setText(tennv);
+        txtAddDoB.setText(ngaysinhString);
+        cbAddGender1.setSelectedItem(gioitinhString);
+        txtAddMail.setText(email);
+        txtAddphone.setText(sdt);
+        cbAddCate.setSelectedItem(maloai);
+        txtAddStore.setText(mach);
+    }
+    private void DisableStaffInfo(){
+        txtAddStaffID.setEnabled(false);
+        txtAddFirstname.setEnabled(false);
+        txtAddLastname.setEnabled(false);
+        txtAddDoB.setEnabled(false);
+        cbAddGender1.setEnabled(false);
+        txtAddMail.setEnabled(false);
+        txtAddphone.setEnabled(false);
+        cbAddCate.setEnabled(false);
+        txtAddStore.setEnabled(false);
+    }
+    private void EnableStaffInfo(){
+        txtAddStaffID.setEnabled(true);
+        txtAddFirstname.setEnabled(true);
+        txtAddLastname.setEnabled(true);
+        txtAddDoB.setEnabled(true);
+        cbAddGender1.setEnabled(true);
+        txtAddMail.setEnabled(true);
+        txtAddphone.setEnabled(true);
+        cbAddCate.setEnabled(true);
+        txtAddStore.setEnabled(true);
+    }
+    private void RefeshInfoPanel(){
+        //generate new staff id
+        String staffid = new Helper().generateUniqueStaffId();
+        txtAddStaffID.setText(staffid);
+        txtAddFirstname.setText("");
+        txtAddLastname.setText(" ");
+
+        Date now = Calendar.getInstance().getTime();
+        Format f = new SimpleDateFormat("yyyy-M-d");
+        String dob = f.format(now);
+        
+        txtAddDoB.setText(dob);
+        cbAddGender1.setSelectedIndex(0);
+        txtAddMail.setText("");
+        txtAddphone.setText("");
+        cbAddCate.setSelectedIndex(0);
+        txtAddStore.setText(this.StoreID);
+    }
+    private void LoadCbStaff(){
+        try{
+            ResultSet r = new DBUpdater().GetSaleStaffIDByStore(StoreID);
+            while (r.next()){
+                String manv = r.getString("MaNV");
+                SCbStaffID.addItem(manv);
+            } 
+            
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+       
+    }
+    void LoadStatisticTable(String mach, int month, int year){
+         //String month = cbMonth.getSelectedItem().toString();
+        //String year = cbYear.getSelectedItem().toString();
+
+        try{
+
+            ResultSet rs = new DBUpdater().GetStatisticEmployeeByStore(
+                mach, month, year);
+
+            DefaultTableModel model=(DefaultTableModel)TableStatistic.getModel();
+            int i=0;
+            if (!rs.next()){
+                JOptionPane.showMessageDialog(this,"Thống kê thất bại!");
+            }else{
+                while(rs.next()){
+
+                    String thang = rs.getString(1);
+                    String nam  = rs.getString(2);
+                    String manv = rs.getString(3);
+                    String sodonghang = rs.getString(4);
+                    String doanhso = rs.getString(5);
+                    String quota = rs.getString(6);
+                    String hieusuat = rs.getString(7);
+                    //JOptionPane.showMessageDialog(this, thang + " " + nam);
+                    Object[] row = {thang,nam,manv,sodonghang,doanhso,quota,hieusuat};
+                    // model.addRow(row);
+                    model.insertRow(i, row);
+                }
+                //JOptionPane.showMessageDialog(this, "Thống kê thành công! ");
+
+            }
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+   
     private void LoadSalaryTable(String manv, int month, int year){
        
          DefaultTableModel model = (DefaultTableModel)tableSalary.getModel();
@@ -935,143 +1899,45 @@ public class AdminEmployee extends javax.swing.JFrame {
             e.printStackTrace();
         }
     }
-    private void txtStaffIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtStaffIDActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtStaffIDActionPerformed
-
-    private void txtFirstnameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFirstnameActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtFirstnameActionPerformed
-
-    private void txtLastnameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLastnameActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtLastnameActionPerformed
-
-    private void txtSalaryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSalaryActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtSalaryActionPerformed
-
-    private void tableSalaryMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableSalaryMouseClicked
-        // TODO add your handling code here:
-       // panelDetail.setVisible(true); //hien panel
-        String id = tableSalary.getValueAt(tableSalary.getSelectedRow(), 2).toString();
-        String luongcd = tableSalary.getValueAt(tableSalary.getSelectedRow(), 3).toString();
-        String songaynghi = tableSalary.getValueAt(tableSalary.getSelectedRow(), 5).toString();
-        String thang = tableSalary.getValueAt(tableSalary.getSelectedRow(), 0).toString();
-        String nam = tableSalary.getValueAt(tableSalary.getSelectedRow(), 1).toString();
-        
-        txtDayOff.setText(songaynghi);
-        txtSalary.setText(luongcd);
-        txtStaffID.setText(id);
-        StxtMonth.setText(thang);
-        StxtYear.setText(nam);
-        
+    void LoadStaffTable(String storeid){
+        DefaultTableModel model = (DefaultTableModel)tableStatisticStaff.getModel();
+         //xóa all table row
+         model.getDataVector().removeAllElements();
+         model.fireTableDataChanged();
         try{
-            ResultSet rs = new DBUpdater().GetInfoStaff(id);
-            rs.next();
-            String honv = rs.getString(2);
-            String ten = rs.getString(3);
-            
-            JOptionPane.showMessageDialog(this, ten);
-            txtLastname.setText(honv);
-            txtFirstname.setText(ten);
-            
-                    
+            ResultSet rs = new DBUpdater().GetListInfoStaff("CH85650");
+            while(rs.next()){
+                String manv = rs.getString(1);
+                String honv = rs.getString(2);
+                String tennv = rs.getString(3);
+                String gioitinh =rs.getString(4);
+                String ngaysinh = rs.getString(5);
+                //convert sang dateString d = date.toString();
+                String r = ConvertFormatDate(ngaysinh);
+                String sdt = rs.getString (6);
+                String email = rs.getString(7);
+                String mach = rs.getString(8);
+                String loainv = rs.getString(9);
+                model.addRow(new Object[]{manv,honv,tennv,gioitinh,r,sdt,email,mach,loainv});
+            }
         }catch(Exception e){
             e.printStackTrace();
         }
-        
-    }//GEN-LAST:event_tableSalaryMouseClicked
-
-    private void txtDayOffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDayOffActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtDayOffActionPerformed
-
-    //lưu thay đổi cập nhật
-    private void SbtnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SbtnSaveActionPerformed
-       SbtnUpdate.setVisible(true);
-        String luongcd = txtSalary.getText();
-       String songaynghi = txtDayOff.getText();
-       String manv = txtStaffID.getText();
-       int thang = Integer.parseInt(StxtMonth.getText());
-       int nam = Integer.parseInt(StxtYear.getText());
-       //cap nhat vao he thong
-       int result=new DBUpdater().UpdateSalaryInfo(manv, Integer.parseInt(songaynghi), Integer.parseInt(luongcd), thang, nam);
-       if (result > 0){
-           JOptionPane.showMessageDialog(this, "Cập nhật thành công!");
-       }else{
-           JOptionPane.showMessageDialog(this, "Cập nhật thất bại!");
-       }
-        LoadSalaryTable(manv, thang, nam);
-    }//GEN-LAST:event_SbtnSaveActionPerformed
-
-    private void StxtMonthActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_StxtMonthActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_StxtMonthActionPerformed
-
-    private void StxtYearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_StxtYearActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_StxtYearActionPerformed
-
-    private void btnUpdateStatisticMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUpdateStatisticMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnUpdateStatisticMouseClicked
-
-    private void btnUpdateStatisticActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateStatisticActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnUpdateStatisticActionPerformed
-
-    private void btnAddStatisticMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAddStatisticMouseClicked
-        //thêm quota sale cho tháng mới'
-        btnAddStatistic.setVisible(false);
-        panelQuota.setVisible(true);
-    }//GEN-LAST:event_btnAddStatisticMouseClicked
-
-    private void btnAddStatisticActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddStatisticActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnAddStatisticActionPerformed
-
-    private void cbMonthAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbMonthAddActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cbMonthAddActionPerformed
-
-    private void cbYearAdd1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbYearAdd1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cbYearAdd1ActionPerformed
-
-    private void txtSetNewQuotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSetNewQuotaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtSetNewQuotaActionPerformed
-
-    private void btnSaveQuotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveQuotaActionPerformed
-        String mach = this.StoreID;
-        int thang = Integer.parseInt(cbMonthAdd.getSelectedItem().toString());
-        int nam = Integer.parseInt(cbYearAdd1.getSelectedItem().toString());
-        String quota = txtSetNewQuota.getText();
-        int quotasale=0;
-        int result;
-        if (quota.equals("")){
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập QuotaSale tháng mới!");
-        }else{
-            quotasale=Integer.parseInt(quota);
-            try{
-                result = new DBUpdater().AddNewQuotaSale(mach, thang, nam, quotasale);
-                if (result>0){
-                    JOptionPane.showMessageDialog(this, "Thêm thành công!");
-                           
-                }
-                else{
-                    JOptionPane.showMessageDialog(this, "Thêm thất bại");
-                }
-            }catch(Exception e){
-                e.printStackTrace();
-            }
+    }
+    public static String ConvertFormatDate(String dob){
+        try{
+            Format f = new SimpleDateFormat("yyyy-M-d");
+            SimpleDateFormat simple = new SimpleDateFormat("yyyy-M-d HH:mm:ss");
+            Date date = simple.parse(dob);
+                
+            //convert date sang string
+            String r = f.format(date);
+            return r;
+        }catch(Exception e){
+            e.printStackTrace();
         }
-        btnAddStatistic.setVisible(true);
-        panelQuota.setVisible(false);
-        
-    }//GEN-LAST:event_btnSaveQuotaActionPerformed
-
+        return "";
+    }
     private void LoadCbMonth(){
         cbMonth.removeAll();
         for (int i=1; i<=12; i++){
@@ -1089,6 +1955,22 @@ public class AdminEmployee extends javax.swing.JFrame {
             cbYearAdd1.addItem(Integer.toString(i));
         }
     }
+    private void LoadCbGender_Cate(){
+        cbAddGender1.addItem("Nữ");
+        cbAddGender1.addItem("Nam");
+        
+        try{
+            ResultSet rs = new DBUpdater().GetCategory();
+            while(rs.next()){
+                String cate = rs.getString(1);
+               cbAddCate.addItem(cate);
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+    
+
     /**
      * @param args the command line arguments
      */
@@ -1134,17 +2016,29 @@ public class AdminEmployee extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> SCbStaffID;
     private javax.swing.JComboBox<String> SCbYear;
     private javax.swing.JButton SbtnAdd;
-    private javax.swing.JButton SbtnSave;
+    private javax.swing.JButton SbtnCancelAll;
+    private javax.swing.JButton SbtnCancelSalary;
+    private javax.swing.JButton SbtnSaveChange;
+    private javax.swing.JButton SbtnSaveChangeQuota;
     private javax.swing.JButton SbtnStatistic;
-    private javax.swing.JButton SbtnUpdate;
     private javax.swing.JTextField StxtMonth;
     private javax.swing.JTextField StxtYear;
     private javax.swing.JTable TableStatistic;
     private javax.swing.JTabbedPane TbPanelEmployee;
+    private javax.swing.JButton btnAddStaff;
     private javax.swing.JButton btnAddStatistic;
+    private javax.swing.JButton btnCancel;
+    private javax.swing.JButton btnDeleteStaff;
+    private javax.swing.JButton btnSaveChangeUpdate;
+    private javax.swing.JButton btnSaveNewStaff;
     private javax.swing.JButton btnSaveQuota;
+    private javax.swing.JButton btnSearchInfoStaff1;
     private javax.swing.JButton btnStatistic;
+    private javax.swing.JButton btnUpdateInfoStaff;
+    private javax.swing.JButton btnUpdateSalary;
     private javax.swing.JButton btnUpdateStatistic;
+    private javax.swing.JComboBox<String> cbAddCate;
+    private javax.swing.JComboBox<String> cbAddGender1;
     private javax.swing.JComboBox<String> cbMonth;
     private javax.swing.JComboBox<String> cbMonthAdd;
     private javax.swing.JComboBox<String> cbYear;
@@ -1166,27 +2060,59 @@ public class AdminEmployee extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel27;
+    private javax.swing.JLabel jLabel28;
+    private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel30;
+    private javax.swing.JLabel jLabel31;
+    private javax.swing.JLabel jLabel32;
+    private javax.swing.JLabel jLabel33;
+    private javax.swing.JLabel jLabel34;
+    private javax.swing.JLabel jLabel35;
+    private javax.swing.JLabel jLabel36;
+    private javax.swing.JLabel jLabel37;
+    private javax.swing.JLabel jLabel38;
+    private javax.swing.JLabel jLabel39;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel40;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel10;
+    private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField5;
+    private javax.swing.JPanel panelInfoStaff;
     private javax.swing.JPanel panelQuota;
     private javax.swing.JTable tableSalary;
+    private javax.swing.JTable tableStatisticStaff;
+    private javax.swing.JTextField txtAddDoB;
+    private javax.swing.JTextField txtAddEmail;
+    private javax.swing.JTextField txtAddFirstname;
+    private javax.swing.JTextField txtAddLastname;
+    private javax.swing.JTextField txtAddMail;
+    private javax.swing.JTextField txtAddStaffID;
+    private javax.swing.JTextField txtAddStore;
+    private javax.swing.JTextField txtAddphone;
     private javax.swing.JTextField txtDayOff;
     private javax.swing.JTextField txtFirstname;
     private javax.swing.JTextField txtLastname;

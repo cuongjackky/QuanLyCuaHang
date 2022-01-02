@@ -9,6 +9,6 @@
  */
 public class QLCuaHang {
     public static void main(String args[]) {
-        new AdminEmployee().setVisible(true);
+        new WarehouseStaffFrame("NV06168").setVisible(true);
     }
 }
