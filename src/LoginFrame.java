@@ -238,9 +238,8 @@ public class LoginFrame extends javax.swing.JFrame {
                else if(role.equals("Quản Lý")){
                    if(new DBUpdater().StoreOwnerLogin(user, password)){
                         JOptionPane.showMessageDialog(this, "Đăng nhập thành công !!");
-                        String StoreManagerId = new DBUpdater().getStoreManagerId(user);
-                        String StoreId = new DBUpdater().getStoreIDByManagerId(StoreManagerId);
-                        new AdminEmployee(StoreId).setVisible(true);
+                        
+                        new AdminFrame(user).setVisible(true);
                         this.setVisible(false);
                         //Giao dien Quan Ly
                     }

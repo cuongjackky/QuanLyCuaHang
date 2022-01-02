@@ -44,8 +44,8 @@ public class QuanLySanPham extends javax.swing.JFrame {
      */
     public QuanLySanPham(String MaCuaHang) {
         initComponents();
-        //MaCH = MaCuaHang; // Trong trường hợp Login
-        MaCH = "CH85650"; // Xoá dòng này trong trường hợp login
+        MaCH = MaCuaHang; // Trong trường hợp Login
+        //MaCH = "CH85650"; // Xoá dòng này trong trường hợp login
         this.LoadSuppliesTable();
         this.LoadImportOrderTable();
         this.LoadDeliveryOrderTable();
@@ -125,7 +125,7 @@ public class QuanLySanPham extends javax.swing.JFrame {
         DiaChiKhoTxt = new javax.swing.JLabel();
         jtfFilter3 = new javax.swing.JTextField();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jTabbedPane1.setBackground(new java.awt.Color(31, 34, 46));
         jTabbedPane1.setForeground(new java.awt.Color(255, 255, 255));

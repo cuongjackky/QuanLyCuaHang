@@ -250,11 +250,61 @@ public class DBUpdater {
         }
         return null;
     }
+    public String getManagerId(String user){
+        /*
+        Dùng để lấy MaKH
+        */
+        String sql = "SELECT  * FROM TAIKHOAN_QL WHERE id = ?";
+        PreparedStatement statement ;
+        try {
+        	      	
+        	Connection con=DriverManager.getConnection(conString, username, password);
+                statement = con.prepareStatement(sql);
+                statement.setString(1,user);
+                
+                ResultSet rs = statement.executeQuery();
+                
+                rs.next();
+                String ans = rs.getString(1);
+                
+                return ans;
+                
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
     public String getCustomerFullName(String user){
         /*
         Dùng để lấy họ và tên của khách hàng
         */
         String sql = "SELECT  * FROM KHACHHANG WHERE MaKH = ?";
+        PreparedStatement statement ;
+        try {
+        	      	
+        	Connection con=DriverManager.getConnection(conString, username, password);
+                statement = con.prepareStatement(sql);
+                statement.setString(1,user);
+                
+                ResultSet rs = statement.executeQuery();
+                
+                rs.next();
+                String ans = rs.getString(2).strip()+" "+ rs.getString(3).strip(); 
+                
+                return ans;
+                
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+    public String getManagerFullName(String user){
+        /*
+        Dùng để lấy họ và tên của khách hàng
+        */
+        String sql = "SELECT  * FROM QUANLY WHERE MaQL = ?";
         PreparedStatement statement ;
         try {
         	      	

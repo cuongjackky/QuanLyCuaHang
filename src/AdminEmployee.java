@@ -27,8 +27,8 @@ public class AdminEmployee extends javax.swing.JFrame {
         LoadCbYear();
         LoadCbMonth();
         LoadCbStaff();
-        //this.StoreID = txtStoreID.getText();
-        this.StoreID = "CH85650";
+        this.StoreID = storeId;
+        //this.StoreID = "CH85650";
         txtStoreID.setText(this.StoreID);
     }
     
@@ -131,7 +131,7 @@ public class AdminEmployee extends javax.swing.JFrame {
 
         jLabel15.setText("jLabel15");
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setAutoRequestFocus(false);
         setBackground(new java.awt.Color(31, 34, 46));
 
