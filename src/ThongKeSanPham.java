@@ -81,6 +81,8 @@ public class ThongKeSanPham extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jButton_timkiem = new javax.swing.JButton();
+        jTextField_banchay = new javax.swing.JTextField();
+        jTextField_khongchay = new javax.swing.JTextField();
         jLabel_banchay = new javax.swing.JLabel();
         jLabel_khongchay = new javax.swing.JLabel();
 
@@ -103,7 +105,7 @@ public class ThongKeSanPham extends javax.swing.JFrame {
 
         jLabel3.setText("Sản phẩm bán chạy: ");
 
-        jLabel4.setText("Sản phẩm bán không chạy: ");
+        jLabel4.setText("Sản phẩm không bán chạy: ");
 
         jButton_timkiem.setText("Tìm kiếm");
         jButton_timkiem.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -112,60 +114,71 @@ public class ThongKeSanPham extends javax.swing.JFrame {
             }
         });
 
-        jLabel_banchay.setText("---");
-
-        jLabel_khongchay.setText("---");
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(210, 210, 210)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel4)
+                        .addComponent(jLabel3))
+                    .addComponent(jLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(192, 192, 192)
-                        .addComponent(jLabel1))
+                        .addGap(164, 164, 164)
+                        .addComponent(jLabel_khongchay, javax.swing.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField_mach, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton_timkiem)
-                        .addGap(47, 47, 47)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel3))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel_banchay, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel_khongchay, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(58, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jTextField_khongchay, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
+                            .addComponent(jTextField_banchay))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jLabel_banchay, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel2)
+                .addGap(22, 22, 22)
+                .addComponent(jTextField_mach, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jButton_timkiem)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(26, 26, 26)
-                .addComponent(jLabel1)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(64, 64, 64)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2)
-                            .addComponent(jTextField_mach, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton_timkiem)))
+                        .addGap(55, 55, 55)
+                        .addComponent(jLabel_banchay))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(50, 50, 50)
+                        .addGap(40, 40, 40)
+                        .addComponent(jLabel1)))
+                .addGap(42, 42, 42)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel3)
-                            .addComponent(jLabel_banchay))
-                        .addGap(18, 18, 18)
+                            .addComponent(jTextField_banchay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(1, 1, 1)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jTextField_mach, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2)
+                            .addComponent(jButton_timkiem))
+                        .addGap(9, 9, 9)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel4)
-                            .addComponent(jLabel_khongchay))))
-                .addGap(45, 45, 45)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 310, Short.MAX_VALUE))
+                            .addComponent(jTextField_khongchay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(19, 19, 19))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel_khongchay)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 301, Short.MAX_VALUE))
         );
 
         pack();
@@ -177,6 +190,9 @@ public class ThongKeSanPham extends javax.swing.JFrame {
        try{
            if(mach.trim().length() == 0){
                loadAllEmployees();
+               jTextField_banchay.setText(""); 
+               jTextField_khongchay.setText(""); 
+               
            }
            else{
                 try {
@@ -187,10 +203,21 @@ public class ThongKeSanPham extends javax.swing.JFrame {
                     Connection conn = DriverManager.getConnection(url, username, password);
                     
                     String sql = "select * from CUAHANG where MaCH = '"+jTextField_mach.getText()+"'";
-                       
+                    String sqlmax = "select distinct TenSP from SANPHAM, DONHANG, CT_DONHANG, CUAHANG where SANPHAM.MaSP = CT_DONHANG.MaSP and CT_DONHANG.MaDH = DONHANG.MaDH and DONHANG.MaCH = CUAHANG.MaCH and CUAHANG.MaCH = '"+jTextField_mach.getText()+"' and SANPHAM.MaSP in (select CT_DONHANG.MaSP from DONHANG, CT_DONHANG, CUAHANG where DONHANG.MaDH = CT_DONHANG.MaDH and DONHANG.MaCH = CUAHANG.MaCH and CUAHANG.MaCH = '"+jTextField_mach.getText()+"' group by CT_DONHANG.MaSP having sum(CT_DONHANG.SoLuong) >= all(select sum(CT_DONHANG.SoLuong) from DONHANG, CT_DONHANG, CUAHANG where DONHANG.MaDH = CT_DONHANG.MaDH and DONHANG.MaCH = CUAHANG.MaCH and CUAHANG.MaCH = '"+jTextField_mach.getText()+"' group by CT_DONHANG.MaSP))";
+                    String sqlmin = "select distinct TenSP from SANPHAM, DONHANG, CT_DONHANG, CUAHANG where SANPHAM.MaSP = CT_DONHANG.MaSP and CT_DONHANG.MaDH = DONHANG.MaDH and DONHANG.MaCH = CUAHANG.MaCH and CUAHANG.MaCH = '"+jTextField_mach.getText()+"' and SANPHAM.MaSP in (select CT_DONHANG.MaSP from DONHANG, CT_DONHANG, CUAHANG where DONHANG.MaDH = CT_DONHANG.MaDH and DONHANG.MaCH = CUAHANG.MaCH and CUAHANG.MaCH = '"+jTextField_mach.getText()+"' group by CT_DONHANG.MaSP having sum(CT_DONHANG.SoLuong) <= all(select sum(CT_DONHANG.SoLuong) from DONHANG, CT_DONHANG, CUAHANG where DONHANG.MaDH = CT_DONHANG.MaDH and DONHANG.MaCH = CUAHANG.MaCH and CUAHANG.MaCH = '"+jTextField_mach.getText()+"' group by CT_DONHANG.MaSP))";
+                    
                     PreparedStatement statement = null;
-                    statement = conn.prepareStatement(sql);   
+                    PreparedStatement statmax = null;
+                    PreparedStatement statmin = null;
+                    
+                    statement = conn.prepareStatement(sql); 
+                    statmax = conn.prepareStatement(sqlmax); 
+                    statmin = conn.prepareStatement(sqlmin);
+                    
                     ResultSet rs = statement.executeQuery();
+                    ResultSet r = statmax.executeQuery();
+                    ResultSet s = statmin.executeQuery();
+
                     tblModel.setRowCount(0);
                     while(rs.next()) {
                         String row[] = new String[]{
@@ -198,11 +225,26 @@ public class ThongKeSanPham extends javax.swing.JFrame {
                             };
                         tblModel.addRow(row);
                         }
+                    if(r.next()){
+                        jTextField_banchay.setText(r.getString("TenSP")); 
+                        //jLabel_banchay.setText(r.getString("TenSP"));
+                    }
+                    if(s.next()){
+                        jTextField_khongchay.setText(s.getString("TenSP"));
+                         //jLabel_khongchay.setText(s.getString("TenSP"));
+                    }
+                    rs.close();
+                    r.close();
+                    s.close();
+                    conn.close();
                       } catch (Exception ex){
                     ex.printStackTrace();
                     }
                 
-                
+//                String tv = "select distinct SANPHAM.TenSP from SANPHAM, DONHANG, CT_DONHANG, CUAHANG where SANPHAM.MaSP = CT_DONHANG.MaSP and CT_DONHANG.MaDH = DONHANG.MaDH and DONHANG.MaCH = CUAHANG.MaCH and CUAHANG.MaCH = 'CH02990' and SANPHAM.MaSP in (select CT_DONHANG.MaSP from DONHANG, CT_DONHANG, CUAHANG where DONHANG.MaDH = CT_DONHANG.MaDH and DONHANG.MaCH = CUAHANG.MaCH and CUAHANG.MaCH = 'CH02990' group by CT_DONHANG.MaSP having sum(CT_DONHANG.SoLuong) >= all(select sum(CT_DONHANG.SoLuong) from DONHANG, CT_DONHANG, CUAHANG where DONHANG.MaDH = CT_DONHANG.MaDH and DONHANG.MaCH = CUAHANG.MaCH and CUAHANG.MaCH = 'CH02990' group by CT_DONHANG.MaSP))";
+//                PreparedStatement statement = null;
+//                statement = conn.prepareStatement(tv);   
+//                ResultSet rs = statement.executeQuery();
                 }
             }catch (Exception ex){
                 ex.printStackTrace();
@@ -254,6 +296,8 @@ public class ThongKeSanPham extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel_khongchay;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable_cuahang;
+    private javax.swing.JTextField jTextField_banchay;
+    private javax.swing.JTextField jTextField_khongchay;
     private javax.swing.JTextField jTextField_mach;
     // End of variables declaration//GEN-END:variables
 }
