@@ -1426,6 +1426,101 @@ public class DBUpdater {
         }
         return null;
    }
+   public ResultSet LayThongKeDoanhThu(String MaCH){
+       String query = " SELECT * FROM THONGKECUAHANG WHERE MaCH = ?";
+       PreparedStatement statement ;
+        try {
+        	      	
+        	Connection con=DriverManager.getConnection(conString, username, password);
+                statement = con.prepareStatement(query);
+                statement.setString(1,MaCH);
+               
+                ResultSet rs = statement.executeQuery();
+          
+               return rs;
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
+   }
+   public ResultSet LayThongKeSanPham(String MaCH,String Thang,String Nam){
+       String query = " SELECT CT_DONHANG.MaSP, SANPHAM.TenSP,SUM(CT_DONHANG.SoLuong) AS SoLuongBan --, MONTH(NGAYDAT) AS Thang, YEAR(NGAYDAT) AS Nam\n" +
+"  FROM SANPHAM,CT_DONHANG,DONHANG\n" +
+"  WHERE SANPHAM.MaSP = CT_DONHANG.MaSP AND CT_DONHANG.MaDH = DONHANG.MaDH AND DONHANG.MaCH = ? AND MONTH(NGAYDAT) = ? AND YEAR(NgayDat) = ? \n" +
+"  GROUP BY CT_DONHANG.MaSP,SANPHAM.TenSP,MONTH(NGAYDAT), YEAR(NGAYDAT)\n" +
+"  ORDER BY SoLuongBan DESC";
+       PreparedStatement statement ;
+        try {
+        	      	
+        	Connection con=DriverManager.getConnection(conString, username, password);
+                statement = con.prepareStatement(query);
+                statement.setString(1,MaCH);
+                int thang = new Helper().chuyenDoi(Thang);
+                int nam = new Helper().chuyenDoi(Nam);
+                statement.setInt(2,thang);
+                statement.setInt(3,nam);
+               
+                ResultSet rs = statement.executeQuery();
+          
+               return rs;
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
+   }
+   public ResultSet LayThongKeSanPhamBanCham(String MaCH,String Thang,String Nam){
+       String query = "  SELECT TOP 3 CT_DONHANG.MaSP, SANPHAM.TenSP,SUM(CT_DONHANG.SoLuong) AS SoLuongBan --, MONTH(NGAYDAT) AS Thang, YEAR(NGAYDAT) AS Nam\n" +
+"  FROM SANPHAM,CT_DONHANG,DONHANG\n" +
+"  WHERE SANPHAM.MaSP = CT_DONHANG.MaSP AND CT_DONHANG.MaDH = DONHANG.MaDH AND DONHANG.MaCH =? AND MONTH(NGAYDAT) = ?  AND YEAR(NgayDat) = ? \n" +
+"  GROUP BY CT_DONHANG.MaSP,SANPHAM.TenSP,MONTH(NGAYDAT), YEAR(NGAYDAT)\n" +
+"  ORDER BY SoLuongBan ASC \n";
+       PreparedStatement statement ;
+        try {
+        	      	
+        	Connection con=DriverManager.getConnection(conString, username, password);
+                statement = con.prepareStatement(query);
+                statement.setString(1,MaCH);
+                int thang = new Helper().chuyenDoi(Thang);
+                int nam = new Helper().chuyenDoi(Nam);
+                statement.setInt(2,thang);
+                statement.setInt(3,nam);
+               
+                ResultSet rs = statement.executeQuery();
+          
+               return rs;
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
+   }
+   public ResultSet LayThongKeSanPhamBanChay(String MaCH,String Thang,String Nam){
+       String query = " SELECT TOP 3 CT_DONHANG.MaSP, SANPHAM.TenSP,SUM(CT_DONHANG.SoLuong) AS SoLuongBan --, MONTH(NGAYDAT) AS Thang, YEAR(NGAYDAT) AS Nam\n" +
+"  FROM SANPHAM,CT_DONHANG,DONHANG\n" +
+"  WHERE SANPHAM.MaSP = CT_DONHANG.MaSP AND CT_DONHANG.MaDH = DONHANG.MaDH AND DONHANG.MaCH =? AND MONTH(NGAYDAT) = ?  AND YEAR(NgayDat) = ? \n" +
+"  GROUP BY CT_DONHANG.MaSP,SANPHAM.TenSP,MONTH(NGAYDAT), YEAR(NGAYDAT)\n" +
+"  ORDER BY SoLuongBan DESC";
+       PreparedStatement statement ;
+        try {
+        	      	
+        	Connection con=DriverManager.getConnection(conString, username, password);
+                statement = con.prepareStatement(query);
+                statement.setString(1,MaCH);
+                int thang = new Helper().chuyenDoi(Thang);
+                int nam = new Helper().chuyenDoi(Nam);
+                statement.setInt(2,thang);
+                statement.setInt(3,nam);
+                ResultSet rs = statement.executeQuery();
+          
+               return rs;
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
+   }
    public ResultSet GetCusInfoForDetailOrder(String makh){
        String query = " select*from khachhang where makh= ?";
        PreparedStatement statement ;

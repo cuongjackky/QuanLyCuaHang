@@ -36,13 +36,14 @@ public class AdminEmployee extends javax.swing.JFrame {
         UIManager.getDefaults().put("Button.disabledShadow", Color.RED);
         this.setLocationRelativeTo(null);
         SetUp();
+        this.StoreID = storeId;
         LoadCbYear();
         LoadCbMonth();
         LoadCbStaff();
         LoadCbGender_Cate();
         LoadStaffTable(this.StoreID);
         //this.StoreID = txtStoreID.getText();
-        this.StoreID = storeId;
+        
         txtStoreID.setText(this.StoreID);
     }
     

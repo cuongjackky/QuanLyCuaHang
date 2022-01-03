@@ -212,7 +212,22 @@ public class Helper {
         return id;
         
     }
-    
+    public int chuyenDoi(String s){
+        int ans =0;
+        String word ="";
+        for(int i =0;i<s.length();i++){
+            if(Character.isDigit(s.charAt(i))){
+                word+=s.charAt(i);
+            }
+        }
+        try{
+            ans =Integer.parseInt(word);
+        }
+        catch(Exception e){
+            
+        }
+        return ans;
+    }
         
         
     
